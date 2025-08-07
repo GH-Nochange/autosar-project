@@ -1,0 +1,39 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+-include ../../makefile.local
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS_QUOTED += \
+"C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c" \
+
+C_SRCS += \
+C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c \
+
+OBJS_OS_FORMAT += \
+./phDriver/Can/CanDrv.o \
+
+C_DEPS_QUOTED += \
+"./phDriver/Can/CanDrv.d" \
+
+OBJS += \
+./phDriver/Can/CanDrv.o \
+
+OBJS_QUOTED += \
+"./phDriver/Can/CanDrv.o" \
+
+C_DEPS += \
+./phDriver/Can/CanDrv.d \
+
+
+# Each subdirectory must supply rules for building sources it contributes
+phDriver/Can/CanDrv.o: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c
+	@echo 'Building file: $<'
+	@echo 'Executing target #4 $<'
+	@echo 'Invoking: Standard S32DS C Compiler'
+	arm-none-eabi-gcc "@phDriver/Can/CanDrv.args" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "phDriver/Can/CanDrv.o" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

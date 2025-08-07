@@ -1,0 +1,39 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+-include ../../makefile.local
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS_QUOTED += \
+"C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c" \
+
+C_SRCS += \
+C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c \
+
+OBJS_OS_FORMAT += \
+./phDriver/Pit/PitDrv.o \
+
+C_DEPS_QUOTED += \
+"./phDriver/Pit/PitDrv.d" \
+
+OBJS += \
+./phDriver/Pit/PitDrv.o \
+
+OBJS_QUOTED += \
+"./phDriver/Pit/PitDrv.o" \
+
+C_DEPS += \
+./phDriver/Pit/PitDrv.d \
+
+
+# Each subdirectory must supply rules for building sources it contributes
+phDriver/Pit/PitDrv.o: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c
+	@echo 'Building file: $<'
+	@echo 'Executing target #6 $<'
+	@echo 'Invoking: Standard S32DS C Compiler'
+	arm-none-eabi-gcc "@phDriver/Pit/PitDrv.args" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "phDriver/Pit/PitDrv.o" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

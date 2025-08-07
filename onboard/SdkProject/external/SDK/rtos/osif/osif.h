@@ -43,7 +43,7 @@
 
 /*! @cond DRIVER_INTERNAL_USE_ONLY */
 
-#ifdef USING_OS_FREERTOS
+#ifdef SOSC_init_8MHz
 /* FreeRTOS implementation */
 #include "FreeRTOS.h"
 #include "semphr.h"
