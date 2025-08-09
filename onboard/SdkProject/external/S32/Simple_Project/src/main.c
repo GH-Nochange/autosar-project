@@ -4,6 +4,7 @@
 #include "interrupt_manager.h"
 #include <string.h>
 #include <stdint.h>
+#include "clockMan1.h"
 
 #define RX_MSG_BUF_SIZE 8
 
@@ -29,17 +30,12 @@ void MyCAN_RxCallback(phDriverCan_Channel_t channel,
 
 int main(void)
 {
-    // 1. Khởi tạo clock thủ công
-    SOSC_init_8MHz();           // External 8MHz
-    SPLL_init_160MHz();        // PLL lên 160MHz
-    NormalRUNmode_80MHz();     // Run mode 80MHz
-
-    // 2. Bật Interrupt toàn cục
-    __enable_irq();
-    NVIC_EnableIRQ(CAN0_ORed_0_15_MB_IRQn); // Cho phép ngắt CAN0 (dùng CAN0)
+	CLOCK_SYS_Init(g_clockManConfigsArr, CLOCK_MANAGER_CONFIG_CNT,
+								g_clockManCallbacksArr, CLOCK_MANAGER_CALLBACK_CNT);
+		  CLOCK_SYS_UpdateConfiguration(0U, CLOCK_MANAGER_POLICY_AGREEMENT);
 
     // 3. Khởi tạo driver CAN
-    if (phDriverCan_Init() != EER_OK)
+    if (phDriverCan_Init() != ERR_Ok)
     {
         while (1); // Lỗi khởi tạo → đứng lại
     }
@@ -53,7 +49,7 @@ int main(void)
     s_rxMsgBuf.dataLen = RX_MSG_BUF_SIZE;
     s_rxMsgBuf.msgId = 0x123;              // ID mong muốn nhận
 
-    if (phDriverCan_Recv(PH_CAN_CHANNEL_MAIN, MyCAN_RxCallback, &s_rxMsgBuf, NULL) != EER_OK)
+    if (phDriverCan_Recv(PH_CAN_CHANNEL_MAIN, MyCAN_RxCallback, &s_rxMsgBuf, NULL) != ERR_Ok)
     {
         while (1); // Lỗi cấu hình nhận
     }

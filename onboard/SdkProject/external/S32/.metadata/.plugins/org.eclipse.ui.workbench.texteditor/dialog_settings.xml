@@ -8,6 +8,10 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="__enable_irq"/>
+			<item value="linker_script.ld"/>
+			<item value="C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:33: undefined reference to `SOSC_init_8MHz&apos;"/>
+			<item value="INT_SYS_DisableIRQGlobal()"/>
 			<item value="USING_OS_FREERTOS"/>
 			<item value="INT_SYS_EnableIRQ"/>
 		</list>

@@ -1,134 +1,36 @@
-13:32:32 **** Clean-only build of configuration Debug for project Simple_Project ****
-make -j16 clean 
-rm -rf ./*/*.d ./*/*/*.d  ./*/*.o ./*/*/*.o   "Simple_Project.siz"   "Simple_Project.elf" 
- 
-13:32:32 **** Incremental Build of configuration Debug for project Simple_Project ****
+04:28:37 **** Incremental Build of configuration Debug for project Simple_Project ****
 make -j16 all 
-Building file: ../Project_Settings/Startup_Code/startup.c
-Building file: ../Project_Settings/Startup_Code/startup_S32K144.S
-Executing target #1 ../Project_Settings/Startup_Code/startup.c
-Building file: ../Project_Settings/Startup_Code/system_S32K144.c
-Executing target #2 ../Project_Settings/Startup_Code/startup_S32K144.S
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock/S32K1xx/clock_S32K1xx.c
-Executing target #3 ../Project_Settings/Startup_Code/system_S32K144.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@Project_Settings/Startup_Code/startup.args" -MMD -MP -MF"Project_Settings/Startup_Code/startup.d" -MT"Project_Settings/Startup_Code/startup.o" -o "Project_Settings/Startup_Code/startup.o" "../Project_Settings/Startup_Code/startup.c"
-Executing target #4 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock/S32K1xx/clock_S32K1xx.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@Project_Settings/Startup_Code/system_S32K144.args" -MMD -MP -MF"Project_Settings/Startup_Code/system_S32K144.d" -MT"Project_Settings/Startup_Code/system_S32K144.o" -o "Project_Settings/Startup_Code/system_S32K144.o" "../Project_Settings/Startup_Code/system_S32K144.c"
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@S32K1xx/clock_S32K1xx.args" -MMD -MP -MF"S32K1xx/clock_S32K1xx.d" -MT"S32K1xx/clock_S32K1xx.o" -o "S32K1xx/clock_S32K1xx.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock/S32K1xx/clock_S32K1xx.c"
-Invoking: Standard S32DS Assembler
-arm-none-eabi-gcc "@Project_Settings/Startup_Code/startup_S32K144.args" -o "Project_Settings/Startup_Code/startup_S32K144.o" "../Project_Settings/Startup_Code/startup_S32K144.S"
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_hw_access.c
-Executing target #5 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_irq.c
-Executing target #6 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_hw_access.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@flexcan/flexcan_driver.args" -MMD -MP -MF"flexcan/flexcan_driver.d" -MT"flexcan/flexcan_driver.o" -o "flexcan/flexcan_driver.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c"
-Executing target #7 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_irq.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@flexcan/flexcan_hw_access.args" -MMD -MP -MF"flexcan/flexcan_hw_access.d" -MT"flexcan/flexcan_hw_access.o" -o "flexcan/flexcan_hw_access.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_hw_access.c"
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@flexcan/flexcan_irq.args" -MMD -MP -MF"flexcan/flexcan_irq.d" -MT"flexcan/flexcan_irq.o" -o "flexcan/flexcan_irq.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_irq.c"
-Finished building: ../Project_Settings/Startup_Code/startup_S32K144.S
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c
- 
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c
-Executing target #8 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c
-Finished building: ../Project_Settings/Startup_Code/startup.c
-Executing target #9 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@osif/osif_baremetal.args" -MMD -MP -MF"osif/osif_baremetal.d" -MT"osif/osif_baremetal.o" -o "osif/osif_baremetal.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c"
- 
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@phDriver/Can/CanDrv.args" -MMD -MP -MF"phDriver/Can/CanDrv.d" -MT"phDriver/Can/CanDrv.o" -o "phDriver/Can/CanDrv.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c"
-Finished building: ../Project_Settings/Startup_Code/system_S32K144.c
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c
- 
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c
-Executing target #10 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Spi/SpiDrv.c
-Executing target #11 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@phDriver/Gpio/GpioDrv.args" -MMD -MP -MF"phDriver/Gpio/GpioDrv.d" -MT"phDriver/Gpio/GpioDrv.o" -o "phDriver/Gpio/GpioDrv.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c"
-Executing target #12 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Spi/SpiDrv.c
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_irq.c
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock/S32K1xx/clock_S32K1xx.c
- 
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_hw_access.c
- 
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c
- 
-Invoking: Standard S32DS C Compiler
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c: In function 'phDriverGpio_SetInterrupt':
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c:128:13: warning: implicit declaration of function 'INT_SYS_EnableIRQ' [-Wimplicit-function-declaration]
-             INT_SYS_EnableIRQ(PORTA_IRQn);
-             ^~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc "@phDriver/Pit/PitDrv.args" -MMD -MP -MF"phDriver/Pit/PitDrv.d" -MT"phDriver/Pit/PitDrv.o" -o "phDriver/Pit/PitDrv.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c"
- 
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Can/CanDrv.c
- 
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@phDriver/Spi/SpiDrv.args" -MMD -MP -MF"phDriver/Spi/SpiDrv.d" -MT"phDriver/Spi/SpiDrv.o" -o "phDriver/Spi/SpiDrv.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Spi/SpiDrv.c"
- 
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_driver.c
-Building file: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_port_hw_access.c
-Executing target #13 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_driver.c
+Building file: ../src/Cpu.c
+Building file: ../src/clockMan1.c
+Executing target #19 ../src/Cpu.c
+Executing target #20 ../src/clockMan1.c
 Building file: ../src/main.c
-Executing target #14 C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_port_hw_access.c
 Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@pins/pins_driver.args" -MMD -MP -MF"pins/pins_driver.d" -MT"pins/pins_driver.o" -o "pins/pins_driver.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_driver.c"
-Executing target #15 ../src/main.c
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Pit/PitDrv.c
+arm-none-eabi-gcc "@src/Cpu.args" -MMD -MP -MF"src/Cpu.d" -MT"src/Cpu.o" -o "src/Cpu.o" "../src/Cpu.c"
+Invoking: Standard S32DS C Compiler
+arm-none-eabi-gcc "@src/clockMan1.args" -MMD -MP -MF"src/clockMan1.d" -MT"src/clockMan1.o" -o "src/clockMan1.o" "../src/clockMan1.c"
+Executing target #21 ../src/main.c
 Invoking: Standard S32DS C Compiler
 arm-none-eabi-gcc "@src/main.args" -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
- 
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Gpio/GpioDrv.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@pins/pins_port_hw_access.args" -MMD -MP -MF"pins/pins_port_hw_access.d" -MT"pins/pins_port_hw_access.o" -o "pins/pins_port_hw_access.o" "C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_port_hw_access.c"
- 
-../src/main.c: In function 'main':
-../src/main.c:38:5: warning: implicit declaration of function '__enable_irq' [-Wimplicit-function-declaration]
-     __enable_irq();
-     ^~~~~~~~~~~~
-../src/main.c:39:5: warning: implicit declaration of function 'NVIC_EnableIRQ' [-Wimplicit-function-declaration]
-     NVIC_EnableIRQ(CAN0_ORed_0_15_MB_IRQn); // Cho phép ngắt CAN0 (dùng CAN0)
-     ^~~~~~~~~~~~~~
-At top level:
-../src/main.c:17:16: warning: 's_rxData' defined but not used [-Wunused-variable]
+../src/main.c:18:16: warning: 's_rxData' defined but not used [-Wunused-variable]
  static uint8_t s_rxData[RX_MSG_BUF_SIZE];
                 ^~~~~~~~
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver/Spi/SpiDrv.c
- 
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_driver.c
- 
 Finished building: ../src/main.c
+Finished building: ../src/Cpu.c
+Finished building: ../src/clockMan1.c
  
-Finished building: C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins/pins_port_hw_access.c
+ 
  
 Building target: Simple_Project.elf
-Executing target #16 Simple_Project.elf
+Executing target #22 Simple_Project.elf
 Invoking: Standard S32DS C Linker
 arm-none-eabi-gcc -o "Simple_Project.elf" "@Simple_Project.args"   
-./src/main.o: In function `main':
-C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:33: undefined reference to `SOSC_init_8MHz'
-C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:34: undefined reference to `SPLL_init_160MHz'
-C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:35: undefined reference to `NormalRUNmode_80MHz'
-C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:38: undefined reference to `__enable_irq'
-C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:39: undefined reference to `NVIC_EnableIRQ'
-./osif/osif_baremetal.o: In function `osif_DisableIrqGlobal':
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c:122: undefined reference to `INT_SYS_DisableIRQGlobal'
-./osif/osif_baremetal.o: In function `osif_EnableIrqGlobal':
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif/osif_baremetal.c:127: undefined reference to `INT_SYS_EnableIRQGlobal'
-./flexcan/flexcan_driver.o: In function `FLEXCAN_EnableIRQs':
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c:547: undefined reference to `INT_SYS_EnableIRQ'
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c:550: undefined reference to `INT_SYS_EnableIRQ'
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c:551: undefined reference to `INT_SYS_EnableIRQ'
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c:556: undefined reference to `INT_SYS_EnableIRQ'
-./flexcan/flexcan_driver.o: In function `FLEXCAN_CompleteRxMessageFifoData':
-C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan/flexcan_driver.c:2169: undefined reference to `EDMA_DRV_StopChannel'
-collect2.exe: error: ld returned 1 exit status
-make: *** [makefile:66: Simple_Project.elf] Error 1
+Finished building target: Simple_Project.elf
+ 
+Executing target #23 Simple_Project.siz
+Invoking: Standard S32DS Print Size
+arm-none-eabi-size --format=berkeley  Simple_Project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  24052	    332	   3520	  27904	   6d00	Simple_Project.elf
+Finished building: Simple_Project.siz
+ 

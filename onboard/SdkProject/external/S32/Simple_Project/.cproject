@@ -127,9 +127,26 @@
 							<tool id="com.freescale.s32ds.cross.gnu.disassembler.876381303" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.254538030" name="osif_freertos.c" rcbsApplicability="disable" resourcePath="osif/osif_freertos.c" toolsToInvoke="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068.1796622239">
-						<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068.1796622239" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
-					</fileInfo>
+					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.1372848339" name="/" resourcePath="include">
+						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.243454401" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.2032670090" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.1405098507" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.514432655" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.249736356" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.117637795" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1846190967" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.346539187" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.41529750" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.1688502118" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.2066916766" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.2097335137" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
+							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.656743553" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.983854978" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
+							<tool id="com.freescale.s32ds.cross.gnu.c.preprocessor.154379316" name="Standard S32DS C Preprocessor" superClass="com.freescale.s32ds.cross.gnu.c.preprocessor.1505787124"/>
+							<tool id="com.freescale.s32ds.cross.gnu.cpp.preprocessor.139671341" name="Standard S32DS C++ Preprocessor" superClass="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1514031367"/>
+							<tool id="com.freescale.s32ds.cross.gnu.disassembler.107206173" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
+						</toolChain>
+					</folderInfo>
 					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.865598096" name="/" resourcePath="pins">
 						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.1706598177" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.1026483907" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
@@ -160,9 +177,11 @@
 					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" name="Simple_Project_Debug_RAM.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="Linker_Files/S32K144_64_ram.ld|Debugger/Simple_Project_Debug_RAM.launch|Debugger/Simple_Project_Release.launch" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project_Settings"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="S32K1xx"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="clock"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="edma"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="flexcan"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="interrupt"/>
 						<entry excluding="osif_freertos.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="osif"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phDriver"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="pins"/>
@@ -296,9 +315,8 @@
 					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.release.360975487.Project_Settings/Debugger/Simple_Project_Debug.launch" name="Simple_Project_Debug.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Debug.launch" toolsToInvoke=""/>
 					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.release.360975487.Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" name="Simple_Project_Debug_RAM.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry excluding="Linker_Files/S32K144_64_ram.ld|Debugger/Simple_Project_Debug_RAM.launch|Debugger/Simple_Project_Debug.launch" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project_Settings"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -425,9 +443,8 @@
 					<fileInfo id="com.freescale.s32ds.cross.gnu.arm.cortexm.exe.Debug_RAM.Project_Settings/Debugger/Simple_Project_Release.launch" name="Simple_Project_Release.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Release.launch" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.s32ds.cross.gnu.arm.cortexm.exe.Debug_RAM.Project_Settings/Debugger/Simple_Project_Debug.launch" name="Simple_Project_Debug.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Debug.launch" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry excluding="Linker_Files/S32K144_64_flash.ld|Debugger/Simple_Project_Release.launch|Debugger/Simple_Project_Debug.launch" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project_Settings"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

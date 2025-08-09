@@ -25,19 +25,29 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>S32K1xx</name>
-			<type>2</type>
-			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock/S32K1xx</location>
-		</link>
-		<link>
 			<name>Source</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/FreeRTOS_S32K/Source</location>
 		</link>
 		<link>
+			<name>clock</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock</location>
+		</link>
+		<link>
+			<name>edma</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/edma</location>
+		</link>
+		<link>
 			<name>flexcan</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/flexcan</location>
+		</link>
+		<link>
+			<name>interrupt</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/interrupt</location>
 		</link>
 		<link>
 			<name>osif</name>
