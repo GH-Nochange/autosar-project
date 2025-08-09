@@ -2,18 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="" key="selection"/>
+		<item value="NVIC" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="__enable_irq"/>
-			<item value="linker_script.ld"/>
-			<item value="C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\S32\Simple_Project\Debug/../src/main.c:33: undefined reference to `SOSC_init_8MHz&apos;"/>
-			<item value="INT_SYS_DisableIRQGlobal()"/>
-			<item value="USING_OS_FREERTOS"/>
-			<item value="INT_SYS_EnableIRQ"/>
+			<item value="nvic_Cl"/>
+			<item value="nvic"/>
+			<item value="nviv"/>
+			<item value="NVIC"/>
+			<item value="NVIC\"/>
+			<item value="static inline"/>
+			<item value="NVIC_"/>
+			<item value="ncic"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -1,5 +1,5 @@
-#ifndef GPIODRV_H_
-#define GPIODRV_H_
+#ifndef PH_GPIODRV_H_
+#define PH_GPIODRV_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,94 +11,93 @@ extern "C" {
 #include "device_registers.h"
 
 /**
- * @brief Danh sách các chân GPIO điều khiển (output, interrupt...)
+ * @brief Logical GPIO handle (index into config table).
  */
-typedef enum {
-    PH_GPIO_RED_LED = 0,     /**< Đèn LED đỏ */
-    PH_GPIO_GREEN_LED,       /**< Đèn LED xanh lá */
-    PH_GPIO_BLUE_LED,        /**< Đèn LED xanh dương */
-    PH_GPIO_NUM              /**< Tổng số GPIO được cấu hình */
-} phDriverGpio_Name_t;
+typedef uint8_t phGpio_Handle_t;
+#define PH_GPIO_INVALID_HANDLE ((phGpio_Handle_t)0xFF)
 
 /**
- * @brief Giá trị mức logic của chân GPIO
+ * @brief Logical pin level.
  */
 typedef enum {
-    PH_GPIO_LOW  = 0U,        /**< Mức thấp (0V) */
-    PH_GPIO_HIGH = 1U         /**< Mức cao (3.3V hoặc 5V tuỳ mạch) */
-} phDriverGpio_PinLevel_t;
-
-/** 
- * @brief Kiểu callback cho GPIO interrupt, không có tham số.
- */
-typedef void (*phDriverGpio_Callback_t)(void);
+    PH_GPIO_LOW  = 0U,
+    PH_GPIO_HIGH = 1U
+} phGpio_Level_t;
 
 /**
- * @brief Cấu hình ngắt cho một chân GPIO
+ * @brief Optional interrupt callback with user context.
+ */
+typedef void (*phGpio_IrqCb_t)(phGpio_Handle_t handle, void *user_param);
+
+/**
+ * @brief Per-pin interrupt options.
  */
 typedef struct
 {
-    port_interrupt_config_t intConfig;  /**< Loại ngắt: rising, falling, both edge, logic level... */
-    bool digitalFilterEnable;           /**< Bật/tắt bộ lọc nhiễu kỹ thuật số */
-} phDriverGpio_IrqConfig_t;
+    port_interrupt_config_t int_config;  /* rising/falling/both/level */
+    bool digital_filter_enable;
+} phGpio_IrqConfig_t;
 
 /**
- * @brief Khởi tạo toàn bộ các chân GPIO đã được định nghĩa trong driver
- * 
- * Bao gồm thiết lập mux, hướng xuất (output), giá trị khởi tạo và driver control.
- * Thường dùng khi khởi động hệ thống.
+ * @brief One GPIO configuration entry.
+ * @note  Filled by application, no hard-coded board pins here.
  */
-void phDriverGpio_Init(void);
+typedef struct
+{
+    GPIO_Type *gpio_base;         /* GPIO base address */
+    PORT_Type *port_base;         /* PORT base address */
+    uint32_t   pin;               /* Pin number */
+    port_mux_t  mux;               /* Mux mode */
+    bool       is_output;         /* Direction at init */
+    phGpio_Level_t init_level;    /* Initial level if output */
+    phGpio_IrqConfig_t irq;       /* IRQ settings */
+    phGpio_IrqCb_t irq_cb;        /* Optional ISR callback */
+    void *irq_user_param;         /* Context for callback */
+} phGpio_PinConfig_t;
 
 /**
- * @brief Giải phóng các chân GPIO, đưa về trạng thái an toàn
- * 
- * Đặt mức cao (để tắt LED nếu active-low), đổi hướng chân về input và tắt mux.
+ * @brief Initialize GPIO driver with a config table.
+ * @param table  Config table (array).
+ * @param count  Number of entries.
  */
-void phDriverGpio_DeInit(void);
+void phGpio_Init(const phGpio_PinConfig_t table[], uint32_t count);
 
 /**
- * @brief Thiết lập mức logic cho một chân GPIO
- * 
- * @param pinConfig    Tên chân GPIO theo enum `phDriverGpio_Name_t`
- * @param pinLevel     Mức logic cần đặt: `PH_GPIO_LOW` hoặc `PH_GPIO_HIGH`
+ * @brief Deinitialize all configured GPIOs (safe state).
  */
-void phDriverGpio_SetPinLevel(phDriverGpio_Name_t pinConfig, phDriverGpio_PinLevel_t pinLevel);
+void phGpio_DeInit(void);
 
 /**
- * @brief Đảo trạng thái mức logic của chân GPIO
- * 
- * Nếu đang HIGH sẽ chuyển sang LOW, và ngược lại.
- * 
- * @param pinConfig    Tên chân GPIO
+ * @brief Set pin output level.
  */
-void phDriverGpio_TogglePin(phDriverGpio_Name_t pinConfig);
+void phGpio_Set(phGpio_Handle_t h, phGpio_Level_t lvl);
 
 /**
- * @brief Đọc mức logic hiện tại của chân GPIO
- * 
- * @param pinConfig    Tên chân GPIO
- * @return PH_GPIO_LOW hoặc PH_GPIO_HIGH tuỳ theo trạng thái thực tế
+ * @brief Toggle pin output level.
  */
-phDriverGpio_PinLevel_t phDriverGpio_GetPinLevel(phDriverGpio_Name_t pinConfig);
+void phGpio_Toggle(phGpio_Handle_t h);
 
 /**
- * @brief Cấu hình ngắt cho chân GPIO
- * 
- * @param pinConfig    Tên chân GPIO
- * @param irqConfig    Cấu hình ngắt: kiểu ngắt và bật/tắt bộ lọc nhiễu
+ * @brief Read current pin level.
  */
-void phDriverGpio_SetInterrupt(phDriverGpio_Name_t pinConfig, phDriverGpio_IrqConfig_t irqConfig);
+phGpio_Level_t phGpio_Get(phGpio_Handle_t h);
 
 /**
- * @brief Xoá cờ ngắt cho chân GPIO (thường gọi trong ISR)
- * 
- * @param pinConfig    Tên chân GPIO
+ * @brief Reconfigure interrupt for a pin.
  */
-void phDriverGpio_ClearInterrupt(phDriverGpio_Name_t pinConfig);
+void phGpio_SetInterrupt(phGpio_Handle_t h,
+                         phGpio_IrqConfig_t cfg,
+                         phGpio_IrqCb_t cb,
+                         void *ctx,
+                         uint8_t priority);
+
+/**
+ * @brief Clear interrupt flag for a pin (call inside ISR).
+ */
+void phGpio_ClearInterrupt(phGpio_Handle_t h);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* GPIODRV_H_ */
+#endif /* PH_GPIODRV_H_ */

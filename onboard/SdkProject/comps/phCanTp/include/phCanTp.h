@@ -53,6 +53,4 @@ void phCanTP_TX(phPduR_Pdu_t *pduData);
 
 void CanTpMainFunction(void);
 
-void phCanTP_RX_Processing(uint8_t *data);
-
 #endif /* PHCANTP_H */

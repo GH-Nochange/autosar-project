@@ -35,6 +35,9 @@
 								<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.option.target.sysroot.1432414325" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.option.target.sysroot" useByScannerDiscovery="false" value="--sysroot=&quot;${S32DS_ARM32_EWL_DIR}&quot;" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.545654191" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${S32DS_ARM32_EWL_DIR}/EWL_C/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phHwAb\phIOHwAb\GPIO&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phGenericError&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phDriver\Gpio&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\SDK\rtos\osif&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phGenericError&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\external\SDK\platform\devices&quot;"/>
@@ -133,18 +136,44 @@
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.1405098507" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.514432655" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.249736356" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.117637795" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.117637795" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1334133953" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1846190967" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.346539187" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.41529750" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.1688502118" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.2066916766" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.2066916766" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.630184129" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+								<inputType id="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile.2082272645" superClass="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile"/>
+							</tool>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.2097335137" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
 							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.656743553" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.983854978" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
 							<tool id="com.freescale.s32ds.cross.gnu.c.preprocessor.154379316" name="Standard S32DS C Preprocessor" superClass="com.freescale.s32ds.cross.gnu.c.preprocessor.1505787124"/>
 							<tool id="com.freescale.s32ds.cross.gnu.cpp.preprocessor.139671341" name="Standard S32DS C++ Preprocessor" superClass="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1514031367"/>
 							<tool id="com.freescale.s32ds.cross.gnu.disassembler.107206173" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.464979695" name="/" resourcePath="phHwAb">
+						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.1474159768" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.1744984349" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.980733782" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.67877528" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.1107068627" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.2009108351" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1325488319" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1523675164" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.102784768" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.1317882024" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.753498855" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.1181219646" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
+							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.1026247471" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.1196620026" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
+							<tool id="com.freescale.s32ds.cross.gnu.c.preprocessor.1250605089" name="Standard S32DS C Preprocessor" superClass="com.freescale.s32ds.cross.gnu.c.preprocessor.1505787124"/>
+							<tool id="com.freescale.s32ds.cross.gnu.cpp.preprocessor.459171938" name="Standard S32DS C++ Preprocessor" superClass="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1514031367"/>
+							<tool id="com.freescale.s32ds.cross.gnu.disassembler.2099527047" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
 						</toolChain>
 					</folderInfo>
 					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.865598096" name="/" resourcePath="pins">
@@ -184,6 +213,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="interrupt"/>
 						<entry excluding="osif_freertos.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="osif"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phDriver"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phHwAb"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="pins"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>

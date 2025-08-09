@@ -1,26 +1,5 @@
-04:28:37 **** Incremental Build of configuration Debug for project Simple_Project ****
+04:27:36 **** Incremental Build of configuration Debug for project Simple_Project ****
 make -j16 all 
-Building file: ../src/Cpu.c
-Building file: ../src/clockMan1.c
-Executing target #19 ../src/Cpu.c
-Executing target #20 ../src/clockMan1.c
-Building file: ../src/main.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@src/Cpu.args" -MMD -MP -MF"src/Cpu.d" -MT"src/Cpu.o" -o "src/Cpu.o" "../src/Cpu.c"
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@src/clockMan1.args" -MMD -MP -MF"src/clockMan1.d" -MT"src/clockMan1.o" -o "src/clockMan1.o" "../src/clockMan1.c"
-Executing target #21 ../src/main.c
-Invoking: Standard S32DS C Compiler
-arm-none-eabi-gcc "@src/main.args" -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
-../src/main.c:18:16: warning: 's_rxData' defined but not used [-Wunused-variable]
- static uint8_t s_rxData[RX_MSG_BUF_SIZE];
-                ^~~~~~~~
-Finished building: ../src/main.c
-Finished building: ../src/Cpu.c
-Finished building: ../src/clockMan1.c
- 
- 
- 
 Building target: Simple_Project.elf
 Executing target #22 Simple_Project.elf
 Invoking: Standard S32DS C Linker
@@ -31,6 +10,6 @@ Executing target #23 Simple_Project.siz
 Invoking: Standard S32DS Print Size
 arm-none-eabi-size --format=berkeley  Simple_Project.elf 
    text	   data	    bss	    dec	    hex	filename
-  24052	    332	   3520	  27904	   6d00	Simple_Project.elf
+   8916	      0	   3640	  12556	   310c	Simple_Project.elf
 Finished building: Simple_Project.siz
  

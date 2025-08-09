@@ -18,35 +18,35 @@ static void *s_txCbParam[CAN_INSTANCE_COUNT] = {0};
 
 static void phDriverCan_OnEvent(uint8_t instance,
                                 flexcan_event_type_t eventType,
-                                void *state /* không dùng */)
+                                uint32_t buffIdx,
+                                flexcan_state_t *flexcanState)
 {
-    (void)state;
+    (void)flexcanState;
 
     switch (eventType)
     {
-    case FLEXCAN_EVENT_RX_COMPLETE:
-        if (s_rxCb[instance])
-        {
-            s_rxCb[instance](instance, &s_rxBuf[instance], s_rxCbParam[instance]);
-        }
-        FLEXCAN_DRV_Receive(instance, s_rxMbIdx[instance], &s_rxBuf[instance]);
-        break;
+        case FLEXCAN_EVENT_RX_COMPLETE:
+            if (buffIdx == s_rxMbIdx[instance] && s_rxCb[instance]) {
+                s_rxCb[instance](instance, &s_rxBuf[instance], s_rxCbParam[instance]);
 
-    case FLEXCAN_EVENT_TX_COMPLETE:
-        if (s_txCb[instance])
-        {
-            s_txCb[instance](instance, s_txCbParam[instance]);
-        }
-        break;
-    case FLEXCAN_EVENT_ERROR:
-    case FLEXCAN_EVENT_BUSOFF:
-    case FLEXCAN_EVENT_WAKEUP:
-        break;
+                /* Re-arm để tiếp tục nhận */
+                (void)FLEXCAN_DRV_Receive(instance,
+                                          s_rxMbIdx[instance],
+                                          &s_rxBuf[instance]);
+            }
+            break;
 
-    default:
-        break;
+        case FLEXCAN_EVENT_TX_COMPLETE:
+            if (buffIdx == s_txMbIdx[instance] && s_txCb[instance]) {
+                s_txCb[instance](instance, s_txCbParam[instance]);
+            }
+            break;
+
+        default:
+            break;
     }
 }
+
 
 static void phDriverCan_BindTxMb(uint8_t instance, uint8_t tx_mb_idx)
 {
@@ -64,7 +64,7 @@ static void phDriverCan_BindRxMb(uint8_t instance, uint8_t rx_mb_idx)
     }
 }
 
-phTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
+PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
                                      const phDriverCan_Config_t *canConfig)
 {
     if (instance >= CAN_INSTANCE_COUNT)
@@ -78,7 +78,7 @@ phTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
         return PH_ERR_FAILED;
 
     if (canConfig == NULL)
-        return PH_ERR_SUCCESS;
+        return PH_ERR_OK;
 
     if (canConfig->tx_mb_idx >= cfg.max_num_mb ||
         canConfig->rx_mb_idx >= cfg.max_num_mb)
@@ -95,34 +95,27 @@ phTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
         if (canConfig->tx_id > 0x1FFFFFFFu || canConfig->rx_id > 0x1FFFFFFFu)
             return PH_ERR_FAILED;
     }
-    /* DLC hợp lệ cho CAN thường */
     uint8_t dlc = (canConfig->default_data_length == 0u) ? 8u : canConfig->default_data_length;
     if (dlc > 8u)
         dlc = 8u;
 
-    /* 5) Mask kiểu GLOBAL/INDIVIDUAL */
-    st = FLEXCAN_DRV_SetRxMaskType(instance,
+    FLEXCAN_DRV_SetRxMaskType(instance,
                                    canConfig->use_rx_individual_mask ? FLEXCAN_RX_MASK_INDIVIDUAL
                                                                      : FLEXCAN_RX_MASK_GLOBAL);
-    if (st != STATUS_SUCCESS)
-        return PH_ERR_FAILED;
 
     if (canConfig->use_rx_individual_mask)
     {
-        st = FLEXCAN_DRV_SetRxIndividualMask(instance,
+        FLEXCAN_DRV_SetRxIndividualMask(instance,
                                              canConfig->msg_id_type,
                                              canConfig->rx_mb_idx,
                                              canConfig->rx_mask);
-        if (st != STATUS_SUCCESS)
-            return PH_ERR_FAILED;
+    
     }
     else
     {
-        st = FLEXCAN_DRV_SetRxMbGlobalMask(instance,
-                                           canConfig->msg_id_type,
-                                           canConfig->rx_mask);
-        if (st != STATUS_SUCCESS)
-            return PH_ERR_FAILED;
+        FLEXCAN_DRV_SetRxMbGlobalMask(instance,
+                                       canConfig->msg_id_type,
+                                       canConfig->rx_mask);
     }
 
     flexcan_data_info_t info;
@@ -152,17 +145,16 @@ phTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
                                      phDriverCan_OnEvent,
                                      NULL);
 
-    /* 9) Arm nhận lần đầu (non-blocking). Khi nhận xong sẽ có RX_COMPLETE và bạn re-arm lại trong callback. */
     st = FLEXCAN_DRV_Receive(instance,
                              canConfig->rx_mb_idx,
                              &s_rxBuf[instance]);
     if (st != STATUS_SUCCESS)
         return PH_ERR_FAILED;
 
-    return PH_ERR_SUCCESS;
+    return PH_ERR_OK;
 }
 
-phTypes_ErrorCode_t phDriverCan_DeInit(const uint8_t instance)
+PhTypes_ErrorCode_t phDriverCan_DeInit(const uint8_t instance)
 {
     if (instance >= CAN_INSTANCE_COUNT)
     {
@@ -184,10 +176,10 @@ phTypes_ErrorCode_t phDriverCan_DeInit(const uint8_t instance)
     s_rxMbIdx[instance] = 0;
     s_txMbIdx[instance] = 0;
 
-    return PH_ERR_SUCCESS;
+    return PH_ERR_OK;
 }
 
-phTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
+PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
                                      const uint32_t msgId,
                                      const uint8_t *const sendData,
                                      const uint8_t length)
@@ -219,7 +211,7 @@ phTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
                                    msgId,
                                    sendData);
     if (st == STATUS_SUCCESS)
-        return PH_ERR_SUCCESS;
+        return PH_ERR_OK;
     if (st == STATUS_BUSY)
         return PH_ERR_BUSY;
     return PH_ERR_FAILED;

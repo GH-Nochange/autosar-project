@@ -1,202 +1,212 @@
-#include "GpioDrv.h"
+#include "phGpioDrv.h"
+#include "pins_driver.h"
+#include <string.h>
 
-// Cấu hình phần cứng từng GPIO
-#define LED_R_GPIO   PTD
-#define LED_G_GPIO   PTD
-#define LED_B_GPIO   PTD
 
-#define LED_R_PORT   PORTD
-#define LED_G_PORT   PORTD
-#define LED_B_PORT   PORTD
-
-#define LED_R_PIN    (0U)
-#define LED_G_PIN    (15U)
-#define LED_B_PIN    (16U)
-
-#define LED_MASK     ((1UL << LED_R_PIN) | (1UL << LED_G_PIN) | (1UL << LED_B_PIN))
-
-// Cấu hình pin đầu ra ban đầu
-static const pin_settings_config_t g_boardPins[] = {
-    {
-        .base = LED_R_PORT, .pinPortIdx = LED_R_PIN,
-        .mux = PORT_MUX_AS_GPIO, .gpioBase = LED_R_GPIO,
-        .direction = GPIO_OUTPUT_DIRECTION, .initValue = 1U,
-        .intConfig = PORT_DMA_INT_DISABLED, .digitalFilter = false
-    },
-    {
-        .base = LED_G_PORT, .pinPortIdx = LED_G_PIN,
-        .mux = PORT_MUX_AS_GPIO, .gpioBase = LED_G_GPIO,
-        .direction = GPIO_OUTPUT_DIRECTION, .initValue = 1U,
-        .intConfig = PORT_DMA_INT_DISABLED, .digitalFilter = false
-    },
-    {
-        .base = LED_B_PORT, .pinPortIdx = LED_B_PIN,
-        .mux = PORT_MUX_AS_GPIO, .gpioBase = LED_B_GPIO,
-        .direction = GPIO_OUTPUT_DIRECTION, .initValue = 1U,
-        .intConfig = PORT_DMA_INT_DISABLED, .digitalFilter = false
-    }
-};
-
-static const uint32_t g_boardPinsCount = sizeof(g_boardPins) / sizeof(g_boardPins[0]);
-
-static phDriverGpio_Callback_t g_gpioCallbacks[PH_GPIO_NUM] = { 0 };
-
-void phDriverGpio_Init(void)
-{
-    PINS_DRV_Init(g_boardPinsCount, g_boardPins);
-
-    for (phDriverGpio_Name_t i = 0; i < g_boardPinsCount; i++) {
-        const pin_settings_config_t *cfg = &g_boardPins[i];
-        PINS_DRV_SetPins(cfg->gpioBase, 1U << cfg->pinPortIdx);
-    }
-}
-
-void phDriverGpio_DeInitPin(phDriverGpio_Name_t pinConfig)
-{
-    if (pinConfig < g_boardPinsCount)
-    {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-
-        PINS_DRV_SetPins(cfg->gpioBase, 1U << cfg->pinPortIdx);
-
-        PINS_DRV_SetPinDirection(cfg->gpioBase, cfg->pinPortIdx, GPIO_INPUT_DIRECTION);
-
-#ifdef FEATURE_PINS_DRIVER_USING_PORT
-        PINS_DRV_SetMuxModeSel(cfg->base, cfg->pinPortIdx, PORT_PIN_DISABLED);
+#ifndef PH_GPIO_MAX_HANDLES
+#define PH_GPIO_MAX_HANDLES 64u 
 #endif
-    }
+
+static const phGpio_PinConfig_t *s_table = NULL;
+static uint32_t s_count = 0U;
+
+static phGpio_IrqCb_t s_irq_cb[PH_GPIO_MAX_HANDLES];
+static void          *s_irq_ctx[PH_GPIO_MAX_HANDLES];
+
+
+static inline bool ph_is_valid_handle(phGpio_Handle_t h)
+{
+    return (s_table != NULL) && (h < s_count);
 }
 
-void phDriverGpio_DeInit(void)
+static inline pins_channel_type_t ph_bit(uint32_t pin)
 {
-    for (phDriverGpio_Name_t i = 0; i < g_boardPinsCount; i++) {
-        phDriverGpio_DeInitPin(i);
-    }
+    return (pins_channel_type_t)(1UL << pin);
 }
 
-
-void phDriverGpio_SetPinLevel(phDriverGpio_Name_t pinConfig, phDriverGpio_PinLevel_t pinLevel)
+static phGpio_Handle_t ph_find_handle_by_hw(const PORT_Type *port, uint32_t pin)
 {
-    if (pinConfig < g_boardPinsCount)
+    if (!s_table) return PH_GPIO_INVALID_HANDLE;
+    for (uint32_t i = 0; i < s_count; i++)
     {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-        if (pinLevel == PH_GPIO_LOW)
-            PINS_DRV_ClearPins(cfg->gpioBase, 1U << cfg->pinPortIdx);
-        else
-            PINS_DRV_SetPins(cfg->gpioBase, 1U << cfg->pinPortIdx);
-    }
-}
-
-void phDriverGpio_TogglePin(phDriverGpio_Name_t pinConfig)
-{
-    if (pinConfig < g_boardPinsCount)
-    {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-        PINS_DRV_TogglePins(cfg->gpioBase, 1U << cfg->pinPortIdx);
-    }
-}
-
-phDriverGpio_PinLevel_t phDriverGpio_GetPinLevel(phDriverGpio_Name_t pinConfig)
-{
-    if (pinConfig < g_boardPinsCount)
-    {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-        uint32_t pinState = PINS_DRV_ReadPins(cfg->gpioBase);
-        uint32_t pinMask = 1U << cfg->pinPortIdx;
-
-        return (pinState & pinMask) ? PH_GPIO_HIGH : PH_GPIO_LOW;
-    }
-
-    return PH_GPIO_LOW;
-}
-
-void phDriverGpio_SetInterrupt(phDriverGpio_Name_t pinConfig, phDriverGpio_IrqConfig_t irqConfig)
-{
-    if (pinConfig < g_boardPinsCount)
-    {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-
-        PINS_DRV_SetPinIntSel(cfg->base, cfg->pinPortIdx, irqConfig.intConfig);
-
-        if (irqConfig.digitalFilterEnable)
+        if ((s_table[i].port_base == port) && (s_table[i].pin == pin))
         {
-#ifdef FEATURE_PORT_HAS_DIGITAL_FILTER
-            PINS_DRV_EnableDigitalFilter(cfg->base, 1U << cfg->pinPortIdx);
-#endif
-        }
-         if (cfg->base == PORTA) {
-            INT_SYS_EnableIRQ(PORTA_IRQn);
-        } else if (cfg->base == PORTB) {
-            INT_SYS_EnableIRQ(PORTB_IRQn);
-        } else if (cfg->base == PORTC) {
-            INT_SYS_EnableIRQ(PORTC_IRQn);
-        } else if (cfg->base == PORTD) {
-            INT_SYS_EnableIRQ(PORTD_IRQn);
-        } else if (cfg->base == PORTE) {
-            INT_SYS_EnableIRQ(PORTE_IRQn);
+            return (phGpio_Handle_t)i;
         }
     }
+    return PH_GPIO_INVALID_HANDLE;
 }
 
-void phDriverGpio_ClearInterrupt(phDriverGpio_Name_t pinConfig)
+static void ph_configure_one_pin_(const phGpio_PinConfig_t *cfg)
 {
-    if (pinConfig < g_boardPinsCount)
+    PINS_DRV_SetMuxModeSel(cfg->port_base, cfg->pin, cfg->mux);
+
+    PINS_DRV_SetPinDirection(cfg->gpio_base, (pins_channel_type_t)cfg->pin,
+                             (pins_level_type_t)(cfg->is_output ? 1U : 0U));
+
+    if (cfg->is_output)
     {
-        const pin_settings_config_t *cfg = &g_boardPins[pinConfig];
-        PINS_DRV_ClearPinIntFlagCmd(cfg->base, cfg->pinPortIdx);
+        PINS_DRV_WritePin(cfg->gpio_base, (pins_channel_type_t)cfg->pin,
+                          (pins_level_type_t)cfg->init_level);
     }
+
+    PINS_DRV_SetPinIntSel(cfg->port_base, cfg->pin, cfg->irq.int_config);
+    if (cfg->irq.digital_filter_enable)
+        PINS_DRV_EnableDigitalFilter(cfg->port_base, cfg->pin);
+    else
+        PINS_DRV_DisableDigitalFilter(cfg->port_base, cfg->pin);
 }
 
-void phDriverGpio_RegisterCallback(phDriverGpio_Name_t pinConfig, phDriverGpio_Callback_t callbackFunc)
-{
-    if (pinConfig < g_boardPinsCount)
-    {
-        g_gpioCallbacks[pinConfig] = callbackFunc;
-    }
-}
-
-static void phDriverGpio_CommonIRQHandler(PORT_Type *port)
+static void ph_dispatch_port_isr_(PORT_Type *port)
 {
     uint32_t flags = PINS_DRV_GetPortIntFlag(port);
+    if (flags == 0U) return;
 
-    for (phDriverGpio_Name_t pin = 0; pin < g_boardPinsCount; pin++)
+    while (flags)
     {
-        const pin_settings_config_t *cfg = &g_boardPins[pin];
+        uint32_t pin = __builtin_ctz(flags);     
+        flags &= ~(1UL << pin);                 
 
-        // So khớp PORT
-        if (cfg->base == port && ((flags >> cfg->pinPortIdx) & 1U))
+        phGpio_Handle_t h = ph_find_handle_by_hw(port, pin);
+        if (ph_is_valid_handle(h))
         {
-            PINS_DRV_ClearPinIntFlagCmd(cfg->base, cfg->pinPortIdx);
-
-            if (g_gpioCallbacks[pin])
+            if (h < PH_GPIO_MAX_HANDLES && s_irq_cb[h])
             {
-                g_gpioCallbacks[pin]();  
+                s_irq_cb[h](h, s_irq_ctx[h]);
             }
+        }
+
+        PINS_DRV_ClearPinIntFlagCmd(port, pin);
+    }
+}
+
+
+void phGpio_Init(const phGpio_PinConfig_t table[], uint32_t count)
+{
+    s_table = table;
+    s_count = count;
+
+    memset(s_irq_cb, 0, sizeof(s_irq_cb));
+    memset(s_irq_ctx, 0, sizeof(s_irq_ctx));
+
+    for (uint32_t i = 0; i < s_count; i++)
+    {
+        ph_configure_one_pin_(&s_table[i]);
+
+        if (i < PH_GPIO_MAX_HANDLES)
+        {
+            s_irq_cb[i]  = s_table[i].irq_cb;
+            s_irq_ctx[i] = s_table[i].irq_user_param;
         }
     }
 }
 
-void PORTA_IRQHandler(void)
+void phGpio_DeInit(void)
 {
-    phDriverGpio_CommonIRQHandler(PORTA);
+    if (!s_table) return;
+
+    for (uint32_t i = 0; i < s_count; i++)
+    {
+        const phGpio_PinConfig_t *cfg = &s_table[i];
+
+        PINS_DRV_SetPinDirection(cfg->gpio_base, (pins_channel_type_t)cfg->pin, (pins_level_type_t)0U);
+        PINS_DRV_DisableDigitalFilter(cfg->port_base, cfg->pin);
+        PINS_DRV_SetPinIntSel(cfg->port_base, cfg->pin, PORT_DMA_INT_DISABLED);
+        PINS_DRV_ClearPinIntFlagCmd(cfg->port_base, cfg->pin);
+    }
+
+    s_table = NULL;
+    s_count = 0U;
+    memset(s_irq_cb, 0, sizeof(s_irq_cb));
+    memset(s_irq_ctx, 0, sizeof(s_irq_ctx));
 }
 
-void PORTB_IRQHandler(void)
+void phGpio_Set(phGpio_Handle_t h, phGpio_Level_t lvl)
 {
-    phDriverGpio_CommonIRQHandler(PORTB);
+    if (!ph_is_valid_handle(h)) return;
+    const phGpio_PinConfig_t *cfg = &s_table[h];
+    PINS_DRV_WritePin(cfg->gpio_base, (pins_channel_type_t)cfg->pin, (pins_level_type_t)lvl);
 }
 
-void PORTC_IRQHandler(void)
+void phGpio_Toggle(phGpio_Handle_t h)
 {
-    phDriverGpio_CommonIRQHandler(PORTC);
+    if (!ph_is_valid_handle(h)) return;
+    const phGpio_PinConfig_t *cfg = &s_table[h];
+    PINS_DRV_TogglePins(cfg->gpio_base, ph_bit(cfg->pin));
 }
 
-void PORTD_IRQHandler(void)
+phGpio_Level_t phGpio_Get(phGpio_Handle_t h)
 {
-    phDriverGpio_CommonIRQHandler(PORTD);
+    if (!ph_is_valid_handle(h)) return PH_GPIO_LOW;
+    const phGpio_PinConfig_t *cfg = &s_table[h];
+    pins_channel_type_t v = PINS_DRV_ReadPins(cfg->gpio_base);
+    return ( (v & ph_bit(cfg->pin)) != 0U ) ? PH_GPIO_HIGH : PH_GPIO_LOW;
 }
 
-void PORTE_IRQHandler(void)
+static IRQn_Type ph_port_to_irqn(const PORT_Type *p)
 {
-    phDriverGpio_CommonIRQHandler(PORTE);
-} 
+    if (p == PORTA) return PORTA_IRQn;
+    if (p == PORTB) return PORTB_IRQn;
+    if (p == PORTC) return PORTC_IRQn;
+    if (p == PORTD) return PORTD_IRQn;
+    if (p == PORTE) return PORTE_IRQn;
+    return (IRQn_Type)-1;
+}
+
+void phGpio_SetInterrupt(phGpio_Handle_t h,
+                         phGpio_IrqConfig_t cfg,
+                         phGpio_IrqCb_t cb,
+                         void *ctx,
+                         uint8_t priority)
+{
+    if (!ph_is_valid_handle(h)) return;
+
+    const phGpio_PinConfig_t *pin = &s_table[h];
+    PINS_DRV_ClearPinIntFlagCmd(pin->port_base, pin->pin);
+    PINS_DRV_SetPinIntSel(pin->port_base, pin->pin, cfg.int_config);
+
+    if (cfg.digital_filter_enable)
+        PINS_DRV_EnableDigitalFilter(pin->port_base, pin->pin);
+    else
+        PINS_DRV_DisableDigitalFilter(pin->port_base, pin->pin);
+
+    if (h < PH_GPIO_MAX_HANDLES) {
+        s_irq_cb[h]  = cb;
+        s_irq_ctx[h] = ctx;
+    }
+
+    IRQn_Type irqn = ph_port_to_irqn(pin->port_base);
+    if ((int)irqn >= 0) {
+        S32_NVIC->ICPR[irqn >> 5u] = (1u << (irqn & 31u));
+#ifndef __NVIC_PRIO_BITS
+#define __NVIC_PRIO_BITS 4u
+#endif
+        uint8_t prio = (priority & ((1u << __NVIC_PRIO_BITS) - 1u));
+        S32_NVIC->IP[irqn] = (uint8_t)((prio << (8u - __NVIC_PRIO_BITS)) & 0xFFu);
+        S32_NVIC->ISER[irqn >> 5u] = (1u << (irqn & 31u));
+    }
+}
+
+
+void phGpio_ClearInterrupt(phGpio_Handle_t h)
+{
+    if (!ph_is_valid_handle(h)) return;
+    const phGpio_PinConfig_t *cfg = &s_table[h];
+    PINS_DRV_ClearPinIntFlagCmd(cfg->port_base, cfg->pin);
+}
+
+#ifdef PORTA
+void PORTA_IRQHandler(void) { ph_dispatch_port_isr_(PORTA); }
+#endif
+#ifdef PORTB
+void PORTB_IRQHandler(void) { ph_dispatch_port_isr_(PORTB); }
+#endif
+#ifdef PORTC
+void PORTC_IRQHandler(void) { ph_dispatch_port_isr_(PORTC); }
+#endif
+#ifdef PORTD
+void PORTD_IRQHandler(void) { ph_dispatch_port_isr_(PORTD); }
+#endif
+#ifdef PORTE
+void PORTE_IRQHandler(void) { ph_dispatch_port_isr_(PORTE); }
+#endif

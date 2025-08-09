@@ -60,6 +60,11 @@
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver</location>
 		</link>
 		<link>
+			<name>phHwAb</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phHwAb</location>
+		</link>
+		<link>
 			<name>pins</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/pins</location>

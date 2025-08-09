@@ -39,7 +39,10 @@
     "interrupt_manager.h": "c",
     "text_encoding": "c",
     "typeinfo": "c",
-    "phtypes.h": "c"
+    "phtypes.h": "c",
+    "stdint.h": "c",
+    "phcanif.h": "c",
+    "flexio_spi_driver.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

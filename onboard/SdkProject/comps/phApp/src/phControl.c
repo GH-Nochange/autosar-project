@@ -76,7 +76,9 @@ void Control_MainFunction(void)
             switch (data.header.id)
             {
             case Cmd_CAN:
-                // Xử lý tín hiệu Command_CAN
+                phApp_DataTypes_t internalData;
+                CreateInternalData(SetProtocol, 0, &internalData);
+                TransmitSignal(internalData);
                 if (data.header.length == 2 && data.payload[0] == Cmd_LedControl)
                 {
                     uint8_t control = data.payload[1];
@@ -88,7 +90,9 @@ void Control_MainFunction(void)
                 // Xử lý tín hiệu Command_SPI
                 phApp_DataTypes_t dataResponse;
                 // Routing SPI
-
+                phApp_DataTypes_t internalData;
+                CreateInternalData(SetProtocol, 0x01, &internalData);
+                TransmitSignal(internalData);
                 switch (data.payload[0])
                 {
                 case Cmd_LED_State:
@@ -115,16 +119,10 @@ void Control_MainFunction(void)
                 default:
                     break;
                 }
-
             default:
                 // Xử lý các tín hiệu không xác định
                 break;
             }
         }
     }
-    // Gửi tín hiệu LED state và brightness qua Can
-    // Routing CAN
-    phApp_DataTypes_t data;
-    CreateLedStateAndBrightnessData(LedState, brightness, &data);
-    TransmitSignal(data);
 }

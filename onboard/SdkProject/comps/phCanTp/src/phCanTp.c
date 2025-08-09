@@ -26,14 +26,15 @@ uint8_t RX_sn = 0;
 phPduR_Pdu_t pduRXData;
 
 static void phCanTP_TX_Processing(void);
+static void phCanTP_RX_Processing(uint8_t *data);
 static void phCanTP_RX(void);
 
-void CanIf_TxConfirmation(void)
+void Can_TxConfirmation(void)
 {
     s_tpTxDoneFlag = 1;
 }
 
-void CanIf_RxIndication(const flexcan_msgbuff_t *frame)
+void Can_RxIndication(const flexcan_msgbuff_t *frame)
 {
     uint8_t len = frame->dataLen;
     if (len > 8)
@@ -122,17 +123,17 @@ static void phCanTP_TX_Processing(void)
     switch (canTpTXState)
     {
     case SF_State:
-        CanIf_Transmit((uint8_t *)&singleframeTX, sizeof(singleframeTX));
+        Can_Transmit((uint8_t *)&singleframeTX, sizeof(singleframeTX));
         flagSending = 0;
         break;
     case FF_State:
-        CanIf_Transmit((uint8_t *)&firstframeTX, sizeof(firstframeTX));
+        Can_Transmit((uint8_t *)&firstframeTX, sizeof(firstframeTX));
         break;
     case CF_State:
         phCanTP_CF_t cf;
         if(QueueTX_Pop(&cf)== PH_ERR_OK)
         {
-            CanIf_Transmit((uint8_t *)&cf, sizeof(cf));
+            Can_Transmit((uint8_t *)&cf, sizeof(cf));
             if (QueueTX_IsEmpty())
             {
                 phCanTP_Init(); 
@@ -169,7 +170,7 @@ static void phHandle_FC(phCanTP_FC_t fc)
     // Block Size & STmin
 }
 
-void phCanTP_RX_Processing(uint8_t *data)
+static void phCanTP_RX_Processing(uint8_t *data)
 {
     switch (data[0] >> 4)
     {
@@ -197,7 +198,7 @@ void phCanTP_RX_Processing(uint8_t *data)
         RX_sn = 1;
 
         // Send flow control
-        CanIf_Transmit((uint8_t *)&fc, sizeof(fc));
+        Can_Transmit((uint8_t *)&fc, sizeof(fc));
 
         break;
     case CF:
