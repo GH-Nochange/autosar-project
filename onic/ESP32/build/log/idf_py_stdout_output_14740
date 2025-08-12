@@ -1,6 +1,0 @@
-[0/1] Re-running CMake...
--- ccache will be used for faster recompilation
--- Building ESP-IDF components for target esp32
--- Configuring incomplete, errors occurred!
-FAILED: build.ninja 
-C:\esp\Espressif\tools\cmake\3.30.2\bin\cmake.exe --regenerate-during-build -SC:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onhost\ESP32 -BC:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onhost\ESP32\build
