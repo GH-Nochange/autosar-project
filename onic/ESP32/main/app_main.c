@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include "esp_log.h"
+#include "esp_err.h"
+#include "esp_system.h"
+#include "nvs_flash.h"
+#include "esp_netif.h"
+#include "esp_event.h"
+#include "esp_timer.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "string.h"
+
+#include "input.h"
+#include "wifi_config.h"
+#include "mqtt.h"
+
+static const char *TAG = "APP_MAIN";
+
+void mqtt_data_callback(char *dt, int len)
+{
+    char buf[256] = {0};
+    int length = (len > 255) ? 255 : len;
+    memcpy(buf, dt, length);
+    buf[length] = '\0';
+
+    printf("DATA=%s\n", buf);
+}
+
+typedef struct
+{
+    int gpio_num;
+    uint32_t press_time_ms;
+} button_event_t;
+
+static QueueHandle_t button_evt_queue;
+
+void button_task(void *arg)
+{
+    button_event_t evt;
+    while (1)
+    {
+        if (xQueueReceive(button_evt_queue, &evt, portMAX_DELAY))
+        {
+            if (evt.press_time_ms > 3000)
+            {
+                ESP_ERROR_CHECK(nvs_flash_erase());
+                ESP_LOGI(TAG, "NVS erased. Restarting...");
+
+                vTaskDelay(pdMS_TO_TICKS(500));
+
+                esp_restart();
+            }
+        }
+    }
+}
+
+void input_button_callback(int gpio_num, uint64_t tick)
+{
+    if (gpio_num == GPIO_NUM_0)
+    {
+        button_event_t evt = {
+            .gpio_num = gpio_num,
+            .press_time_ms = tick * portTICK_PERIOD_MS};
+        xQueueSendFromISR(button_evt_queue, &evt, NULL);
+    }
+}
+
+void app_main(void)
+{
+    ESP_LOGI(TAG, "[APP] Startup..");
+    ESP_LOGI(TAG, "[APP] Free memory: %lu bytes", esp_get_free_heap_size());
+    ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
+
+    ESP_ERROR_CHECK(nvs_flash_init());
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    input_set_callback(input_button_callback);
+    input_io_create(GPIO_NUM_0, ANY_EDGE);
+
+    button_evt_queue = xQueueCreate(4, sizeof(button_event_t));
+    xTaskCreate(button_task, "button_task", 2048, NULL, 5, NULL);
+
+    wifi_config();
+
+    mqtt_init();
+    mqtt_set_callback(mqtt_data_callback);
+    mqtt_start();
+}

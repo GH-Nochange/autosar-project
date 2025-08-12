@@ -37,7 +37,7 @@
 *.hex
 
 # Debug files
-*.dSYM/
+*.dSYM/  
 *.su
 *.idb
 *.pdb
@@ -53,3 +53,15 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# meta data
+.metadata/
+
+RemoteSystemsTempFiles/
+
+Debug/
+build/
+
+.vscode/
+
+certs/
