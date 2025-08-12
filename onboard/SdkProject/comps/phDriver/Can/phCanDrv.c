@@ -16,6 +16,8 @@ static void *s_rxCbParam[CAN_INSTANCE_COUNT] = {0};
 static phDriverCan_TxCb_t s_txCb[CAN_INSTANCE_COUNT] = {0};
 static void *s_txCbParam[CAN_INSTANCE_COUNT] = {0};
 
+static uint8_t s_maxMb[CAN_INSTANCE_COUNT];
+
 static void phDriverCan_OnEvent(uint8_t instance,
                                 flexcan_event_type_t eventType,
                                 uint32_t buffIdx,
@@ -25,28 +27,29 @@ static void phDriverCan_OnEvent(uint8_t instance,
 
     switch (eventType)
     {
-        case FLEXCAN_EVENT_RX_COMPLETE:
-            if (buffIdx == s_rxMbIdx[instance] && s_rxCb[instance]) {
-                s_rxCb[instance](instance, &s_rxBuf[instance], s_rxCbParam[instance]);
+    case FLEXCAN_EVENT_RX_COMPLETE:
+        if (buffIdx == s_rxMbIdx[instance] && s_rxCb[instance])
+        {
+            s_rxCb[instance](instance, &s_rxBuf[instance], s_rxCbParam[instance]);
 
-                /* Re-arm để tiếp tục nhận */
-                (void)FLEXCAN_DRV_Receive(instance,
-                                          s_rxMbIdx[instance],
-                                          &s_rxBuf[instance]);
-            }
-            break;
+            /* Re-arm để tiếp tục nhận */
+            (void)FLEXCAN_DRV_Receive(instance,
+                                      s_rxMbIdx[instance],
+                                      &s_rxBuf[instance]);
+        }
+        break;
 
-        case FLEXCAN_EVENT_TX_COMPLETE:
-            if (buffIdx == s_txMbIdx[instance] && s_txCb[instance]) {
-                s_txCb[instance](instance, s_txCbParam[instance]);
-            }
-            break;
+    case FLEXCAN_EVENT_TX_COMPLETE:
+        if (buffIdx == s_txMbIdx[instance] && s_txCb[instance])
+        {
+            s_txCb[instance](instance, s_txCbParam[instance]);
+        }
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
-
 
 static void phDriverCan_BindTxMb(uint8_t instance, uint8_t tx_mb_idx)
 {
@@ -64,6 +67,31 @@ static void phDriverCan_BindRxMb(uint8_t instance, uint8_t rx_mb_idx)
     }
 }
 
+static bool ph_flexcan_enable_pcc(uint8_t instance)
+{
+    switch (instance)
+    {
+#if defined(PCC_FlexCAN0_INDEX)
+        case 0u: PCC->PCCn[PCC_FlexCAN0_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#elif defined(PCC_FLEXCAN0_INDEX)
+        case 0u: PCC->PCCn[PCC_FLEXCAN0_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#endif
+
+#if defined(PCC_FlexCAN1_INDEX)
+        case 1u: PCC->PCCn[PCC_FlexCAN1_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#elif defined(PCC_FLEXCAN1_INDEX)
+        case 1u: PCC->PCCn[PCC_FLEXCAN1_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#endif
+
+#if defined(PCC_FlexCAN2_INDEX)
+        case 2u: PCC->PCCn[PCC_FlexCAN2_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#elif defined(PCC_FLEXCAN2_INDEX)
+        case 2u: PCC->PCCn[PCC_FLEXCAN2_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+#endif
+        default: return false;
+    }
+}
+
 PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
                                      const phDriverCan_Config_t *canConfig)
 {
@@ -72,6 +100,17 @@ PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
 
     flexcan_user_config_t cfg;
     FLEXCAN_DRV_GetDefaultConfig(&cfg);
+#if FEATURE_CAN_HAS_PE_CLKSRC_SELECT
+    cfg.pe_clock = FLEXCAN_CLK_SOURCE_OSC; /* PE clock = Osc (8 MHz) */
+#endif
+    cfg.bitrate.preDivider = 0;
+    cfg.bitrate.propSeg = 6;
+    cfg.bitrate.phaseSeg1 = 3;
+    cfg.bitrate.phaseSeg2 = 3;
+    cfg.bitrate.rJumpwidth = 3;
+
+    if (!ph_flexcan_enable_pcc(instance))
+    return PH_ERR_FAILED;
 
     status_t st = FLEXCAN_DRV_Init(instance, &s_canState[instance], &cfg);
     if (st != STATUS_SUCCESS)
@@ -100,28 +139,32 @@ PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
         dlc = 8u;
 
     FLEXCAN_DRV_SetRxMaskType(instance,
-                                   canConfig->use_rx_individual_mask ? FLEXCAN_RX_MASK_INDIVIDUAL
-                                                                     : FLEXCAN_RX_MASK_GLOBAL);
+                              canConfig->use_rx_individual_mask ? FLEXCAN_RX_MASK_INDIVIDUAL
+                                                                : FLEXCAN_RX_MASK_GLOBAL);
 
     if (canConfig->use_rx_individual_mask)
     {
         FLEXCAN_DRV_SetRxIndividualMask(instance,
-                                             canConfig->msg_id_type,
-                                             canConfig->rx_mb_idx,
-                                             canConfig->rx_mask);
-    
+                                        canConfig->msg_id_type,
+                                        canConfig->rx_mb_idx,
+                                        canConfig->rx_mask);
     }
     else
     {
         FLEXCAN_DRV_SetRxMbGlobalMask(instance,
-                                       canConfig->msg_id_type,
-                                       canConfig->rx_mask);
+                                      canConfig->msg_id_type,
+                                      canConfig->rx_mask);
     }
 
     flexcan_data_info_t info;
     info.msg_id_type = canConfig->msg_id_type;
     info.data_length = dlc;
     info.is_remote = false;
+    #if FEATURE_CAN_HAS_FD
+    info.fd_enable = false;
+    info.fd_padding = 0;
+    info.enable_brs = false;
+#endif
 
     st = FLEXCAN_DRV_ConfigRxMb(instance,
                                 canConfig->rx_mb_idx,
@@ -199,6 +242,12 @@ PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
     flexcan_data_info_t info;
     info.msg_id_type = idType;
     info.is_remote = false;
+    #if FEATURE_CAN_HAS_FD
+    info.fd_enable = false;
+    info.fd_padding = 0;
+    info.enable_brs = false;
+#endif
+
 
     uint8_t dlc = (length == 0u) ? 8u : length;
     if (dlc > 8u)

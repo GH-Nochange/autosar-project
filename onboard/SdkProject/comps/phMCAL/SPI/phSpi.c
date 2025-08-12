@@ -71,4 +71,6 @@ PhTypes_ErrorCode_t phSpi_SlaveGetStatus(uint32_t *bytesRemaining) {
     return (status == PH_ERR_OK) ? PH_ERR_OK : PH_ERR_FAILED;
 }
 
-void callback
+void phSpi_SlaveCallback(void *driverState, spi_event_t event, void *userData) {
+    
+}

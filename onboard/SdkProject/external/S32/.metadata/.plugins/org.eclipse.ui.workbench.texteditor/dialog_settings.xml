@@ -2,29 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="NVIC" key="selection"/>
+		<item value="SPI0_IRQn" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="SPI0_IRQn"/>
+			<item value="FLEXIO_SPO"/>
+			<item value="FLEXIO_"/>
+			<item value="FLEX"/>
+			<item value="SPI"/>
+			<item value="FLEXIO_SPI_IRQn"/>
+			<item value="NVIC_ClearPendingIRQ_Reg"/>
 			<item value="nvic_Cl"/>
-			<item value="nvic"/>
-			<item value="nviv"/>
-			<item value="NVIC"/>
-			<item value="NVIC\"/>
-			<item value="static inline"/>
-			<item value="NVIC_"/>
-			<item value="ncic"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="336" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="454" key="DIALOG_HEIGHT"/>
-		<item value="801" key="DIALOG_X_ORIGIN"/>
-		<item value="217" key="DIALOG_Y_ORIGIN"/>
+		<item value="1176" key="DIALOG_X_ORIGIN"/>
+		<item value="313" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

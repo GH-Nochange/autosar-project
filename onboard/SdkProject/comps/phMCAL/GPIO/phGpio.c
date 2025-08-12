@@ -78,7 +78,7 @@ static const phGpio_PinConfig_t s_pins[H_COUNT] =
     },
 };
 
-void phGpio_Init(void)
+void phGpioHwAb_Init(void)
 {
     phGpio_Init(s_pins, (uint32_t)H_COUNT);
     s_handles.led_r   = (phGpio_Handle_t)H_LED_R;

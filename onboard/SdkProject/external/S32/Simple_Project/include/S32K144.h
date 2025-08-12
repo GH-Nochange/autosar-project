@@ -83,7 +83,7 @@
 **         Added FSL_NVIC registers to SVD
 **     - rev. 2.0 (2016-04-07) - Iulian Talpiga
 **         Updated support for Rev2.0 silicon (0N47T)
-**         Updated ADC, AIPS, DMA, FlexIO, FTM, GPIO, LPI2C, LPIT, LPSPI, MCM, MPU, MSCM, PMC, RTC, RCM, PCC, RTC, SCG, SIM, TRGMUX and WDOG  module
+**         Updated ADC, AIPS, DMA, IO, FTM, GPIO, LPI2C, LPIT, LPSPI, MCM, MPU, MSCM, PMC, RTC, RCM, PCC, RTC, SCG, SIM, TRGMUX and WDOG  module
 **         Updated interrupts
 **         Added EIM and ERM modules
 **         Added EIM and ERM modules
@@ -98,7 +98,7 @@
 **         Updated to latest RM
 **         Minor changes to: PCC, FSL_NVIC and FTM
 **     - rev. 2.4 (2016-09-28) - Iulian Talpiga
-**         Fix RAMn array size in FlexCAN
+**         Fix RAMn array size in CAN
 **         Fix FCSESTAT bit order
 **         Added CP0CFG0, CP0CFG1,CP0CFG2 and CP0CFG3 in MSCM
 **         Fixed STIR register in FSL_NVIC
@@ -115,7 +115,7 @@
 **         Update header as per rev S32K14XRM Rev. 2, 02/2017
 **         Updated modules AIPS, CAN, LPI2C, LPSPI, MCM, MPU, SCG and SIM
 **     - rev. 2.8 (2017-03-27) - Iulian Talpiga
-**         Synchronized PCC_FlexIO on S32K Family
+**         Synchronized PCC_IO on S32K Family
 **     - rev. 3.0 (2017-08-04) - Mihai Volmer
 **         Update header as per rev S32K1XXRM Rev. 4, 06/2017
 **         Updated modules CAN, MCM and PORTn

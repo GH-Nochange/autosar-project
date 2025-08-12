@@ -116,3 +116,30 @@ PhTypes_ErrorCode_t phSpiDrv_SlaveGetStatus(uint32_t instance, uint32_t *bytesRe
     if (instance >= FLEXIO_INSTANCE_COUNT || !s_slvInited[instance] || !bytesRemaining) return PH_ERR_INVALID_STATE;
     return map_status(FLEXIO_SPI_DRV_SlaveGetStatus(&s_slv[instance], bytesRemaining));
 }
+
+void phSpiDrv_SetInterrupt(uint32_t instance, bool enable, uint8_t priority, spi_callback_t cb, void *userData) {
+    if (instance >= FLEXIO_INSTANCE_COUNT) return;
+
+    if (enable) {
+        s_spi_irq_cb[instance] = cb;
+        s_spi_irq_ctx[instance] = userData;
+
+        IRQn_Type irqn = FLEXIO_SPI_IRQn;
+        uint8_t prio = (priority & ((1u << __NVIC_PRIO_BITS) - 1u));
+
+        S32_NVIC->ICPR[irqn >> 5u] = (1u << (irqn & 31u));
+        S32_NVIC->IP[irqn] = (uint8_t)((prio << (8u - __NVIC_PRIO_BITS)) & 0xFFu);
+        S32_NVIC->ISER[irqn >> 5u] = (1u << (irqn & 31u));
+    } else {
+        IRQn_Type irqn = FLEXIO_SPI_IRQn;
+        S32_NVIC->ICPR[irqn >> 5u] = (1u << (irqn & 31u));
+        S32_NVIC->ISER[irqn >> 5u] = 0;
+    }
+}
+
+void phSpiDrv_ClearInterrupt(uint32_t instance) {
+    if (instance >= FLEXIO_INSTANCE_COUNT) return;
+
+    IRQn_Type irqn = FLEXIO_IRQn;
+    S32_NVIC->ICPR[irqn >> 5u] = (1u << (irqn & 31u));
+}
