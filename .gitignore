@@ -55,13 +55,15 @@ dkms.conf
 *.dwo
 
 # meta data
-.metadata/
+**/.metadata/
 
-RemoteSystemsTempFiles/
+**/RemoteSystemsTempFiles/
 
-Debug/
-build/
+**/Debug/
+**/build/
 
-.vscode/
+**/.vscode/
 
-certs/
+**/certs/
+
+**/settings/

@@ -44,7 +44,9 @@
     "phcanif.h": "c",
     "flexio_spi_driver.h": "c",
     "phcan.h": "c",
-    "phcandrv.h": "c"
+    "phcandrv.h": "c",
+    "phcantp.h": "c",
+    "phpdur_com.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

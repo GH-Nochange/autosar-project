@@ -35,6 +35,15 @@
 								<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.option.target.sysroot.1432414325" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.option.target.sysroot" useByScannerDiscovery="false" value="--sysroot=&quot;${S32DS_ARM32_EWL_DIR}&quot;" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.545654191" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phMCAL\GPIO&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCanTp\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCom\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCommon\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phPduR\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phQueue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phApp\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCanTp\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCommon\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phCanIf\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phSystem\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\nguye\DATA\study\AUTOMOTIVE\autosar-project\onboard\SdkProject\comps\phMCAL\Can&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${S32DS_ARM32_EWL_DIR}/EWL_C/include&quot;"/>
@@ -158,6 +167,26 @@
 							<tool id="com.freescale.s32ds.cross.gnu.disassembler.107206173" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.28415776" name="/" resourcePath="comps/phDriver/Spi">
+						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.301128132" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.125001723" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.1569852072" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.502478025" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
+							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.764994334" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.80728385" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1373782464" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.883689530" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.2009555973" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.31040076" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.983733938" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.2074857026" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
+							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.49683183" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.1547644019" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
+							<tool id="com.freescale.s32ds.cross.gnu.c.preprocessor.766103538" name="Standard S32DS C Preprocessor" superClass="com.freescale.s32ds.cross.gnu.c.preprocessor.1505787124"/>
+							<tool id="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1078296353" name="Standard S32DS C++ Preprocessor" superClass="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1514031367"/>
+							<tool id="com.freescale.s32ds.cross.gnu.disassembler.1743043079" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
+						</toolChain>
+					</folderInfo>
 					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.865598096" name="/" resourcePath="pins">
 						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.1706598177" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.1026483907" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
@@ -184,45 +213,17 @@
 							<tool id="com.freescale.s32ds.cross.gnu.disassembler.516007180" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
 						</toolChain>
 					</folderInfo>
-					<folderInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.1922510548" name="/" resourcePath="phSystem">
-						<toolChain id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug.1494879840" name="ARM Bare-Metal 32-bit Target Binary Toolchain" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.toolchain.debug" unusedChildren="">
-							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785.1810884920" name="Print size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.addtools.printsize.1567228785"/>
-							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.410988746" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
-							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.210880007" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
-							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.1056685408" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.8269396" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068">
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1317840885" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1498508400" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.90996057" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1353632744" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.649102705" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.191626407" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.761560103" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-								<inputType id="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile.1717337168" superClass="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile"/>
-							</tool>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.604650520" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
-							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.853390142" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.2141012213" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
-							<tool id="com.freescale.s32ds.cross.gnu.c.preprocessor.6790851" name="Standard S32DS C Preprocessor" superClass="com.freescale.s32ds.cross.gnu.c.preprocessor.1505787124"/>
-							<tool id="com.freescale.s32ds.cross.gnu.cpp.preprocessor.2005913130" name="Standard S32DS C++ Preprocessor" superClass="com.freescale.s32ds.cross.gnu.cpp.preprocessor.1514031367"/>
-							<tool id="com.freescale.s32ds.cross.gnu.disassembler.1586037617" name="Standard S32DS Disassembler" superClass="com.freescale.s32ds.cross.gnu.disassembler.876381303"/>
-						</toolChain>
-					</folderInfo>
 					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.Project_Settings/Debugger/Simple_Project_Release.launch" name="Simple_Project_Release.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Release.launch" toolsToInvoke=""/>
 					<fileInfo id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.exe.debug.809203739.Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" name="Simple_Project_Debug_RAM.launch" rcbsApplicability="disable" resourcePath="Project_Settings/Debugger/Simple_Project_Debug_RAM.launch" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="Linker_Files/S32K144_64_ram.ld|Debugger/Simple_Project_Debug_RAM.launch|Debugger/Simple_Project_Release.launch" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project_Settings"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="clock"/>
+						<entry excluding="phDriver/Spi" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="comps"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="edma"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="flexcan"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="interrupt"/>
 						<entry excluding="osif_freertos.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="osif"/>
-						<entry excluding="Spi" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phDriver"/>
-						<entry excluding="SPI" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phMCAL"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="phSystem"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="pins"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>

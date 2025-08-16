@@ -1,22 +1,55 @@
-#ifndef PHPDUR_H
-#define PHPDUR_H
+#ifndef PH_PDUR_H
+#define PH_PDUR_H
 
-#include "phComQueue.h"
-#include <stdint.h>
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-typedef enum {
-    PDU_CAN,
-    PDU_SPI
-} phPduR_Protocol_t;
+#include "phTypes.h"
+#include "phComStack_Types.h"
 
-typedef struct {
-    uint16_t length;
-    uint8_t data[4096];
-} phPduR_Pdu_t;
+typedef enum
+{
+    PH_CAN,
+} PH_PDUR_t;
 
-void phPduR_Init(void);
+typedef struct
+{
+    phPduIdType SrcPduId;   
+    phPduIdType DestPduId;  
+    uint8_t    RouteType;  
+} phPduR_RoutingPathType;
 
-void phPduR_SendPdu(phPduR_Pdu_t *pdu);
-void phPduR_ReceivePdu(phPduR_Pdu_t *pdu);
+typedef struct
+{
+    const phPduR_RoutingPathType* RoutingPaths; 
+    uint16_t                      NumOfRoutes;  
+} phPduR_RoutingTableType;
 
-#endif /* PHPDUR_H */
+typedef struct 
+{
+    const phPduR_RoutingTableType* IfRoutingTable; 
+    const phPduR_RoutingTableType* TpRoutingTable; 
+} phPduR_PBConfigType;
+
+typedef uint16_t PduR_PBConfigIdType;
+
+typedef uint16_t phPduR_RoutingPathGroupIdType;
+
+typedef enum
+{
+    PDUR_UNINIT,
+    PDUR_ONLINE
+} phPduR_StateType;
+
+void phPduR_Init(const phPduR_PBConfigType *ConfigPtr);
+phPduR_PBConfigType phPduR_GetConfigurationId(void);
+void phPduR_DisableRouting(phPduR_RoutingPathGroupIdType id, bool initialize);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* PH_PDUR_H */

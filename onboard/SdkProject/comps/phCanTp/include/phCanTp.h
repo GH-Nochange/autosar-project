@@ -1,56 +1,47 @@
-#ifndef PHCANTP_H
-#define PHCANTP_H
+#ifndef PH_CANTP_H
+#define PH_CANTP_H
 
-#include <stdint.h>
-#include "phApp_DataTypes.h"
-#include "phPduR.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-typedef struct {
-    uint8_t FT:4;
-    uint8_t SFDL:4;
-    uint8_t Data[7];
-} phCanTP_SF_t;
+#include "phComStack_Types.h"
+#include "phTypes.h"
 
-typedef struct {
-    uint16_t FT:4;
-    uint16_t MFDL:12;
-    uint8_t Data[6];
-} phCanTP_FF_t;
+typedef enum
+{
+    PCI_TYPE_SF = 0b0000,
+    PCI_TYPE_FF = 0b0001,
+    PCI_TYPE_CF = 0b0010,
+    PCI_TYPE_FC = 0b0011
+} phFrameType;
 
-typedef struct {
-    uint8_t FT:4;
-    uint8_t SN:4;
-    uint8_t Data[7];
-} phCanTP_CF_t;
-
-typedef struct {
-    uint8_t FT:4;
-    uint8_t Flag:4; //0:Clear to Send, 1: Wait, 2: Overflow
-    uint8_t BlockSize;
-    uint8_t STMin;
-} phCanTP_FC_t;
+typedef enum
+{
+    PH_IDLE,
+    PH_SF,
+    PH_FF,
+    PH_CF,
+    PH_WAIT_FC
+} phCanTpState;
 
 typedef enum {
-    SF = 0b0000,
-    FF = 0b0001,
-    CF = 0b0010,
-    FC = 0b0011
-} Frame_t;
+    FC_FS_CTS   = 0x0u,  // cho phép gửi CF
+    FC_FS_WT    = 0x1u,  // chờ (Wait)
+    FC_FS_OVFLW = 0x2u   // overflow/bộ đệm không đủ
+} phCanTp_FcFsType;
 
-typedef enum {
-    SF_State,
-    FF_State,
-    CF_State,
-    WaitFC_State,
-    Idle_State
-} phCanTP_State_t;
+PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType* PduInfoPtr);
+
+void phCanTp_MainFunction(void);
+
+void phCanTp_RxIndication(const phPduInfoType* PduInfoPtr);
+void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result);
 
 
+#ifdef __cplusplus
+}
+#endif
 
-void phCanTP_Init(void);
-
-void phCanTP_TX(phPduR_Pdu_t *pduData);
-
-void CanTpMainFunction(void);
-
-#endif /* PHCANTP_H */
+#endif /* PH_CANTP_H */

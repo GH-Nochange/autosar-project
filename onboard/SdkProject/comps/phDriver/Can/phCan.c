@@ -1,6 +1,7 @@
 #include "phCan.h"
 #include "phCanDrv.h"
 #include "device_registers.h"
+#include "phCanIf.h"
 
 static bool s_canIfInited = false;
 
@@ -10,21 +11,25 @@ static void Can_RxCb(uint8_t instance,
 {
     (void)instance;
     (void)user_param;
-    Can_RxIndication(frame);
+
+    phPduInfoType pduInfo;
+    pduInfo.MetaDataPtr = NULL;
+    pduInfo.SduDataPtr = frame->data;
+    pduInfo.SduLength = frame->dataLen;
+    phCanIf_RxIndication(&pduInfo);
 }
 
 static void Can_TxCb(uint8_t instance, void *user_param)
 {
     (void)instance;
     (void)user_param;
-    Can_TxConfirmation();
+    phCanIf_TxConfirmation();
 }
- 
-PhTypes_ErrorCode_t Can_Init(void)
+
+PhTypes_ErrorCode_t phCan0_Init(void)
 {
     if (s_canIfInited)
         return PH_ERR_OK;
-    
 
     phDriverCan_Config_t cfg = {0};
     cfg.tx_mb_idx = CANIF_TX_MB_IDX;
@@ -49,7 +54,7 @@ PhTypes_ErrorCode_t Can_Init(void)
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t Can_DeInit(void)
+PhTypes_ErrorCode_t phCan0_DeInit(void)
 {
     if (!s_canIfInited)
         return PH_ERR_OK;
@@ -62,7 +67,7 @@ PhTypes_ErrorCode_t Can_DeInit(void)
     return ec;
 }
 
-PhTypes_ErrorCode_t Can_Transmit(const uint8_t *data, uint8_t len)
+PhTypes_ErrorCode_t phCan0_Transmit(const uint8_t *data, uint8_t len)
 {
     if (!s_canIfInited)
         return PH_ERR_FAILED;
@@ -72,13 +77,4 @@ PhTypes_ErrorCode_t Can_Transmit(const uint8_t *data, uint8_t len)
         return PH_ERR_INVALID_ARG;
 
     return phDriverCan_Send(CANIF_CAN_INSTANCE, CANIF_TX_ID, data, len);
-}
-
-__attribute__((weak)) void Can_TxConfirmation(void)
-{
-}
-
-__attribute__((weak)) void Can_RxIndication(const flexcan_msgbuff_t *frame)
-{
-    (void)frame;
 }

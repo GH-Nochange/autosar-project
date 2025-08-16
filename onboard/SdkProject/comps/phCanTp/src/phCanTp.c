@@ -1,246 +1,289 @@
-#include "phCanTP.h"
-#include "phCanTpQueue.h"
-#include "phPduR.h"
+#include "phCanTp.h"
 #include "phCanIf.h"
-#include <string.h>
+#include "phPduR.h"
+#include "phPduR_CanTp.h"
+#include "phTypes.h"
+#include "string.h"
 
-static phCanTP_SF_t singleframeTX;
-static phCanTP_FF_t firstframeTX;
+#define CAN_FRAME_SIZE 8
 
-static volatile uint8_t s_tpTxDoneFlag = 0;
-static volatile uint8_t s_tpRxPendFlag = 0;
-static volatile uint8_t s_tpBusy = 0;
+// TX
+static const uint8_t *TX_appPtr = NULL;
+static phPduLengthType TX_totalLen = 0;
+static phPduLengthType TX_sentLen = 0;
+static uint8_t TX_SN = 0;
+static phPduLengthType TX_bufferSizePtr;
+static phCanTpState txState = PH_IDLE;
 
-static uint8_t s_rxBuf[8];
-static uint8_t s_rxLen = 0;
+// RX
+static phPduLengthType RX_bufferSizePtr;
+static uint8_t RX_SN = 0;
+static phPduLengthType totalLen;
+static phPduLengthType copiedLen;
 
-static uint8_t isSingleFrame = 1;
-
-static uint8_t flagSending = 0;
-static uint8_t flagRXComplete = 0;
-
-phCanTP_State_t canTpTXState = Idle_State;
-uint16_t RXoffset;
-uint8_t RX_sn = 0;
-
-phPduR_Pdu_t pduRXData;
-
-static void phCanTP_TX_Processing(void);
-static void phCanTP_RX_Processing(uint8_t *data);
-static void phCanTP_RX(void);
-
-void Can_TxConfirmation(void)
+PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
 {
-    s_tpTxDoneFlag = 1;
-}
+    if (!PduInfoPtr || !PduInfoPtr->SduDataPtr || PduInfoPtr->SduLength == 0u)
+        return PH_ERR_FAILED;
+    if (txState != PH_IDLE)
+        return PH_ERR_FAILED;
 
-void Can_RxIndication(const flexcan_msgbuff_t *frame)
-{
-    uint8_t len = frame->dataLen;
-    if (len > 8)
-        len = 8;
-    for (uint8_t i = 0; i < len; i++)
-        s_rxBuf[i] = frame->data[i];
-    s_rxLen = len;
-    s_tpRxPendFlag = 1;
-}
-
-void phCanTP_Init(void)
-{
-    canTpTXState = Idle_State;
-    flagSending = 0;
-    Queue_Init();
-}
-
-void phCanTP_TX(phPduR_Pdu_t *pduData)
-{
-    if (CANIF_ID_TYPE == 0)
+    /* Single Frame (<=7B) */
+    if (PduInfoPtr->SduLength <= 7u)
     {
-        if (pduData->length <= 7)
-        {
-            phCanTP_SF_t sf;
-            sf.FT = SF;
-            sf.SFDL = pduData->length;
-            memcpy(sf.Data, pduData->data, pduData->length);
-            singleframeTX = sf;
-            canTpTXState = SF_State;
-        }
-        else
-        {
-            firstframeTX.FT = FF;
-            firstframeTX.MFDL = pduData->length;
-            memcpy(firstframeTX.Data, pduData->data, 6); // First 6 bytes
-            canTpTXState = FF_State;
+        phPduInfoType info;
+        static uint8_t sfBuf[8];
+        info.SduDataPtr = sfBuf;
+        info.MetaDataPtr = NULL;
+        info.SduDataPtr[0] = (uint8_t)((PCI_TYPE_SF << 4) | (PduInfoPtr->SduLength & 0x0F));
+        memcpy(&info.SduDataPtr[1], PduInfoPtr->SduDataPtr, PduInfoPtr->SduLength);
+        info.SduLength = (phPduLengthType)(1u + PduInfoPtr->SduLength);
 
-            uint16_t offset = 6;
-            uint8_t sn = 1;
-
-            while (offset < pduData->length)
-            {
-                uint8_t chunk = ((pduData->length - offset) >= 7) ? 7 : (uint8_t)(pduData->length - offset);
-                phCanTP_CF_t cf;
-                cf.FT = CF;
-                cf.SN = sn;
-                memcpy(cf.Data, &pduData->data[offset], chunk);
-                QueueTX_Push(&cf);
-
-                offset += chunk;
-                sn = (uint8_t)((sn + 1u) & 0x0F); // (SN + 1) mod 16
-            }
-        }
-    }
-    else
-    {
-        // Handle other frame formats if necessary
-    }
-    flagSending = 1;
-}
-
-void CanTpMainFunction()
-{
-    if (s_tpBusy)
-        return; 
-    s_tpBusy = 1;
-
-    if (s_tpRxPendFlag)
-    {
-        s_tpRxPendFlag = 0;
-        phCanTP_RX_Processing(s_rxBuf);
+        txState = PH_SF;
+        return phCanIf_Transmit(&info);
     }
 
-    if (flagSending && (s_tpTxDoneFlag == 1))
-    {
-        s_tpTxDoneFlag = 0;
-        phCanTP_TX_Processing();
+    if (PduInfoPtr->SduLength > 0x0FFFu)
+        return PH_ERR_FAILED;
 
-    }
+    phPduInfoType infoFirstFrame;
+    static uint8_t ffBuf[8];
 
-    s_tpBusy = 0;
+    infoFirstFrame.SduDataPtr = ffBuf;
+    infoFirstFrame.MetaDataPtr = NULL;
+
+    infoFirstFrame.SduDataPtr[0] = (uint8_t)((PCI_TYPE_FF << 4) | ((PduInfoPtr->SduLength >> 8) & 0x0F));
+    infoFirstFrame.SduDataPtr[1] = (uint8_t)(PduInfoPtr->SduLength & 0xFF);
+
+    memcpy(&infoFirstFrame.SduDataPtr[2], PduInfoPtr->SduDataPtr, 6u);
+    infoFirstFrame.SduLength = 8u;
+
+    TX_appPtr = PduInfoPtr->SduDataPtr;
+    TX_totalLen = PduInfoPtr->SduLength;
+    TX_sentLen = 6u;
+    TX_SN = 1u;
+
+    txState = PH_FF;
+    return phCanIf_Transmit(&infoFirstFrame);
 }
 
-static void phCanTP_TX_Processing(void)
+void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
 {
-    switch (canTpTXState)
+    if (result != PH_ERR_OK)
     {
-    case SF_State:
-        Can_Transmit((uint8_t *)&singleframeTX, sizeof(singleframeTX));
-        flagSending = 0;
-        break;
-    case FF_State:
-        Can_Transmit((uint8_t *)&firstframeTX, sizeof(firstframeTX));
-        break;
-    case CF_State:
-        phCanTP_CF_t cf;
-        if(QueueTX_Pop(&cf)== PH_ERR_OK)
-        {
-            Can_Transmit((uint8_t *)&cf, sizeof(cf));
-            if (QueueTX_IsEmpty())
-            {
-                phCanTP_Init(); 
-            }
-        }
-        else
-        {
-            phCanTP_Init(); 
-            return;
-        }
-        break;
-    case WaitFC_State:
-        break;
-    case Idle_State:
-        break;
-    }
-}
-
-static void phHandle_FC(phCanTP_FC_t fc)
-{
-    switch (fc.Flag)
-    {
-    case 0:
-        canTpTXState = CF_State;
-        break;
-    case 1:
+        txState = PH_IDLE;
+        phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
         return;
-    case 2:
-        phCanTP_Init();
-        return;
+    }
+
+    switch (txState)
+    {
+    /* --- Single Frame xong: bÃ¡o lÃªn PduR vÃ  káº¿t thÃºc --- */
+    case PH_SF:
+        txState = PH_IDLE;
+        phPduR_CanTpTxConfirmation(PH_ERR_OK);
+        break;
+
+    /* --- FF xong: chuyá»ƒn sang chá»� FC(CTS) tá»« peer --- */
+    case PH_FF:
+        txState = PH_WAIT_FC;
+        break;
+
+    /* --- CF vá»«a Ä‘Æ°á»£c xÃ¡c nháº­n: cáº­p nháº­t chá»‰ sá»‘ & náº¿u cÃ²n dá»¯ liá»‡u thÃ¬ gá»­i CF káº¿ --- */
+    case PH_CF:
+    {
+        phPduLengthType left_before = (phPduLengthType)(TX_totalLen - TX_sentLen);
+        phPduLengthType just = (left_before > 7u) ? 7u : left_before;
+        TX_sentLen += just;
+        TX_SN = (uint8_t)((TX_SN + 1u) & 0x0F);
+
+        /* háº¿t dá»¯ liá»‡u -> hoÃ n táº¥t */
+        if (TX_sentLen >= TX_totalLen)
+        {
+            txState = PH_IDLE;
+            phPduR_CanTpTxConfirmation(PH_ERR_OK);
+            break;
+        }
+
+        static uint8_t cfBuf[8];
+        phPduInfoType info;
+        phPduLengthType chunk = (phPduLengthType)((TX_totalLen - TX_sentLen) > 7u ? 7u : (TX_totalLen - TX_sentLen));
+
+        info.SduDataPtr = cfBuf;
+        info.MetaDataPtr = NULL;
+        info.SduDataPtr[0] = (uint8_t)((PCI_TYPE_CF << 4) | (TX_SN & 0x0F));
+        memcpy(&info.SduDataPtr[1], &TX_appPtr[TX_sentLen], chunk);
+        info.SduLength = (phPduLengthType)(1u + chunk);
+
+        if (phCanIf_Transmit(&info) != PH_ERR_OK)
+        {
+            txState = PH_IDLE;
+            phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
+        }
+        break;
+    }
+
+    /* --- KhÃ´ng cÃ³ frame vá»«a phÃ¡t (Ä‘ang chá»� FC) hoáº·c tráº¡ng thÃ¡i khÃ¡c: bá»� qua --- */
+    case PH_WAIT_FC:
+    case PH_IDLE:
     default:
         break;
     }
-    // Block Size & STmin
 }
 
-static void phCanTP_RX_Processing(uint8_t *data)
+void phCanTp_MainFunction(void)
 {
-    switch (data[0] >> 4)
-    {
-    case SF:
-        isSingleFrame = 1;
-        pduRXData.length = data[0] & 0x0F;
-        memcpy(pduRXData.data, &data[1], pduRXData.length);
-        flagRXComplete = 1;
-        break;
-    case FF:
-        phCanTP_FC_t fc =
-            {
-                .FT = FC,
-                .Flag = 0,
-                .BlockSize = 0,
-                .STMin = 5u};
+}
 
-        pduRXData.length = ((data[0] & 0x0F) << 8) | data[1];
-        for (int i = 0; i < 6; i++)
+static void phPrepareFC_AllowAll(void)
+{
+    static uint8_t fc_buf[3];
+    phPduInfoType pdu;
+
+    /* PCI: FT=FC(0x3) | FS=CTS(0x0) */
+    fc_buf[0] = (uint8_t)((PCI_TYPE_FC << 4) | 0);
+    fc_buf[1] = 0x00;
+    fc_buf[2] = 0x00;
+
+    pdu.SduDataPtr = fc_buf;
+    pdu.MetaDataPtr = NULL;
+    pdu.SduLength = (phPduLengthType)sizeof(fc_buf); /* 3 byte */
+
+    (void)phCanIf_Transmit(&pdu);
+}
+
+void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
+{
+    phPduLengthType TpSduLength = 0;
+    phPduInfoType info;
+    phBufReq_ReturnType bufferReq;
+    switch ((PduInfoPtr->SduDataPtr[0] >> 4) & 0x0F)
+    {
+    case PCI_TYPE_SF:
+        TpSduLength = PduInfoPtr->SduDataPtr[0] & 0x0F;
+        if (TpSduLength == 0 || TpSduLength > 7 || TpSduLength > (PduInfoPtr->SduLength - 1))
         {
-            pduRXData.data[i] = data[i + 2];
+            return;
         }
 
-        RXoffset = 6;
-        RX_sn = 1;
+        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[1]; // Bá»� PCI
+        info.SduLength = TpSduLength;
 
-        // Send flow control
-        Can_Transmit((uint8_t *)&fc, sizeof(fc));
+        bufferReq = phPduR_CanTpStartOfReception(&info, TpSduLength, &RX_bufferSizePtr);
 
+        if (bufferReq != PH_BUFREQ_OK || (RX_bufferSizePtr < info.SduLength))
+            return;
+
+        phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr);
+        phPduR_CanTpRxIndication(PH_ERR_OK);
         break;
-    case CF:
-        if ((data[0] & 0x0F) == RX_sn)
-        {
-            uint8_t chunk = ((pduRXData.length - RXoffset) >= 7) ? 7 : (uint8_t)(pduRXData.length - RXoffset);
 
-            for (int i = 0; i < chunk; i++)
+    case PCI_TYPE_FF:
+
+        TpSduLength = ((PduInfoPtr->SduDataPtr[0] & 0x0F) << 8) | (PduInfoPtr->SduDataPtr[1]);
+        if (TpSduLength == 0)
+            return;
+
+        phPduLengthType firstChunk = (PduInfoPtr->SduLength > 2) ? (PduInfoPtr->SduLength - 2) : 0;
+        if (firstChunk > 6)
+            firstChunk = 6;
+        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[2]; /* bá»� 2 byte PCI */
+        info.MetaDataPtr = NULL;
+        info.SduLength = firstChunk;
+
+        bufferReq = phPduR_CanTpStartOfReception(&info, TpSduLength, &RX_bufferSizePtr);
+
+        if (bufferReq != PH_BUFREQ_OK || RX_bufferSizePtr < info.SduLength)
+            return;
+
+        phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr);
+
+        phPrepareFC_AllowAll();
+
+        totalLen = TpSduLength;
+        copiedLen = firstChunk;
+        RX_SN = 0;
+        break;
+
+    case PCI_TYPE_CF:
+        if (totalLen == 0 || copiedLen >= totalLen)
+        {
+            phPduR_CanTpRxIndication(PH_ERR_FAILED);
+            break;
+        }
+
+        uint8_t sn_expect = (uint8_t)((RX_SN + 1U) & 0x0Fu);
+        uint8_t sn_rx = (uint8_t)(PduInfoPtr->SduDataPtr[0] & 0x0F);
+        if (sn_rx != sn_expect)
+        {
+            phPduR_CanTpRxIndication(PH_ERR_FAILED);
+            break;
+        }
+
+        phPduLengthType chunk = (PduInfoPtr->SduLength > 1u) ? (PduInfoPtr->SduLength - 1u) : 0u;
+        phPduLengthType left = (phPduLengthType)(totalLen - copiedLen);
+        if (chunk > left)
+            chunk = left;
+
+        phPduInfoType info;
+        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[1];
+        info.MetaDataPtr = NULL;
+        info.SduLength = chunk;
+
+        if (phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr) != PH_BUFREQ_OK)
+        {
+            phPduR_CanTpRxIndication(PH_ERR_FAILED);
+            break;
+        }
+
+        copiedLen = (phPduLengthType)(copiedLen + chunk);
+        RX_SN = sn_expect;
+
+        if (copiedLen >= totalLen)
+        {
+            phPduR_CanTpRxIndication(PH_ERR_OK);
+            totalLen  = 0u;
+            copiedLen = 0u;
+            RX_SN     = 0u;
+        }
+        break;
+    case PCI_TYPE_FC:
+        if (txState == PH_WAIT_FC && PduInfoPtr->SduLength >= 3u)
+        {
+            uint8_t fs = (uint8_t)(PduInfoPtr->SduDataPtr[0] & 0x0F);
+
+            if (fs == FC_FS_CTS)
             {
-                pduRXData.data[RXoffset + i] = data[i + 1];
+                // Gá»­i CF Ä‘áº§u tiÃªn
+                static uint8_t cfBuf[8];
+                phPduInfoType info;
+
+                phPduLengthType left = (phPduLengthType)(TX_totalLen - TX_sentLen);
+                phPduLengthType chunk = (left > 7u) ? 7u : left;
+
+                info.SduDataPtr = cfBuf;
+                info.MetaDataPtr = NULL;
+                info.SduDataPtr[0] = (uint8_t)((PCI_TYPE_CF << 4) | (TX_SN & 0x0F));
+                memcpy(&info.SduDataPtr[1], &TX_appPtr[TX_sentLen], chunk);
+                info.SduLength = (phPduLengthType)(1u + chunk);
+
+                txState = PH_CF;
+                if (phCanIf_Transmit(&info) != PH_ERR_OK)
+                {
+                    txState = PH_IDLE;
+                    phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
+                }
             }
-            RXoffset += chunk;
-            if (RXoffset >= pduRXData.length)
+            else if (fs == FC_FS_WT)
             {
-                flagRXComplete = 1;
-                RX_sn = 0;
+                
             }
             else
-            {
-                RX_sn = (uint8_t)((RX_sn + 1u) & 0x0F);
+            { 
+                txState = PH_IDLE;
+                phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
             }
         }
         break;
-    case FC:
-        phCanTP_FC_t fc;
-        memcpy(&fc, data, 3);
-        phHandle_FC(fc);
-        break;
     }
-
-    if (flagRXComplete)
-    {
-        phCanTP_RX();
-    }
-}
-
-static void phCanTP_RX(void)
-{
-    if (RXoffset == pduRXData.length)
-    {
-        phPduR_ReceivePdu(&pduRXData);
-    }
-    RXoffset = 0;
-    flagRXComplete = 0;
 }

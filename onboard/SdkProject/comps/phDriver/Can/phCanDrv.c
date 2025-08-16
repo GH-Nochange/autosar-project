@@ -16,7 +16,6 @@ static void *s_rxCbParam[CAN_INSTANCE_COUNT] = {0};
 static phDriverCan_TxCb_t s_txCb[CAN_INSTANCE_COUNT] = {0};
 static void *s_txCbParam[CAN_INSTANCE_COUNT] = {0};
 
-static uint8_t s_maxMb[CAN_INSTANCE_COUNT];
 
 static void phDriverCan_OnEvent(uint8_t instance,
                                 flexcan_event_type_t eventType,
@@ -72,23 +71,54 @@ static bool ph_flexcan_enable_pcc(uint8_t instance)
     switch (instance)
     {
 #if defined(PCC_FlexCAN0_INDEX)
-        case 0u: PCC->PCCn[PCC_FlexCAN0_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 0u:
+        PCC->PCCn[PCC_PORTE_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTE->PCR[4] |= PORT_PCR_MUX(5);
+        PORTE->PCR[5] |= PORT_PCR_MUX(5);
+        PCC->PCCn[PCC_FlexCAN0_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #elif defined(PCC_FLEXCAN0_INDEX)
-        case 0u: PCC->PCCn[PCC_FLEXCAN0_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 0u:
+        PCC->PCCn[PCC_PORTE_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTE->PCR[4] |= PORT_PCR_MUX(5);
+        PORTE->PCR[5] |= PORT_PCR_MUX(5);
+        PCC->PCCn[PCC_FLEXCAN0_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #endif
 
 #if defined(PCC_FlexCAN1_INDEX)
-        case 1u: PCC->PCCn[PCC_FlexCAN1_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 1u:
+        PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTC->PCR[16] = (PORTC->PCR[16] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PORTC->PCR[17] = (PORTC->PCR[17] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PCC->PCCn[PCC_FlexCAN1_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #elif defined(PCC_FLEXCAN1_INDEX)
-        case 1u: PCC->PCCn[PCC_FLEXCAN1_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 1u:
+        PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTC->PCR[16] = (PORTC->PCR[16] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PORTC->PCR[17] = (PORTC->PCR[17] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PCC->PCCn[PCC_FLEXCAN1_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #endif
 
 #if defined(PCC_FlexCAN2_INDEX)
-        case 2u: PCC->PCCn[PCC_FlexCAN2_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 2u:
+        PCC->PCCn[PCC_PORTB_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTB->PCR[12] = (PORTB->PCR[12] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PORTB->PCR[13] = (PORTB->PCR[13] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PCC->PCCn[PCC_FlexCAN2_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #elif defined(PCC_FLEXCAN2_INDEX)
-        case 2u: PCC->PCCn[PCC_FLEXCAN2_INDEX] |= PCC_PCCn_CGC_MASK; return true;
+    case 2u:
+        PCC->PCCn[PCC_PORTB_INDEX] |= PCC_PCCn_CGC_MASK;
+        PORTB->PCR[12] = (PORTB->PCR[12] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PORTB->PCR[13] = (PORTB->PCR[13] & ~PORT_PCR_MUX_MASK) | PORT_PCR_MUX(3);
+        PCC->PCCn[PCC_FLEXCAN2_INDEX] |= PCC_PCCn_CGC_MASK;
+        return true;
 #endif
-        default: return false;
+    default:
+        return false;
     }
 }
 
@@ -110,7 +140,7 @@ PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
     cfg.bitrate.rJumpwidth = 3;
 
     if (!ph_flexcan_enable_pcc(instance))
-    return PH_ERR_FAILED;
+        return PH_ERR_FAILED;
 
     status_t st = FLEXCAN_DRV_Init(instance, &s_canState[instance], &cfg);
     if (st != STATUS_SUCCESS)
@@ -160,7 +190,7 @@ PhTypes_ErrorCode_t phDriverCan_Init(const uint8_t instance,
     info.msg_id_type = canConfig->msg_id_type;
     info.data_length = dlc;
     info.is_remote = false;
-    #if FEATURE_CAN_HAS_FD
+#if FEATURE_CAN_HAS_FD
     info.fd_enable = false;
     info.fd_padding = 0;
     info.enable_brs = false;
@@ -242,12 +272,11 @@ PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
     flexcan_data_info_t info;
     info.msg_id_type = idType;
     info.is_remote = false;
-    #if FEATURE_CAN_HAS_FD
+#if FEATURE_CAN_HAS_FD
     info.fd_enable = false;
     info.fd_padding = 0;
     info.enable_brs = false;
 #endif
-
 
     uint8_t dlc = (length == 0u) ? 8u : length;
     if (dlc > 8u)
@@ -265,7 +294,11 @@ PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
         return PH_ERR_BUSY;
     return PH_ERR_FAILED;
 }
+                                 
+PhTypes_ErrorCode_t phDriverCan_Recv(const uint8_t instance, uint8_t * const recvData)
+{
 
+}
 void phDriverCan_RegisterRxCallback(uint8_t instance,
                                     phDriverCan_RxCb_t cb,
                                     void *user_param)

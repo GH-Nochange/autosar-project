@@ -48,15 +48,12 @@ extern "C"
 #define CANIF_DEFAULT_DLC (8u)
 #endif
 
-    PhTypes_ErrorCode_t Can_Init(void);
-    PhTypes_ErrorCode_t Can_DeInit(void);
+    PhTypes_ErrorCode_t phCan0_Init(void);
+    PhTypes_ErrorCode_t phCan0_DeInit(void);
 
-    PhTypes_ErrorCode_t Can_Transmit(
+    PhTypes_ErrorCode_t phCan0_Transmit(
         const uint8_t *data,
         uint8_t len);
-
-    void Can_TxConfirmation(void);
-    void Can_RxIndication(const flexcan_msgbuff_t *frame);
 
 #ifdef __cplusplus
 }

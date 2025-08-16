@@ -55,6 +55,11 @@ PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance, const uint32_t msgI
                                      const uint8_t *const sendData, const uint8_t length);
 
 /**
+ * @brief Recv a CAN frame.
+ */                                     
+PhTypes_ErrorCode_t phDriverCan_Recv(const uint8_t instance, uint8_t * const recvData);
+
+/**
  * @brief Register RX callback.
  */
 void phDriverCan_RegisterRxCallback(uint8_t instance,

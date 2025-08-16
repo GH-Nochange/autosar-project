@@ -1,79 +1,95 @@
 #include "phPduR.h"
-#include "phComQueue.h"
-#include "phApp_DataTypes.h"
-#include "phCanTP.h"
+#include "phPduR_Com.h"
+#include "phPduR_CanTp.h"
+#include "phCom.h"
+#include "phCanTp.h"
 #include "phTypes.h"
 
-static phPduR_Protocol_t protocol;
+static PH_PDUR_t g_pdur = PH_CAN;
 
-void phPduR_Init(void)
+PhTypes_ErrorCode_t phPduR_ComTransmit(const phPduInfoType *PduInfoPtr)
 {
-    protocol = PDU_CAN;
-}
-
-PhTypes_ErrorCode_t phPduR_TX_Handle(void)
-{
-    if (QueueTX_IsEmpty())
+    switch (g_pdur)
     {
-        return ERR_NoResource;
-    }
-    phApp_DataTypes_t data;
-    QueueTX_Pop(&data);
-    if (data.header.id == Internal)
-    {
-        switch (data.payload[0])
-        {
-        case SetProtocol:
-            if (data.payload[1] == PDU_CAN)
-            {
-                protocol = PDU_CAN;
-            }
-            else if (data.payload[1] == PDU_SPI)
-            {
-                protocol = PDU_SPI;
-            }
-            else
-            {
-                return ERR_InvalidArg; 
-            }
-            break;
-
-        default:
-            return ERR_InvalidArg;
-        }
-    }
-    else
-    {
-        phPduR_Pdu_t pdu;
-        pdu.length = data.header.length + 4; // 4byte header
-        memcpy(pdu.data, &data, pdu.length);
-
-        phPduR_SendPdu(&pdu);
-    }
-
-    return ERR_Ok;
-}
-
-void phPduR_SendPdu(phPduR_Pdu_t *pdu)
-{
-    switch (protocol)
-    {
-    case PDU_CAN:
-        phCanTP_TX(pdu);
+    case PH_CAN:
+        return  phCanTp_Transmit(PduInfoPtr);
         break;
-
-    case PDU_SPI:
-
-        break;
-
+    
     default:
         break;
     }
 }
 
-void phPduR_ReceivePdu(phPduR_Pdu_t *pdu)
+phBufReq_ReturnType phPduR_CanTpCopyRxData(const phPduInfoType* info, phPduLengthType* bufferSizePtr)
 {
-    phApp_DataTypes_t datarx;
-    memcpy(&datarx, pdu->data, pdu->length);
-    QueueRX_Push(&datarx);
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        return phCom_CopyRxData(info, bufferSizePtr);
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void phPduR_CanTpRxIndication(PhTypes_ErrorCode_t result)
+{
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        phCom_TpRxIndication(result);
+        break;
+    
+    default:
+        break;
+    }
+}
+phBufReq_ReturnType phPduR_CanTpStartOfReception(const phPduInfoType* info, phPduLengthType TpSduLength, phPduLengthType *bufferSizePtr)
+{
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        return phCom_StartOfReception(info, TpSduLength, bufferSizePtr);
+        break;
+    
+    default:
+        break;
+    }
+}
+phBufReq_ReturnType phPduR_CanTpCopyTxData(const phPduInfoType* info, const phRetryInfoType* retry, phPduLengthType* bufferSizePtr)
+{
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        return phCom_CopyTxData(info, retry, bufferSizePtr);
+        break;
+    
+    default:
+        break;
+    }
+}
+void phPduR_CanTpTxConfirmation(PhTypes_ErrorCode_t result)
+{
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        phCom_TpTxConfirmation(result);
+        break;
+    
+    default:
+        break;
+    }
+}
+PhTypes_ErrorCode_t phPduR_CanTpTriggerTransmit(const phPduInfoType *PduInfoPtr)
+{
+    switch (g_pdur)
+    {
+    case PH_CAN:
+        return phCom_TriggerTransmit(PduInfoPtr);
+        break;
+    
+    default:
+        break;
+    }
 }

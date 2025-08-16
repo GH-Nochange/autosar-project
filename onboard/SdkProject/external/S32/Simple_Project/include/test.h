@@ -12,12 +12,13 @@
 #include <stdint.h>
 #include "flexcan_driver.h"
 #include "phTypes.h"
+#include "phComStack_Types.h"
 
 
-#define CAN
+//#define CAN
 
 void TEST_run(void);
-
+void Test_RxIndication(const phPduInfoType * PduInfoPtr);
 
 
 #endif /* TEST_H_ */

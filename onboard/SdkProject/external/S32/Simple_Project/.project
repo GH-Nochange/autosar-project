@@ -35,6 +35,11 @@
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/clock</location>
 		</link>
 		<link>
+			<name>comps</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps</location>
+		</link>
+		<link>
 			<name>edma</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/edma</location>
@@ -53,21 +58,6 @@
 			<name>osif</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif</location>
-		</link>
-		<link>
-			<name>phDriver</name>
-			<type>2</type>
-			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phDriver</location>
-		</link>
-		<link>
-			<name>phMCAL</name>
-			<type>2</type>
-			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phMCAL</location>
-		</link>
-		<link>
-			<name>phSystem</name>
-			<type>2</type>
-			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/comps/phSystem</location>
 		</link>
 		<link>
 			<name>pins</name>
