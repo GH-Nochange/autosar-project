@@ -287,9 +287,11 @@ PhTypes_ErrorCode_t phDriverCan_Send(const uint8_t instance,
                                    s_txMbIdx[instance],
                                    &info,
                                    msgId,
-                                   sendData);
+                                   sendData); 
     if (st == STATUS_SUCCESS)
+    {
         return PH_ERR_OK;
+    }
     if (st == STATUS_BUSY)
         return PH_ERR_BUSY;
     return PH_ERR_FAILED;

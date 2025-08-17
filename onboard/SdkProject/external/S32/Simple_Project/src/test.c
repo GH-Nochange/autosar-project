@@ -13,6 +13,13 @@
 #include "phCom.h"
 #include "phControl.h"
 
+void delay(volatile uint32_t count)
+{
+    while (count--)
+    {
+        __asm("NOP");
+    }
+}
 
 static inline void led_set(uint32_t pin, bool on)
 {
@@ -26,12 +33,15 @@ void TEST_PORT_init(void)
 
     PORTD->PCR[16] = 0x00000100;
     PTD->PDDR |= (1u << 16);
+    PTD->PSOR |= (1 << 16);
 
     PORTD->PCR[15] = 0x00000100;
     PTD->PDDR |= (1u << 15);
+    PTD->PSOR |= (1 << 15);
 
     PORTD->PCR[0] = 0x00000100;
     PTD->PDDR |= (1u << 0);
+    PTD->PSOR |= (1 << 0);
 }
 
 void TEST_run(void)
@@ -50,6 +60,7 @@ void TEST_run(void)
         led_set(0u, false);
         for (;;);
     }
+
     Control_MainFunction();
 #if defined(CAN)
     uint8_t data[8] = {0xAA, 0x44, 0x55, 0x66, 0x77, 0xFF, 0xBB, 0x99};
@@ -57,7 +68,10 @@ void TEST_run(void)
 #endif
     while (1)
     {
+    	delay(1000000);
         phCom_MainFunctionTx();
+
+
     }
 }
 

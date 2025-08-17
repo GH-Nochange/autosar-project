@@ -48,7 +48,7 @@ PhTypes_ErrorCode_t QueueRX_Push(const phApp_DataTypes_t *data, uint16_t Length)
     if (QueueRX_IsFull())
         return PH_ERR_NO_RESOURCE;
 
-    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], data, sizeof(phApp_DataTypes_t));
+    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], data, Length);
 
     com_rx_queue.tail = (com_rx_queue.tail + 1) % QUEUE_CAPACITY;
     com_rx_queue.size++;
@@ -60,7 +60,7 @@ PhTypes_ErrorCode_t QueueTX_Pop(phApp_DataTypes_t *out_data)
     if (QueueTX_IsEmpty())
         return PH_ERR_NO_RESOURCE;
 
-    out_data = &com_tx_queue.buffer[com_tx_queue.head];
+    *out_data = com_tx_queue.buffer[com_tx_queue.head];
 
     com_tx_queue.head = (com_tx_queue.head + 1) % QUEUE_CAPACITY;
     com_tx_queue.size--;
@@ -72,7 +72,7 @@ PhTypes_ErrorCode_t QueueRX_Pop(phApp_DataTypes_t *out_data)
     if (QueueRX_IsEmpty())
         return PH_ERR_NO_RESOURCE;
 
-    out_data = &com_rx_queue.buffer[com_rx_queue.head];
+    *out_data = com_rx_queue.buffer[com_rx_queue.head];
 
     com_rx_queue.head = (com_rx_queue.head + 1) % QUEUE_CAPACITY;
     com_rx_queue.size--;

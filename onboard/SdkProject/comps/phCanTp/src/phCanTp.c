@@ -4,6 +4,7 @@
 #include "phPduR_CanTp.h"
 #include "phTypes.h"
 #include "string.h"
+#include "S32K144.h"
 
 #define CAN_FRAME_SIZE 8
 
@@ -28,8 +29,7 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
     if (txState != PH_IDLE)
         return PH_ERR_FAILED;
 
-    /* Single Frame (<=7B) */
-    if (PduInfoPtr->SduLength <= 7u)
+    if (PduInfoPtr->SduLength <= 7u) // Single Frame
     {
         phPduInfoType info;
         static uint8_t sfBuf[8];
@@ -45,7 +45,7 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
 
     if (PduInfoPtr->SduLength > 0x0FFFu)
         return PH_ERR_FAILED;
-
+    //Multiple Frame (First Frame)
     phPduInfoType infoFirstFrame;
     static uint8_t ffBuf[8];
 
@@ -75,29 +75,24 @@ void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
         phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
         return;
     }
-
     switch (txState)
     {
-    /* --- Single Frame xong: bÃ¡o lÃªn PduR vÃ  káº¿t thÃºc --- */
     case PH_SF:
         txState = PH_IDLE;
-        phPduR_CanTpTxConfirmation(PH_ERR_OK);
+        phPduR_CanTpTxConfirmation(result);
         break;
 
-    /* --- FF xong: chuyá»ƒn sang chá»� FC(CTS) tá»« peer --- */
     case PH_FF:
         txState = PH_WAIT_FC;
         break;
 
-    /* --- CF vá»«a Ä‘Æ°á»£c xÃ¡c nháº­n: cáº­p nháº­t chá»‰ sá»‘ & náº¿u cÃ²n dá»¯ liá»‡u thÃ¬ gá»­i CF káº¿ --- */
-    case PH_CF:
+    case PH_CF: // Update: set flag & transmit on main function
     {
         phPduLengthType left_before = (phPduLengthType)(TX_totalLen - TX_sentLen);
         phPduLengthType just = (left_before > 7u) ? 7u : left_before;
         TX_sentLen += just;
         TX_SN = (uint8_t)((TX_SN + 1u) & 0x0F);
 
-        /* háº¿t dá»¯ liá»‡u -> hoÃ n táº¥t */
         if (TX_sentLen >= TX_totalLen)
         {
             txState = PH_IDLE;
@@ -123,7 +118,6 @@ void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
         break;
     }
 
-    /* --- KhÃ´ng cÃ³ frame vá»«a phÃ¡t (Ä‘ang chá»� FC) hoáº·c tráº¡ng thÃ¡i khÃ¡c: bá»� qua --- */
     case PH_WAIT_FC:
     case PH_IDLE:
     default:
@@ -159,23 +153,25 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
     phBufReq_ReturnType bufferReq;
     switch ((PduInfoPtr->SduDataPtr[0] >> 4) & 0x0F)
     {
-    case PCI_TYPE_SF:
+    case PCI_TYPE_SF: 
         TpSduLength = PduInfoPtr->SduDataPtr[0] & 0x0F;
         if (TpSduLength == 0 || TpSduLength > 7 || TpSduLength > (PduInfoPtr->SduLength - 1))
         {
             return;
         }
 
-        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[1]; // Bá»� PCI
+        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[1];
         info.SduLength = TpSduLength;
 
         bufferReq = phPduR_CanTpStartOfReception(&info, TpSduLength, &RX_bufferSizePtr);
 
         if (bufferReq != PH_BUFREQ_OK || (RX_bufferSizePtr < info.SduLength))
             return;
+        if (phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr) == PH_BUFREQ_OK)
+        {
+            phPduR_CanTpRxIndication(PH_ERR_OK);
+        }
 
-        phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr);
-        phPduR_CanTpRxIndication(PH_ERR_OK);
         break;
 
     case PCI_TYPE_FF:
@@ -187,7 +183,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
         phPduLengthType firstChunk = (PduInfoPtr->SduLength > 2) ? (PduInfoPtr->SduLength - 2) : 0;
         if (firstChunk > 6)
             firstChunk = 6;
-        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[2]; /* bá»� 2 byte PCI */
+        info.SduDataPtr = (uint8_t *)&PduInfoPtr->SduDataPtr[2];
         info.MetaDataPtr = NULL;
         info.SduLength = firstChunk;
 
@@ -198,7 +194,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
 
         phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr);
 
-        phPrepareFC_AllowAll();
+        phPrepareFC_AllowAll(); // Prepare & Send  Flow Control 
 
         totalLen = TpSduLength;
         copiedLen = firstChunk;
@@ -206,7 +202,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
         break;
 
     case PCI_TYPE_CF:
-        if (totalLen == 0 || copiedLen >= totalLen)
+        if (totalLen == 0 || copiedLen >= totalLen) // Not received or already completed
         {
             phPduR_CanTpRxIndication(PH_ERR_FAILED);
             break;
@@ -214,7 +210,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
 
         uint8_t sn_expect = (uint8_t)((RX_SN + 1U) & 0x0Fu);
         uint8_t sn_rx = (uint8_t)(PduInfoPtr->SduDataPtr[0] & 0x0F);
-        if (sn_rx != sn_expect)
+        if (sn_rx != sn_expect) // Error sequence number
         {
             phPduR_CanTpRxIndication(PH_ERR_FAILED);
             break;
@@ -239,12 +235,12 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
         copiedLen = (phPduLengthType)(copiedLen + chunk);
         RX_SN = sn_expect;
 
-        if (copiedLen >= totalLen)
+        if (copiedLen >= totalLen) // Reception complete
         {
             phPduR_CanTpRxIndication(PH_ERR_OK);
-            totalLen  = 0u;
+            totalLen = 0u;
             copiedLen = 0u;
-            RX_SN     = 0u;
+            RX_SN = 0u;
         }
         break;
     case PCI_TYPE_FC:
@@ -254,7 +250,6 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
 
             if (fs == FC_FS_CTS)
             {
-                // Gá»­i CF Ä‘áº§u tiÃªn
                 static uint8_t cfBuf[8];
                 phPduInfoType info;
 
@@ -268,7 +263,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
                 info.SduLength = (phPduLengthType)(1u + chunk);
 
                 txState = PH_CF;
-                if (phCanIf_Transmit(&info) != PH_ERR_OK)
+                if (phCanIf_Transmit(&info) != PH_ERR_OK) // send first CF
                 {
                     txState = PH_IDLE;
                     phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
@@ -276,10 +271,9 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
             }
             else if (fs == FC_FS_WT)
             {
-                
             }
             else
-            { 
+            {
                 txState = PH_IDLE;
                 phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
             }
