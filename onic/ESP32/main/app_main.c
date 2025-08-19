@@ -13,20 +13,14 @@
 
 #include "input.h"
 #include "wifi_config.h"
-#include "mqtt.h"
+#include "phQueue.h"
+
+#include "app_mqtt.h"
+#include "app_spi.h"
 
 static const char *TAG = "APP_MAIN";
 
-void mqtt_data_callback(char *dt, int len)
-{
-    char buf[256] = {0};
-    int length = (len > 255) ? 255 : len;
-    memcpy(buf, dt, length);
-    buf[length] = '\0';
-
-    printf("DATA=%s\n", buf);
-}
-
+// Reset ESP32
 typedef struct
 {
     int gpio_num;
@@ -76,15 +70,20 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    input_set_callback(input_button_callback);
-    input_io_create(GPIO_NUM_0, ANY_EDGE);
+    // input_set_callback(input_button_callback);
+    // input_io_create(GPIO_NUM_0, ANY_EDGE);
 
     button_evt_queue = xQueueCreate(4, sizeof(button_event_t));
     xTaskCreate(button_task, "button_task", 2048, NULL, 5, NULL);
 
-    wifi_config();
+    //Queue Init
+    PhTypes_ErrorCode_t err = Queue_Init();
+    if(err != PH_ERR_OK) ESP_LOGI(TAG, "Queue_Init error: %d", err);
 
-    mqtt_init();
-    mqtt_set_callback(mqtt_data_callback);
-    mqtt_start();
+    wifi_config();
+    app_mqtt();
+    app_spi();
+
+    
+
 }

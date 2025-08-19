@@ -1,4 +1,4 @@
-set(app_src mqtt.c)
+set(app_src nddmqtt_client.c)
 set(pri_req
     "esp_wifi"
     "log"

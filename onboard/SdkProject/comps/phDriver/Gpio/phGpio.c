@@ -13,7 +13,7 @@ typedef enum
     H_COUNT
 } hw_handles_e;
 
-static phGpioHwAb_Handles_t s_handles;
+static phGpio_Handles_t s_handles;
 static uint8_t s_colorIdx7;
 
 void sw2_irq_handler(void *param);
@@ -78,9 +78,9 @@ static const phGpio_PinConfig_t s_pins[H_COUNT] =
     },
 };
 
-void phGpioHwAb_Init(void)
+void phGpio_Init(void)
 {
-    phGpio_Init(s_pins, (uint32_t)H_COUNT);
+    phGpioDrv_Init(s_pins, (uint32_t)H_COUNT);
     s_handles.led_r   = (phGpio_Handle_t)H_LED_R;
     s_handles.led_g   = (phGpio_Handle_t)H_LED_G;
     s_handles.led_b   = (phGpio_Handle_t)H_LED_B;
@@ -92,25 +92,25 @@ void phGpioHwAb_Init(void)
         .int_config = PORT_INT_FALLING_EDGE,
         .digital_filter_enable = true
     };
-    phGpio_SetInterrupt(s_handles.btn_sw2, sw2_irq_config, sw2_irq_handler, NULL, 3u); 
+    phGpioDrv_SetInterrupt(s_handles.btn_sw2, sw2_irq_config, sw2_irq_handler, NULL, 3u); 
 
     phGpio_IrqConfig_t sw3_irq_config = {
         .int_config = PORT_INT_FALLING_EDGE,
         .digital_filter_enable = true
     };
-    phGpio_SetInterrupt(s_handles.btn_sw3, sw3_irq_config, sw3_irq_handler, NULL, 3u); 
+    phGpioDrv_SetInterrupt(s_handles.btn_sw3, sw3_irq_config, sw3_irq_handler, NULL, 3u); 
 }
 
-const phGpioHwAb_Handles_t* phGpioHwAb_GetHandles(void)
+const phGpio_Handles_t* phGpio_GetHandles(void)
 {
     return &s_handles;
 }
 
 static inline void led_apply(bool r, bool g, bool b)
 {
-    phGpio_Set(s_handles.led_r, r ? PH_GPIO_LOW : PH_GPIO_HIGH);
-    phGpio_Set(s_handles.led_g, g ? PH_GPIO_LOW : PH_GPIO_HIGH);
-    phGpio_Set(s_handles.led_b, b ? PH_GPIO_LOW : PH_GPIO_HIGH);
+    phGpioDrv_Set(s_handles.led_r, r ? PH_GPIO_LOW : PH_GPIO_HIGH);
+    phGpioDrv_Set(s_handles.led_g, g ? PH_GPIO_LOW : PH_GPIO_HIGH);
+    phGpioDrv_Set(s_handles.led_b, b ? PH_GPIO_LOW : PH_GPIO_HIGH);
 }
 
 void phGpio_LedOff(void)
@@ -156,7 +156,7 @@ void phGpio_LedNext7(void)
 
 static inline bool btn_pressed(phGpio_Handle_t h)
 {
-    return phGpio_Get(h) == PH_GPIO_LOW;
+    return phGpioDrv_Get(h) == PH_GPIO_LOW;
 }
 
 bool phGpio_ButtonSw2Pressed(void)

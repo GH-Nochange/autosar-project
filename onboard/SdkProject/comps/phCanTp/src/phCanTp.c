@@ -4,7 +4,6 @@
 #include "phPduR_CanTp.h"
 #include "phTypes.h"
 #include "string.h"
-#include "S32K144.h"
 
 #define CAN_FRAME_SIZE 8
 
@@ -13,7 +12,7 @@ static const uint8_t *TX_appPtr = NULL;
 static phPduLengthType TX_totalLen = 0;
 static phPduLengthType TX_sentLen = 0;
 static uint8_t TX_SN = 0;
-static phPduLengthType TX_bufferSizePtr;
+// static phPduLengthType TX_bufferSizePtr;
 static phCanTpState txState = PH_IDLE;
 
 // RX
@@ -45,7 +44,7 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
 
     if (PduInfoPtr->SduLength > 0x0FFFu)
         return PH_ERR_FAILED;
-    //Multiple Frame (First Frame)
+    // Multiple Frame (First Frame)
     phPduInfoType infoFirstFrame;
     static uint8_t ffBuf[8];
 
@@ -153,7 +152,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
     phBufReq_ReturnType bufferReq;
     switch ((PduInfoPtr->SduDataPtr[0] >> 4) & 0x0F)
     {
-    case PCI_TYPE_SF: 
+    case PCI_TYPE_SF:
         TpSduLength = PduInfoPtr->SduDataPtr[0] & 0x0F;
         if (TpSduLength == 0 || TpSduLength > 7 || TpSduLength > (PduInfoPtr->SduLength - 1))
         {
@@ -192,13 +191,14 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
         if (bufferReq != PH_BUFREQ_OK || RX_bufferSizePtr < info.SduLength)
             return;
 
-        phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr);
+        if (phPduR_CanTpCopyRxData(&info, &RX_bufferSizePtr) == PH_BUFREQ_OK)
+        {
+            phPrepareFC_AllowAll();
 
-        phPrepareFC_AllowAll(); // Prepare & Send  Flow Control 
-
-        totalLen = TpSduLength;
-        copiedLen = firstChunk;
-        RX_SN = 0;
+            totalLen = TpSduLength;
+            copiedLen = firstChunk;
+            RX_SN = 0;
+        }
         break;
 
     case PCI_TYPE_CF:

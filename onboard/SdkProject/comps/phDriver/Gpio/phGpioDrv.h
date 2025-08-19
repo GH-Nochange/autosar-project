@@ -60,32 +60,32 @@ typedef struct
  * @param table  Config table (array).
  * @param count  Number of entries.
  */
-void phGpio_Init(const phGpio_PinConfig_t table[], uint32_t count);
+void phGpioDrv_Init(const phGpio_PinConfig_t table[], uint32_t count);
 
 /**
  * @brief Deinitialize all configured GPIOs (safe state).
  */
-void phGpio_DeInit(void);
+void phGpioDrv_DeInit(void);
 
 /**
  * @brief Set pin output level.
  */
-void phGpio_Set(phGpio_Handle_t h, phGpio_Level_t lvl);
+void phGpioDrv_Set(phGpio_Handle_t h, phGpio_Level_t lvl);
 
 /**
  * @brief Toggle pin output level.
  */
-void phGpio_Toggle(phGpio_Handle_t h);
+void phGpioDrv_Toggle(phGpio_Handle_t h);
 
 /**
  * @brief Read current pin level.
  */
-phGpio_Level_t phGpio_Get(phGpio_Handle_t h);
+phGpio_Level_t phGpioDrv_Get(phGpio_Handle_t h);
 
 /**
  * @brief Reconfigure interrupt for a pin.
  */
-void phGpio_SetInterrupt(phGpio_Handle_t h,
+void phGpioDrv_SetInterrupt(phGpio_Handle_t h,
                          phGpio_IrqConfig_t cfg,
                          phGpio_IrqCb_t cb,
                          void *ctx,
@@ -94,7 +94,7 @@ void phGpio_SetInterrupt(phGpio_Handle_t h,
 /**
  * @brief Clear interrupt flag for a pin (call inside ISR).
  */
-void phGpio_ClearInterrupt(phGpio_Handle_t h);
+void phGpioDrv_ClearInterrupt(phGpio_Handle_t h);
 
 #ifdef __cplusplus
 }

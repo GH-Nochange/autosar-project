@@ -19,7 +19,7 @@
 
 #include "esp_log.h"
 #include "mqtt_client.h"
-#include "mqtt.h"
+#include "nddmqtt_client.h"
 
 static const char *TAG = "MQTT";
 
@@ -35,17 +35,18 @@ extern const uint8_t client_key_pem_end[] asm("_binary_client_key_end");
 static esp_mqtt_client_handle_t client = NULL;
 static mqtt_handle_t mqtt_handle = NULL;
 
+#define MQTT_SUB_TOPIC "/topic/rx"
 
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
-    esp_mqtt_event_handle_t event = (esp_mqtt_event_handle_t) event_data;
+    esp_mqtt_event_handle_t event = (esp_mqtt_event_handle_t)event_data;
     client = event->client;
 
-    switch ((esp_mqtt_event_id_t) event_id)
+    switch ((esp_mqtt_event_id_t)event_id)
     {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        mqtt_sub("/topic/test");
+        mqtt_sub(MQTT_SUB_TOPIC);
         break;
 
     case MQTT_EVENT_DISCONNECTED:
@@ -54,7 +55,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
     case MQTT_EVENT_SUBSCRIBED:
         ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
-        mqtt_pub("/topic/test", "Hello MQTT", 10);
+        mqtt_pub(MQTT_SUB_TOPIC, "Hello MQTT", 10);
         break;
 
     case MQTT_EVENT_UNSUBSCRIBED:
@@ -90,22 +91,20 @@ void mqtt_start(void)
 void mqtt_init(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
-        // .broker.address.uri = "mqtt://192.168.54.198:1883",
-        .broker.address.uri = "mqtts://192.168.54.198:8883",
+        // .broker.address.uri = "mqtt://192.168.54.195:1883",
+        .broker.address.uri = "mqtts://192.168.54.195:8883",
         .broker.verification = {
             .certificate = (const char *)ca_cert_pem_start,
             .certificate_len = ca_cert_pem_end - ca_cert_pem_start,
             .skip_cert_common_name_check = true, // Skip CN check for simplicity, not recommended for production
         },
-        .credentials = {
-            .authentication = {
-                .certificate = (const char *)client_cert_pem_start,
-                .certificate_len = client_cert_pem_end - client_cert_pem_start,
-                .key = (const char *)client_key_pem_start,
-                .key_len = client_key_pem_end - client_key_pem_start,
-            }
-        }
-    };
+        .credentials = {.authentication = {
+                            .certificate = (const char *)client_cert_pem_start,
+                            .certificate_len = client_cert_pem_end - client_cert_pem_start,
+                            .key = (const char *)client_key_pem_start,
+                            .key_len = client_key_pem_end - client_key_pem_start,
+                        }}
+                    };
 
     client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_register_event(client, MQTT_EVENT_ANY, mqtt_event_handler, NULL);
@@ -115,7 +114,8 @@ void mqtt_init(void)
 
 void mqtt_set_callback(void *cb)
 {
-    if(cb){
+    if (cb)
+    {
         mqtt_handle = cb;
     }
 }

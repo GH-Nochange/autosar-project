@@ -1,5 +1,5 @@
-#ifndef __MQTT_H__
-#define __MQTT_H__
+#ifndef __NDD_MQTT_CLIENT_H__
+#define __NDD_MQTT_CLIENT_H__
 
 typedef void(*mqtt_handle_t)(char *data, int len);
 
@@ -9,4 +9,4 @@ void mqtt_set_callback(void *cb);
 void mqtt_pub(char *topic, char *data, int len);
 void mqtt_sub(char *topic);
 
-#endif // __MQTT_H__
+#endif // __NDD_MQTT_CLIENT_H__

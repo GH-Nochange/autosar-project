@@ -30,10 +30,10 @@ typedef struct
     phGpio_Handle_t led_b;
     phGpio_Handle_t btn_sw2;
     phGpio_Handle_t btn_sw3;
-} phGpioHwAb_Handles_t;
+} phGpio_Handles_t;
 
-void phGpioHwAb_Init(void);
-const phGpioHwAb_Handles_t* phGpioHwAb_GetHandles(void);
+void phGpio_Init(void);
+const phGpio_Handles_t* phGpio_GetHandles(void);
 
 void phGpio_LedOff(void);
 void phGpio_LedSetRGB(bool r_on, bool g_on, bool b_on);      

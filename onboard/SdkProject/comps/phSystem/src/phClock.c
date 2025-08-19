@@ -1,6 +1,6 @@
 #include "S32K144.h"           
 
-void SOSC_init_8MHz(void) {
+static void SOSC_init_8MHz(void) {
   SCG->SOSCDIV=0x00000101;  /* SOSCDIV1 & SOSCDIV2 =1: divide by 1 */
   SCG->SOSCCFG=0x00000024;  /* Range=2: Medium freq (SOSC betw 1MHz-8MHz)*/
                             /* HGO=0:   Config xtal osc for low power */
@@ -16,7 +16,7 @@ void SOSC_init_8MHz(void) {
   while(!(SCG->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK)); /* Wait for sys OSC clk valid */
 }
 
-void SPLL_init_160MHz(void) {
+static void SPLL_init_160MHz(void) {
   while(SCG->SPLLCSR & SCG_SPLLCSR_LK_MASK); /* Ensure SPLLCSR unlocked */
   SCG->SPLLCSR = 0x00000000;  /* SPLLEN=0: SPLL is disabled (default) */
   SCG->SPLLDIV = 0x00000302;  /* SPLLDIV1 divide by 2; SPLLDIV2 divide by 4 */
@@ -32,7 +32,7 @@ void SPLL_init_160MHz(void) {
   while(!(SCG->SPLLCSR & SCG_SPLLCSR_SPLLVLD_MASK)); /* Wait for SPLL valid */
 }
 
-void NormalRUNmode_80MHz (void) {  /* Change to normal RUN mode with 8MHz SOSC, 80 MHz PLL*/
+static void NormalRUNmode_80MHz (void) {  /* Change to normal RUN mode with 8MHz SOSC, 80 MHz PLL*/
   SCG->RCCR=SCG_RCCR_SCS(6)      /* PLL as clock source*/
     |SCG_RCCR_DIVCORE(0b01)      /* DIVCORE=1, div. by 2: Core clock = 160/2 MHz = 80 MHz*/
     |SCG_RCCR_DIVBUS(0b01)       /* DIVBUS=1, div. by 2: bus clock = 40 MHz*/
@@ -41,8 +41,16 @@ void NormalRUNmode_80MHz (void) {  /* Change to normal RUN mode with 8MHz SOSC, 
                                  /* Wait for sys clk src = SPLL */
 }
 
-void WDOG_disable (void){
+static void WDOG_disable (void){
   WDOG->CNT=0xD928C520; 	/* Unlock watchdog */
   WDOG->TOVAL=0x0000FFFF;	/* Maximum timeout value */
   WDOG->CS = 0x00002100;    /* Disable watchdog */
+}
+
+void system_clock_init(void)
+{
+    WDOG_disable();        // 1) Tắt watchdog để tránh reset ngoài ý muốn
+    SOSC_init_8MHz();      // 2) Bật thạch anh ngoài 8 MHz (SOSC)
+    SPLL_init_160MHz();    // 3) Nhân PLL lên 160 MHz
+    NormalRUNmode_80MHz(); // 4) Chuyển sang RUN: Core 80 MHz
 }

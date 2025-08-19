@@ -10,24 +10,32 @@
 input_callback_t input_callback = NULL;
 static uint64_t _start, _stop, _pressTick;
 
+// static void IRAM_ATTR gpio_input_handler(void *arg)
+// {
+//     int gpio_num = (uint32_t)arg;
+    
+//     uint64_t rtc = xTaskGetTickCountFromISR();
+
+//     if(gpio_get_level(gpio_num) == 0) {
+//         // Button pressed
+//         _start = rtc;
+//     } else {
+//         // Button released
+//         _stop = rtc;
+//         _pressTick = _stop - _start;
+//         if (input_callback != NULL) {
+//             input_callback(gpio_num, _pressTick);
+//         }
+//     }
+// }
+
 static void IRAM_ATTR gpio_input_handler(void *arg)
 {
     int gpio_num = (uint32_t)arg;
-    
-    uint64_t rtc = xTaskGetTickCountFromISR();
-
-    if(gpio_get_level(gpio_num) == 0) {
-        // Button pressed
-        _start = rtc;
-    } else {
-        // Button released
-        _stop = rtc;
-        _pressTick = _stop - _start;
-        if (input_callback != NULL) {
-            input_callback(gpio_num, _pressTick);
-        }
-    }
+    input_callback(gpio_num);
 }
+
+    
 
 void input_io_create(gpio_num_t gpio_num, interrupt_type_edge_t type)
 {

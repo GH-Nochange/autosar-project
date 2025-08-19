@@ -1,162 +1,98 @@
-#ifndef PH_SPIDRV_H
-#define PH_SPIDRV_H
+#ifndef PH_SPI_DRV_H
+#define PH_SPI_DRV_H
+
+/**
+ * @file phSpiDrv.h
+ * @brief Wrapper APIs for NXP LPSPI slave driver on S32K1xx.
+ *
+ * Provides a simplified interface for initializing, deinitializing,
+ * and transferring data using the LPSPI slave peripheral, based on
+ * the NXP SDK `lpspi_slave_driver.h`.
+ */
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "lpspi_slave_driver.h"
+#include "phTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "device_registers.h"
-#include "flexio.h"
-#include "edma_driver.h"
-#include "callbacks.h"
-#include "phTypes.h"
-
-/* =========================================================================
- *  ENUM & STRUCT ĐỊNH NGHĨA CẤU HÌNH SPI
- * ========================================================================= */
+/**
+ * @brief Initialize an LPSPI instance in slave mode.
+ *
+ * @param instance LPSPI instance index (0..LPSPI_INSTANCE_COUNT-1).
+ * @param cfg      Pointer to a valid slave configuration structure.
+ * @return PH_ERR_OK on success, or an error code on failure.
+ *
+ * @retval PH_ERR_INVALID_ARG If parameters are invalid.
+ * @retval PH_ERR_ALREADY_INIT If the instance is already initialized.
+ */
+PhTypes_ErrorCode_t phSpiDrvSlave_Init(uint32_t instance,
+                                    const lpspi_slave_config_t *cfg);
 
 /**
- * @brief Thứ tự truyền bit
+ * @brief Deinitialize a previously initialized LPSPI slave instance.
+ *
+ * @param instance LPSPI instance index.
+ * @return PH_ERR_OK on success, or an error code on failure.
+ *
+ * @retval PH_ERR_INVALID_ARG If instance index is invalid.
+ * @retval PH_ERR_NOT_INIT If the instance is not initialized.
  */
-typedef enum
-{
-    phSpiDrv_TransferMsbFirst = 0u,  /**< MSB truyền trước */
-    phSpiDrv_TransferLsbFirst = 1u   /**< LSB truyền trước */
-} phSpiDrv_TransferBitOrder_t;
+PhTypes_ErrorCode_t phSpiDrvSlave_Deinit(uint32_t instance);
 
 /**
- * @brief Kích thước dữ liệu truyền
+ * @brief Start a non-blocking transfer on the LPSPI bus.
+ *
+ * @param instance LPSPI instance index.
+ * @param tx       Pointer to transmit buffer (NULL to skip TX).
+ * @param rx       Pointer to receive buffer (NULL to skip RX).
+ * @param len      Number of bytes to transfer (must be > 0).
+ * @return PH_ERR_OK if transfer was started successfully, otherwise error code.
  */
-typedef enum
-{
-    phSpiDrv_Transfer1Byte = 1u, /**< 8-bit */
-    phSpiDrv_Transfer2Byte = 2u, /**< 16-bit */
-    phSpiDrv_Transfer4Byte = 4u  /**< 32-bit */
-} phSpiDrv_TransferSize_t;
+PhTypes_ErrorCode_t phSpiDrvSlave_Transfer(uint32_t instance,
+                                        const uint8_t *tx,
+                                        uint8_t *rx,
+                                        uint16_t len);
 
 /**
- * @brief Cấu hình SPI Master
- * @note  Baudrate chỉ cấu hình tại Init, không thay đổi khi đang chạy.
+ * @brief Perform a blocking transfer on the LPSPI bus.
+ *
+ * @param instance    LPSPI instance index.
+ * @param tx          Pointer to transmit buffer (NULL to skip TX).
+ * @param rx          Pointer to receive buffer (NULL to skip RX).
+ * @param len         Number of bytes to transfer (must be > 0).
+ * @param timeout_ms  Timeout in milliseconds.
+ * @return PH_ERR_OK if transfer completed successfully, otherwise error code.
  */
-typedef struct
-{
-    uint32_t baudRate;                 /**< Tốc độ baud (Hz) */
-    flexio_driver_type_t driverType;   /**< Kiểu driver: Polling, Interrupt, DMA */
-    phSpiDrv_TransferBitOrder_t bitOrder; /**< Thứ tự bit truyền */
-    phSpiDrv_TransferSize_t transferSize; /**< Kích thước dữ liệu truyền */
-    uint8_t clockPolarity;             /**< CPOL: 0 = Idle Low, 1 = Idle High */
-    uint8_t clockPhase;                /**< CPHA: 0 = Sample đầu, 1 = Sample sau */
-    uint8_t mosiPin;                    /**< Chân MOSI */
-    uint8_t misoPin;                    /**< Chân MISO */
-    uint8_t sckPin;                     /**< Chân SCK */
-    uint8_t ssPin;                      /**< Chân SS */
-    spi_callback_t callback;           /**< Hàm callback khi truyền xong (có thể NULL) */
-    void *callbackParam;               /**< Tham số truyền vào callback */
-    uint8_t rxDMAChannel;               /**< Kênh DMA nhận (nếu dùng DMA) */
-    uint8_t txDMAChannel;               /**< Kênh DMA truyền (nếu dùng DMA) */
-} phSpiDrv_MasterConfig_t;
+PhTypes_ErrorCode_t phSpiDrvSlave_TransferBlocking(uint32_t instance,
+                                                const uint8_t *tx,
+                                                uint8_t *rx,
+                                                uint16_t len,
+                                                uint32_t timeout_ms);
 
 /**
- * @brief Cấu hình SPI Slave
+ * @brief Abort an ongoing non-blocking transfer.
+ *
+ * @param instance LPSPI instance index.
+ * @return PH_ERR_OK on success, otherwise error code.
  */
-typedef struct
-{
-    flexio_driver_type_t driverType;   /**< Kiểu driver: Polling, Interrupt, DMA */
-    phSpiDrv_TransferBitOrder_t bitOrder; /**< Thứ tự bit truyền */
-    phSpiDrv_TransferSize_t transferSize; /**< Kích thước dữ liệu truyền */
-    uint8_t clockPolarity;             /**< CPOL: 0 = Idle Low, 1 = Idle High */
-    uint8_t clockPhase;                /**< CPHA: 0 = Sample đầu, 1 = Sample sau */
-    uint8_t mosiPin;                    /**< Chân MOSI */
-    uint8_t misoPin;                    /**< Chân MISO */
-    uint8_t sckPin;                     /**< Chân SCK */
-    uint8_t ssPin;                      /**< Chân SS */
-    spi_callback_t callback;           /**< Hàm callback khi truyền xong (có thể NULL) */
-    void *callbackParam;               /**< Tham số truyền vào callback */
-    uint8_t rxDMAChannel;               /**< Kênh DMA nhận (nếu dùng DMA) */
-    uint8_t txDMAChannel;               /**< Kênh DMA truyền (nếu dùng DMA) */
-} phSpiDrv_SlaveConfig_t;
-
-/* =========================================================================
- *  API CHO SPI MASTER
- * ========================================================================= */
+PhTypes_ErrorCode_t phSpiDrvSlave_Abort(uint32_t instance);
 
 /**
- * @brief Khởi tạo SPI Master
- * @param instance  Số instance FlexIO
- * @param cfg       Con trỏ tới cấu hình master
- * @return EER_OK nếu thành công
+ * @brief Get status of an ongoing non-blocking transfer.
+ *
+ * @param instance       LPSPI instance index.
+ * @param bytesRemained  Pointer to store remaining bytes count.
+ * @return PH_ERR_OK if status was retrieved successfully, otherwise error code.
  */
-PhTypes_ErrorCode_t phSpiDrv_MasterInit(uint32_t instance, const phSpiDrv_MasterConfig_t *cfg);
-
-/**
- * @brief Giải phóng SPI Master
- */
-PhTypes_ErrorCode_t phSpiDrv_MasterDeinit(uint32_t instance);
-
-/**
- * @brief Truyền/Nhận dữ liệu không chặn (non-blocking)
- * @param tx   Buffer dữ liệu truyền (có thể NULL nếu chỉ nhận)
- * @param rx   Buffer dữ liệu nhận (có thể NULL nếu chỉ truyền)
- * @param len  Số byte cần truyền/nhận
- */
-PhTypes_ErrorCode_t phSpiDrv_MasterTransfer(uint32_t instance, const uint8_t *tx, uint8_t *rx, uint32_t len);
-
-/**
- * @brief Truyền/Nhận dữ liệu chặn (blocking)
- * @param timeoutMs Thời gian chờ tối đa (ms)
- */
-PhTypes_ErrorCode_t phSpiDrv_MasterTransferBlocking(uint32_t instance, const uint8_t *tx, uint8_t *rx, uint32_t len, uint32_t timeoutMs);
-
-/**
- * @brief Hủy truyền đang thực hiện
- */
-PhTypes_ErrorCode_t phSpiDrv_MasterTransferAbort(uint32_t instance);
-
-/**
- * @brief Lấy trạng thái truyền (non-blocking)
- * @param bytesRemaining Trả về số byte còn lại chưa truyền
- */
-PhTypes_ErrorCode_t phSpiDrv_MasterGetStatus(uint32_t instance, uint32_t *bytesRemaining);
-
-/* =========================================================================
- *  API CHO SPI SLAVE
- * ========================================================================= */
-
-/**
- * @brief Khởi tạo SPI Slave
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveInit(uint32_t instance, const phSpiDrv_SlaveConfig_t *cfg);
-
-/**
- * @brief Giải phóng SPI Slave
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveDeinit(uint32_t instance);
-
-/**
- * @brief Truyền/Nhận dữ liệu không chặn (non-blocking)
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveTransfer(uint32_t instance, const uint8_t *tx, uint8_t *rx, uint32_t len);
-
-/**
- * @brief Truyền/Nhận dữ liệu chặn (blocking)
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveTransferBlocking(uint32_t instance, const uint8_t *tx, uint8_t *rx, uint32_t len, uint32_t timeoutMs);
-
-/**
- * @brief Hủy truyền đang thực hiện
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveTransferAbort(uint32_t instance);
-
-/**
- * @brief Lấy trạng thái truyền (non-blocking)
- * @param bytesRemaining Trả về số byte còn lại chưa truyền
- */
-PhTypes_ErrorCode_t phSpiDrv_SlaveGetStatus(uint32_t instance, uint32_t *bytesRemaining);
+PhTypes_ErrorCode_t LpspiSlave_GetStatus(uint32_t instance,
+                                         uint32_t *bytesRemained);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* PH_SPIDRV_H */
+#endif /* PH_SPI_DRV_H */

@@ -19,4 +19,4 @@ typedef void (*spi_handler_t)(esp_err_t status);
 void      spi_init(void);
 void      spi_deinit(void);
 void      spi_set_callback(spi_handler_t cb);
-esp_err_t spi_transfer_async(const uint8_t *data, uint16_t len);
+esp_err_t spi_transfer_async_duplex(const uint8_t *tx, uint8_t *rx, uint16_t len);

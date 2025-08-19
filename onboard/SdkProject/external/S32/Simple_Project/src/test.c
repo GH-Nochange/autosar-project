@@ -46,10 +46,7 @@ void TEST_PORT_init(void)
 
 void TEST_run(void)
 {
-    WDOG_disable();
-    SOSC_init_8MHz();
-    SPLL_init_160MHz();
-    NormalRUNmode_80MHz();
+	system_clock_init();
 
     TEST_PORT_init();
 
@@ -61,7 +58,7 @@ void TEST_run(void)
         for (;;);
     }
 
-    Control_MainFunction();
+    phControl_MainFunction();
 #if defined(CAN)
     uint8_t data[8] = {0xAA, 0x44, 0x55, 0x66, 0x77, 0xFF, 0xBB, 0x99};
     (void)phCan0_Transmit(data, 8);

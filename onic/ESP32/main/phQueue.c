@@ -29,31 +29,52 @@ PhTypes_ErrorCode_t Queue_Init(void)
 
 PhTypes_ErrorCode_t QueueTX_Push(const phApp_DataTypes_t *data, uint16_t length)
 {
-    if (!data)
-        return PH_ERR_INVALID_ARG;
-    if (QueueTX_IsFull())
-        return PH_ERR_NO_RESOURCE;
+    if (!data) return PH_ERR_INVALID_ARG;
+    if (QueueTX_IsFull()) return PH_ERR_NO_RESOURCE;
 
-    memcpy(&com_tx_queue.buffer[com_tx_queue.tail], data, length + 4);
+    uint16_t len = data->length;
+    if (length != 0) len = length;               
+    if (len > PAYLOAD_SIZE) len = PAYLOAD_SIZE;
+
+    phApp_DataTypes_t tmp = *data;
+    tmp.length = len;
+
+    if (len < PAYLOAD_SIZE) {
+        memset(&tmp.payload[len], 0, (size_t)(PAYLOAD_SIZE - len));
+    }
+
+    /* Copy đúng kích thước phần tử (AN TOÀN) */
+    memset(&com_tx_queue.buffer[com_tx_queue.tail], 0, sizeof(phApp_DataTypes_t));
+    memcpy(&com_tx_queue.buffer[com_tx_queue.tail], &tmp, sizeof(phApp_DataTypes_t));
 
     com_tx_queue.tail = (com_tx_queue.tail + 1) % QUEUE_CAPACITY;
     com_tx_queue.size++;
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueRX_Push(const phApp_DataTypes_t *data, uint16_t Length)
+PhTypes_ErrorCode_t QueueRX_Push(const phApp_DataTypes_t *data, uint16_t length)
 {
-    if (!data)
-        return PH_ERR_INVALID_ARG;
-    if (QueueRX_IsFull())
-        return PH_ERR_NO_RESOURCE;
+    if (!data) return PH_ERR_INVALID_ARG;
+    if (QueueRX_IsFull()) return PH_ERR_NO_RESOURCE;
 
-    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], data, Length + 4);
+    uint16_t len = data->length;
+    if (length != 0) len = length;
+    if (len > PAYLOAD_SIZE) len = PAYLOAD_SIZE;
+
+    phApp_DataTypes_t tmp = *data;
+    tmp.length = len;
+    if (len < PAYLOAD_SIZE) {
+        memset(&tmp.payload[len], 0, (size_t)(PAYLOAD_SIZE - len));
+    }
+
+    memset(&com_rx_queue.buffer[com_rx_queue.tail], 0, sizeof(phApp_DataTypes_t));
+    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], &tmp, sizeof(phApp_DataTypes_t));
 
     com_rx_queue.tail = (com_rx_queue.tail + 1) % QUEUE_CAPACITY;
     com_rx_queue.size++;
     return PH_ERR_OK;
 }
+
 
 PhTypes_ErrorCode_t QueueTX_Pop(phApp_DataTypes_t *out_data)
 {

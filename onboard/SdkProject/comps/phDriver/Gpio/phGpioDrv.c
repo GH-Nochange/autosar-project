@@ -81,7 +81,7 @@ static void ph_dispatch_port_isr_(PORT_Type *port)
 }
 
 
-void phGpio_Init(const phGpio_PinConfig_t table[], uint32_t count)
+void phGpioDrv_Init(const phGpio_PinConfig_t table[], uint32_t count)
 {
     s_table = table;
     s_count = count;
@@ -101,7 +101,7 @@ void phGpio_Init(const phGpio_PinConfig_t table[], uint32_t count)
     }
 }
 
-void phGpio_DeInit(void)
+void phGpioDrv_DeInit(void)
 {
     if (!s_table) return;
 
@@ -121,21 +121,21 @@ void phGpio_DeInit(void)
     memset(s_irq_ctx, 0, sizeof(s_irq_ctx));
 }
 
-void phGpio_Set(phGpio_Handle_t h, phGpio_Level_t lvl)
+void phGpioDrv_Set(phGpio_Handle_t h, phGpio_Level_t lvl)
 {
     if (!ph_is_valid_handle(h)) return;
     const phGpio_PinConfig_t *cfg = &s_table[h];
     PINS_DRV_WritePin(cfg->gpio_base, (pins_channel_type_t)cfg->pin, (pins_level_type_t)lvl);
 }
 
-void phGpio_Toggle(phGpio_Handle_t h)
+void phGpioDrv_Toggle(phGpio_Handle_t h)
 {
     if (!ph_is_valid_handle(h)) return;
     const phGpio_PinConfig_t *cfg = &s_table[h];
     PINS_DRV_TogglePins(cfg->gpio_base, ph_bit(cfg->pin));
 }
 
-phGpio_Level_t phGpio_Get(phGpio_Handle_t h)
+phGpio_Level_t phGpioDrv_Get(phGpio_Handle_t h)
 {
     if (!ph_is_valid_handle(h)) return PH_GPIO_LOW;
     const phGpio_PinConfig_t *cfg = &s_table[h];
@@ -153,7 +153,7 @@ static IRQn_Type ph_port_to_irqn(const PORT_Type *p)
     return (IRQn_Type)-1;
 }
 
-void phGpio_SetInterrupt(phGpio_Handle_t h,
+void phGpioDrv_SetInterrupt(phGpio_Handle_t h,
                          phGpio_IrqConfig_t cfg,
                          phGpio_IrqCb_t cb,
                          void *ctx,
@@ -188,7 +188,7 @@ void phGpio_SetInterrupt(phGpio_Handle_t h,
 }
 
 
-void phGpio_ClearInterrupt(phGpio_Handle_t h)
+void phGpioDrv_ClearInterrupt(phGpio_Handle_t h)
 {
     if (!ph_is_valid_handle(h)) return;
     const phGpio_PinConfig_t *cfg = &s_table[h];

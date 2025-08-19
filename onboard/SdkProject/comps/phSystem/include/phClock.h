@@ -9,23 +9,12 @@
  */
 
 /**
- * @brief Initialize System Oscillator (SOSC) to 8 MHz.
+ * @brief Initialize system clocks for S32K144:
+ *        - Disable WDOG
+ *        - Enable SOSC @ 8 MHz (external XTAL)
+ *        - Configure SPLL = 160 MHz
+ *        - Switch to Normal RUN: Core=80MHz, Bus=40MHz, Flash≈26.7MHz
  */
-void SOSC_init_8MHz(void);
-
-/**
- * @brief Initialize System PLL (SPLL) with 160 MHz output.
- */
-void SPLL_init_160MHz(void);
-
-/**
- * @brief Set Normal RUN mode with core clock 80 MHz.
- */
-void NormalRUNmode_80MHz(void);
-
-/**
- * @brief Disable Watchdog (WDOG).
- */
-void WDOG_disable(void);
+void system_clock_init(void);
 
 #endif /* PH_CLOCKS_H_ */

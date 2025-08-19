@@ -1,0 +1,12 @@
+/* --- SPI wiring: ESP32 (VSPI) ↔ S32K144 (LPSPI1, Slave, Mode0) ---
+ *  GND ↔ GND  
+ *
+ *  ESP32         Signal           S32K144
+ *  GPIO18 (P18)  SCK     ->       PTB14 (LPSPI1_SCK)
+ *  GPIO23 (P23)  MOSI    ->       PTB15 (LPSPI1_SIN)   // Master → Slave
+ *  GPIO19 (P19)  MISO    <-       PTB16 (LPSPI1_SOUT)  // Slave  → Master
+ *  GPIO5  (P5)   CS_n    ->       PTB17 (LPSPI1_PCS3)  // Active-Low
+ *
+ *  READY line (host-notify):
+ *  ESP32 GPIO4 (P4) -> S32K PTC7 (GPIO input/IRQ)
+ */

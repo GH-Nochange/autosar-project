@@ -55,6 +55,11 @@
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/interrupt</location>
 		</link>
 		<link>
+			<name>lpspi</name>
+			<type>2</type>
+			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/platform/drivers/src/lpspi</location>
+		</link>
+		<link>
 			<name>osif</name>
 			<type>2</type>
 			<location>C:/Users/nguye/DATA/study/AUTOMOTIVE/autosar-project/onboard/SdkProject/external/SDK/rtos/osif</location>

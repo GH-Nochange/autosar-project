@@ -3,8 +3,11 @@
 
 #include <stdint.h>
 #include "phTypes.h"
+#include "phApp_DataTypes.h"
 
-void Control_MainFunction(void);
+
+void phControl_Init(void);
+void phControl_MainFunction(void);
 
 PhTypes_ErrorCode_t TransmitSignal(phApp_DataTypes_t data);
 
