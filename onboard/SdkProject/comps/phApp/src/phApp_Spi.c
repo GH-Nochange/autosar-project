@@ -14,24 +14,17 @@ static void spi_cb(void *ud)
     (void)ud;
 
     uint16_t len = (uint16_t)rx[0] | ((uint16_t)rx[1] << 8);
-    uint8_t grp = rx[2];
-    uint8_t id = rx[3];
-
-    if (len > PAYLOAD_SIZE)
-        len = PAYLOAD_SIZE;
-    if (len > (MESSAGE_SIZE - 4))
-        len = (MESSAGE_SIZE - 4);
+    
+    if (len > MESSAGE_SIZE)
+        len = MESSAGE_SIZE;
 
     if (len > 0u)
     {
-        phApp_DataTypes_t data;
-        data.length = len;
-        data.group = grp;
-        data.id = id;
-        memcpy(data.payload, &rx[4], len);
-        if (len < PAYLOAD_SIZE)
-            memset(&data.payload[len], 0, PAYLOAD_SIZE - len);
-        (void)QueueTX_Push(&data, len);
+        phApp_Data_t data;
+        memcpy(&data, &rx[2], len);
+        if (len < MESSAGE_SIZE)
+            memset(&data, 0, MESSAGE_SIZE - len);
+        (void)QueueTX_Push(&data);
     }
 
     f_transfer = 0;
@@ -51,25 +44,18 @@ void phApp_SpiMainFunction(void)
     if (!f_transfer)
     {
         bool has_tx_data = false;
-        phApp_DataTypes_t out;
+        phApp_Data_t out;
 
         memset(tx, 0, MESSAGE_SIZE);
         memset(rx, 0, MESSAGE_SIZE);
 
         if (!QueueRX_IsEmpty() && QueueRX_Pop(&out) == PH_ERR_OK)
         {
-            uint16_t len = out.length;
-            if (len > PAYLOAD_SIZE)
-                len = PAYLOAD_SIZE;
-            if (len > (MESSAGE_SIZE - 4))
-                len = (MESSAGE_SIZE - 4);
-
-            tx[0] = (uint8_t)(len & 0xFF);
-            tx[1] = (uint8_t)((len >> 8) & 0xFF);
-            tx[2] = out.group;
-            tx[3] = out.id;
+            uint16_t len = out.header.length + 4;
+            if (len > MESSAGE_SIZE)
+                len = MESSAGE_SIZE;
             if (len > 0)
-                memcpy(&tx[4], out.payload, len);
+                memcpy(&tx[2], out.payload, len);
 
             has_tx_data = true;
         }
@@ -89,14 +75,12 @@ void phApp_SpiMainFunction(void)
 
     if (!QueueRX_IsEmpty() && phSpi_SlaveIsCsHigh())
     {
-        phApp_DataTypes_t out;
+        phApp_Data_t out;
         if (QueueRX_Front(&out) == PH_ERR_OK)
         {
-            uint16_t len = out.length;
-            if (len > PAYLOAD_SIZE)
-                len = PAYLOAD_SIZE;
-            if (len > (MESSAGE_SIZE - 4))
-                len = (MESSAGE_SIZE - 4);
+            uint16_t len = out.header.length + 4;
+            if (len > MESSAGE_SIZE)
+                len = MESSAGE_SIZE;
 
             phSpi_SlaveAbort();
             f_transfer = 0;
@@ -115,12 +99,7 @@ void phApp_SpiMainFunction(void)
             //     out.payload[i] = (uint8_t)(i + 1); // 01 02 03 ... 10
             // }
 
-            tx[0] = (uint8_t)(len & 0xFF);
-            tx[1] = (uint8_t)((len >> 8) & 0xFF);
-            tx[2] = out.group;
-            tx[3] = out.id;
-            if (len > 0)
-                memcpy(&tx[4], out.payload, len);
+            memcpy(&tx[2], out.payload, len);
 
             // // Debug
             // if(out.length == 0x0011 && out.group == 0x10 && out.id == 0x11 && out.payload[5] == 0xAA) PTD->PTOR = (1u << 16);

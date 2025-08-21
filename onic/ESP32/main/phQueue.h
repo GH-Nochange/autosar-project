@@ -34,21 +34,21 @@ PhTypes_ErrorCode_t Queue_Init(void);
  * @param[in] Length  Frame length.
  * @return ERR_Ok, ERR_InvalidArg, or ERR_NoResource if full.
  */
-PhTypes_ErrorCode_t QueueTX_Push(const phApp_DataTypes_t *data, uint16_t Length);
+PhTypes_ErrorCode_t QueueTX_Push(const phApp_Data_t *data);
 
 /**
  * @brief Pop the first frame from TX queue.
  * @param[out] out_data Destination buffer.
  * @return ERR_Ok or ERR_NoResource if empty.
  */
-PhTypes_ErrorCode_t QueueTX_Pop(phApp_DataTypes_t *out_data);
+PhTypes_ErrorCode_t QueueTX_Pop(phApp_Data_t *out_data);
 
 /**
  * @brief Peek at the first TX frame without removing it.
  * @param[out] out_data Destination buffer.
  * @return ERR_Ok or ERR_NoResource if empty.
  */
-PhTypes_ErrorCode_t QueueTX_Front(phApp_DataTypes_t *out_data);
+PhTypes_ErrorCode_t QueueTX_Front(phApp_Data_t *out_data);
 
 /** @return true if TX queue is empty. */
 bool   QueueTX_IsEmpty(void);
@@ -65,21 +65,21 @@ size_t QueueTX_Size(void);
  * @param[in] Length  Frame length.
  * @return ERR_Ok, ERR_InvalidArg, or ERR_NoResource if full.
  */
-PhTypes_ErrorCode_t QueueRX_Push(const phApp_DataTypes_t *data, uint16_t Length);
+PhTypes_ErrorCode_t QueueRX_Push(const phApp_Data_t *data);
 
 /**
  * @brief Pop the first frame from RX queue.
  * @param[out] out_data Destination buffer.
  * @return ERR_Ok or ERR_NoResource if empty.
  */
-PhTypes_ErrorCode_t QueueRX_Pop(phApp_DataTypes_t *out_data);
+PhTypes_ErrorCode_t QueueRX_Pop(phApp_Data_t *out_data);
 
 /**
  * @brief Peek at the first RX frame without removing it.
  * @param[out] out_data Destination buffer.
  * @return ERR_Ok or ERR_NoResource if empty.
  */
-PhTypes_ErrorCode_t QueueRX_Front(phApp_DataTypes_t *out_data);
+PhTypes_ErrorCode_t QueueRX_Front(phApp_Data_t *out_data);
 
 /** @return true if RX queue is empty. */
 bool   QueueRX_IsEmpty(void);

@@ -2,6 +2,7 @@
 #include "phQueue.h"
 #include "phComStack_Types.h"
 #include "phPduR_Com.h"
+#include "phBoard.h"
 #include <string.h>
 #include "device_registers.h"
 
@@ -21,24 +22,26 @@ static phPduLengthType s_rxExpected = 0;
 /* Bytes already received/written */
 static phPduLengthType s_rxWritten = 0;
 
-PhTypes_ErrorCode_t phCom_Send(const phApp_DataTypes_t *Data)
+PhTypes_ErrorCode_t phCom_Send(const phApp_Data_t *Data)
 {
     if (sending_flag == 1)
         return PH_ERR_BUSY;
     if (Data == NULL)
         return PH_ERR_INVALID_ARG;
-    if (Data->length > PH_COM_MAX_PDU - 2)
+    if (Data->header.length > PH_COM_MAX_PDU - 2)
         return PH_ERR_NO_RESOURCE;
 
-    s_txBuf[0] = Data->group;
-    s_txBuf[1] = Data->id;
-    if (Data->length > 0)
+    s_txBuf[0] = (Data->header.group << 4) | (Data->header.ecu);
+    s_txBuf[1] = Data->header.id;
+    s_txBuf[2] = (Data->header.length >> 8) & 0x0F;
+    s_txBuf[3] = Data->header.length & 0x0F;
+    if (Data->header.length > 0)
     {
 
-        memcpy(&s_txBuf[2], Data->payload, (size_t)(Data->length));
+        memcpy(&s_txBuf[4], Data->payload, (size_t)(Data->header.length));
     }
 
-    s_txPdu.SduLength = Data->length + 2;
+    s_txPdu.SduLength = Data->header.length + 4;
 
     sending_flag = 1;
     if (phPduR_ComTransmit(&s_txPdu) != PH_ERR_OK)
@@ -47,6 +50,11 @@ PhTypes_ErrorCode_t phCom_Send(const phApp_DataTypes_t *Data)
         return PH_ERR_FAILED;
     }
     return PH_ERR_OK;
+}
+
+PhTypes_ErrorCode_t phCom_Recv(const phApp_Data_t *Data) // ID
+{
+    phBoard_Recv(Data);
 }
 
 void phCom_TpTxConfirmation(PhTypes_ErrorCode_t result)
@@ -116,17 +124,11 @@ void phCom_TpRxIndication(PhTypes_ErrorCode_t result)
 {
     if (result == PH_ERR_OK && s_rxWritten == s_rxExpected && s_rxExpected >= 2u)
     {
-        phApp_DataTypes_t data;
+        phApp_Data_t data;
         memset(&data, 0, sizeof(data));
-        data.length = s_rxExpected - 2;
-        data.group = s_rxBuf[0];
-        data.id = s_rxBuf[1];
-        if (data.length > 0u)
-        {
-            memcpy(data.payload, &s_rxBuf[2], (size_t)data.length);
-        }
+        memcpy(&data, phRX_PduInfoPtr.SduDataPtr, phRX_PduInfoPtr.SduLength);
 
-        (void)QueueRX_Push(&data, data.length);
+        phCom_Recv(&data);
     }
 
     memset(s_rxBuf, 0, sizeof(s_rxBuf));
@@ -138,7 +140,7 @@ void phCom_TpRxIndication(PhTypes_ErrorCode_t result)
 
 void phCom_MainFunctionTx(void)
 {
-    phApp_DataTypes_t data;
+    phApp_Data_t data;
 
     if (QueueTX_Front(&data) == PH_ERR_OK)
     {
@@ -147,14 +149,4 @@ void phCom_MainFunctionTx(void)
             QueueTX_Pop(&data);
         }
     }
-
-    // // Debug
-    // phApp_DataTypes_t data1;
-    // if (QueueRX_Front(&data1) == PH_ERR_OK)
-    // {
-    //     if (phCom_Send(&data1) == PH_ERR_OK)
-    //     {
-    //     }
-    // }
-
 }

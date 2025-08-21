@@ -13,26 +13,39 @@ extern "C"
 
     typedef enum
     {
-        LED,
-        LIGHT_SENSOR,
-    } phApp_Id_t;
-
+        PH_COMMAND = 0b0000,
+        PH_NOTIFY = 0b0001,
+        PH_RESPONSE = 0b0010
+    } phApp_Group_t;
 
     typedef enum
     {
-        PH_COMMAND,
-        PH_NOTIFY,
-        PH_RESPONSE
-    } phApp_Group_t;
+        PH_HOST1 = 0b1000,
+        PH_BOARD1 = 0b0100,
+        PH_IC1 = 0b0000,
+    } phApp_Ecu_t; // change 2bit low
 
+    typedef enum
+    {
+        PH_ECHO_REVERT,
+        PH_VERSION,
+        PH_RESET_SOFT,
+        PH_LED,
+    } phApp_Id_t;
 
     typedef struct
     {
+        phApp_Group_t group;
+        phApp_Ecu_t ecu;
+        phApp_Id_t id;
         uint16_t length;
-        uint8_t group;
-        uint8_t id;
+    } phApp_Hearder_t;
+
+    typedef struct
+    {
+        phApp_Hearder_t header;
         uint8_t payload[PAYLOAD_SIZE];
-    } phApp_DataTypes_t;
+    } phApp_Data_t;
 
 #ifdef __cplusplus
 }

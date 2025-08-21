@@ -23,7 +23,14 @@ extern "C" {
  * @param[in] Data Pointer to application data.
  * @return PH_ERR_OK if accepted; error code otherwise.
  */
-PhTypes_ErrorCode_t phCom_Send(const phApp_DataTypes_t *Data);
+PhTypes_ErrorCode_t phCom_Send(const phApp_Data_t *Data);
+
+/**
+ * @brief Recv application data through COM stack.
+ * @param[in] Data Pointer to application data.
+ * @return PH_ERR_OK if accepted; error code otherwise.
+ */
+PhTypes_ErrorCode_t phCom_Recv(const phApp_Data_t *Data);
 
 /* ================= Callback Functions ================= */
 

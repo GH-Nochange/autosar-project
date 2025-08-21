@@ -5,7 +5,7 @@
 
 typedef struct
 {
-    phApp_DataTypes_t buffer[QUEUE_CAPACITY];
+    phApp_Data_t buffer[QUEUE_CAPACITY];
     int head;
     int tail;
     int size;
@@ -27,56 +27,35 @@ PhTypes_ErrorCode_t Queue_Init(void)
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueTX_Push(const phApp_DataTypes_t *data, uint16_t length)
+PhTypes_ErrorCode_t QueueTX_Push(const phApp_Data_t *data)
 {
-    if (!data) return PH_ERR_INVALID_ARG;
-    if (QueueTX_IsFull()) return PH_ERR_NO_RESOURCE;
+    if (!data)
+        return PH_ERR_INVALID_ARG;
+    if (QueueTX_IsFull())
+        return PH_ERR_NO_RESOURCE;
 
-    uint16_t len = data->length;
-    if (length != 0) len = length;               
-    if (len > PAYLOAD_SIZE) len = PAYLOAD_SIZE;
-
-    phApp_DataTypes_t tmp = *data;
-    tmp.length = len;
-
-    if (len < PAYLOAD_SIZE) {
-        memset(&tmp.payload[len], 0, (size_t)(PAYLOAD_SIZE - len));
-    }
-
-    /* Copy đúng kích thước phần tử (AN TOÀN) */
-    memset(&com_tx_queue.buffer[com_tx_queue.tail], 0, sizeof(phApp_DataTypes_t));
-    memcpy(&com_tx_queue.buffer[com_tx_queue.tail], &tmp, sizeof(phApp_DataTypes_t));
+    memcpy(&com_tx_queue.buffer[com_tx_queue.tail], data, data->header.length + 4);
 
     com_tx_queue.tail = (com_tx_queue.tail + 1) % QUEUE_CAPACITY;
     com_tx_queue.size++;
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueRX_Push(const phApp_DataTypes_t *data, uint16_t length)
+PhTypes_ErrorCode_t QueueRX_Push(const phApp_Data_t *data)
 {
-    if (!data) return PH_ERR_INVALID_ARG;
-    if (QueueRX_IsFull()) return PH_ERR_NO_RESOURCE;
+    if (!data)
+        return PH_ERR_INVALID_ARG;
+    if (QueueRX_IsFull())
+        return PH_ERR_NO_RESOURCE;
 
-    uint16_t len = data->length;
-    if (length != 0) len = length;
-    if (len > PAYLOAD_SIZE) len = PAYLOAD_SIZE;
-
-    phApp_DataTypes_t tmp = *data;
-    tmp.length = len;
-    if (len < PAYLOAD_SIZE) {
-        memset(&tmp.payload[len], 0, (size_t)(PAYLOAD_SIZE - len));
-    }
-
-    memset(&com_rx_queue.buffer[com_rx_queue.tail], 0, sizeof(phApp_DataTypes_t));
-    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], &tmp, sizeof(phApp_DataTypes_t));
+    memcpy(&com_rx_queue.buffer[com_rx_queue.tail], data, data->header.length + 4);
 
     com_rx_queue.tail = (com_rx_queue.tail + 1) % QUEUE_CAPACITY;
     com_rx_queue.size++;
     return PH_ERR_OK;
 }
 
-
-PhTypes_ErrorCode_t QueueTX_Pop(phApp_DataTypes_t *out_data)
+PhTypes_ErrorCode_t QueueTX_Pop(phApp_Data_t *out_data)
 {
     if (QueueTX_IsEmpty())
         return PH_ERR_NO_RESOURCE;
@@ -88,7 +67,7 @@ PhTypes_ErrorCode_t QueueTX_Pop(phApp_DataTypes_t *out_data)
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueRX_Pop(phApp_DataTypes_t *out_data)
+PhTypes_ErrorCode_t QueueRX_Pop(phApp_Data_t *out_data)
 {
     if (QueueRX_IsEmpty())
         return PH_ERR_NO_RESOURCE;
@@ -100,7 +79,7 @@ PhTypes_ErrorCode_t QueueRX_Pop(phApp_DataTypes_t *out_data)
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueTX_Front(phApp_DataTypes_t *out_data)
+PhTypes_ErrorCode_t QueueTX_Front(phApp_Data_t *out_data)
 {
     if (QueueTX_IsEmpty())
         return PH_ERR_NO_RESOURCE;
@@ -110,7 +89,7 @@ PhTypes_ErrorCode_t QueueTX_Front(phApp_DataTypes_t *out_data)
     return PH_ERR_OK;
 }
 
-PhTypes_ErrorCode_t QueueRX_Front(phApp_DataTypes_t *out_data)
+PhTypes_ErrorCode_t QueueRX_Front(phApp_Data_t *out_data)
 {
     if (QueueRX_IsEmpty())
         return PH_ERR_NO_RESOURCE;

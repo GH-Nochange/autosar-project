@@ -28,7 +28,10 @@ typedef enum
     PH_ERR_OVERFLOW,           /*!< Tràn dữ liệu */
     PH_ERR_UNDERFLOW,          /*!< Thiếu dữ liệu để xử lý */
     PH_ERR_ABORTED,            /*!< Thao tác bị hủy giữa chừng */
-    PH_ERR_NOT_FOUND           /*!< Không tìm thấy dữ liệu/tài nguyên */
+    PH_ERR_NOT_FOUND,           /*!< Không tìm thấy dữ liệu/tài nguyên */
+
+    PH_ERR_SPI_NOT_CONNECTED,
+    PH_ERR_CAN_NOT_CONNECTED,
 } PhTypes_ErrorCode_t;
 
 

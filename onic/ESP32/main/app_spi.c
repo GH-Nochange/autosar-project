@@ -26,52 +26,43 @@ static void on_spi_done(esp_err_t r)
 }
 
 /* ---------- helper: build TX từ item (hoặc dummy) ---------- */
-static size_t build_tx(uint8_t *tx, const phApp_DataTypes_t *item_or_null)
+static size_t build_tx(uint8_t *tx, const phApp_Data_t *item_or_null)
 {
     memset(tx, 0, MESSAGE_SIZE);
 
-    size_t n = 0;
     const size_t max_payload_buf = (MESSAGE_SIZE >= 4) ? (MESSAGE_SIZE - 4) : 0;
 
     if (item_or_null)
     {
-        size_t payload_len = item_or_null->length;
+        size_t payload_len = item_or_null->header.length;
         if (payload_len > PAYLOAD_SIZE)
             payload_len = PAYLOAD_SIZE;
         if (payload_len > max_payload_buf)
             payload_len = max_payload_buf;
 
-        const uint16_t len = (uint16_t)payload_len;
-        const uint8_t group = item_or_null->group;
-        const uint8_t id = item_or_null->id;
-
-        tx[n++] = (uint8_t)(len & 0xFF);
-        tx[n++] = (uint8_t)(len >> 8);
-        tx[n++] = group;
-        tx[n++] = id;
+        const uint16_t len = (uint16_t)payload_len + 4;
+        tx[0] = (uint8_t)(len & 0xFF);
+        tx[1] = (uint8_t)(len >> 8);
 
         if (payload_len)
         {
-            memcpy(&tx[n], item_or_null->payload, payload_len);
-            n += payload_len;
+            memcpy(&tx[2], item_or_null->payload, len);
         }
     }
     else
     {
-        tx[n++] = 0x00;
-        tx[n++] = 0x00;
-        tx[n++] = 0x00;
-        tx[n++] = 0x00;
-        tx[n++] = 0x00;
+        tx[0] = 0x00;
+        tx[1] = 0x00;
+        tx[2] = 0x00;
+        tx[3] = 0x00;
+        tx[4] = 0x00;
     }
 
-    (void)n; 
     return MESSAGE_SIZE;
 }
 
 static bool rx_parse_if_valid(const uint8_t *rx, size_t xfer_len,
-                              phApp_DataTypes_t *out_item,
-                              size_t *out_rx_copy)
+                              phApp_Data_t *out_item)
 {
     if (!rx)
         return false;
@@ -79,8 +70,6 @@ static bool rx_parse_if_valid(const uint8_t *rx, size_t xfer_len,
         return false;
 
     uint16_t rx_len = (uint16_t)rx[0] | ((uint16_t)rx[1] << 8);
-    uint8_t rx_group = rx[2];
-    uint8_t rx_id = rx[3];
 
     if (rx_len == 0u || rx_len == 0xFFFFu)
         return false;
@@ -93,14 +82,9 @@ static bool rx_parse_if_valid(const uint8_t *rx, size_t xfer_len,
 
     if (out_item)
     {
-        out_item->length = rx_len;
-        out_item->group = rx_group;
-        out_item->id = rx_id;
         if (rx_len)
-            memcpy(out_item->payload, &rx[4], rx_len);
+            memcpy(out_item, &rx[2], rx_len);
     }
-    if (out_rx_copy)
-        *out_rx_copy = rx_len;
 
     return true;
 }
@@ -115,7 +99,7 @@ static void IRAM_ATTR input_cb_isr(int gpio_num)
         BaseType_t hpw = pdFALSE;
         vTaskNotifyGiveFromISR(s_xfer_task, &hpw);
         if (hpw)
-            portYIELD_FROM_ISR();
+            portYIELD_FROM_ISR(); // context switch if needed
     }
 }
 
@@ -126,7 +110,7 @@ static void IRAM_ATTR input_cb_isr(int gpio_num)
 static void transfer_task(void *arg)
 {
     static uint8_t tx[MESSAGE_SIZE], rx[MESSAGE_SIZE];
-    phApp_DataTypes_t item;
+    phApp_Data_t item;
     s_xfer_task = xTaskGetCurrentTaskHandle();
 
     TickType_t last_warn = 0;
@@ -141,7 +125,7 @@ static void transfer_task(void *arg)
             continue;
         }
 
-        const phApp_DataTypes_t *p = NULL;
+        const phApp_Data_t *p = NULL;
         if (want_tx)
         {
             if (QueueTX_Pop(&item) == PH_ERR_OK)
@@ -166,20 +150,21 @@ static void transfer_task(void *arg)
 
         if (xSemaphoreTake(spi_sem, pdMS_TO_TICKS(200)) == pdTRUE)
         {
-            phApp_DataTypes_t rx_item;
+            phApp_Data_t rx_item;
             size_t rx_copy = 0;
-            if (rx_parse_if_valid(rx, MESSAGE_SIZE, &rx_item, &rx_copy))
+            if (rx_parse_if_valid(rx, MESSAGE_SIZE, &rx_item))
             {
-                ESP_LOGI(TAG, "RX frame: len=%u group=%u id=%u",
-                         (unsigned)rx_item.length,
-                         (unsigned)rx_item.group,
-                         (unsigned)rx_item.id);
+                ESP_LOGI(TAG, "RX frame: group=%u ecu_id=%u id=%u length=%u",
+                         rx_item.header.group,
+                         rx_item.header.ecu,
+                         rx_item.header.id,
+                         (unsigned)rx_item.header.length);
 
                 if (rx_copy > 0)
                 {
                     ESP_LOG_BUFFER_HEX(TAG, rx_item.payload, rx_copy);
                 }
-                (void)QueueRX_Push(&rx_item, (uint16_t)rx_copy);
+                (void)QueueRX_Push(&rx_item);
             }
         }
         else
