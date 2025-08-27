@@ -157,7 +157,6 @@ static PhTypes_ErrorCode_t phBoard_CreateFrame(phApp_Group_t group, phApp_Ecu_t 
 
 void phBoard_Init()
 {
-    phMcu_Init();
     Queue_Init();
     phGpio_Init();
     phCan0_Init();

@@ -1,5 +1,6 @@
 #include "phBoard.h"
 #include "device_registers.h"
+#include "phMcu.h"
 
 void delay(volatile uint32_t count)
 {
@@ -14,6 +15,8 @@ int main(void)
 //    TEST_run();
 
 //	spi_test();
+    phMcu_Init();
+
 	PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC_MASK;
 	PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
 
