@@ -33,8 +33,8 @@ PhTypes_ErrorCode_t phCom_Send(const phApp_Data_t *Data)
 
     s_txBuf[0] = (Data->header.group << 4) | (Data->header.ecu);
     s_txBuf[1] = Data->header.id;
-    s_txBuf[2] = (Data->header.length >> 8) & 0x0F;
-    s_txBuf[3] = Data->header.length & 0x0F;
+    s_txBuf[2] = (Data->header.length >> 8) & 0xFF;
+    s_txBuf[3] = Data->header.length & 0xFF;
     if (Data->header.length > 0)
     {
 
@@ -54,7 +54,7 @@ PhTypes_ErrorCode_t phCom_Send(const phApp_Data_t *Data)
 
 PhTypes_ErrorCode_t phCom_Recv(const phApp_Data_t *Data) // ID
 {
-    phBoard_Recv(Data);
+    return phBoard_Recv(Data);
 }
 
 void phCom_TpTxConfirmation(PhTypes_ErrorCode_t result)
@@ -125,9 +125,18 @@ void phCom_TpRxIndication(PhTypes_ErrorCode_t result)
     if (result == PH_ERR_OK && s_rxWritten == s_rxExpected && s_rxExpected >= 2u)
     {
         phApp_Data_t data;
-        memset(&data, 0, sizeof(data));
-        memcpy(&data, phRX_PduInfoPtr.SduDataPtr, phRX_PduInfoPtr.SduLength);
 
+        data.header.group = (phRX_PduInfoPtr.SduDataPtr[0] >> 4) & 0x0F;
+        data.header.ecu = (phRX_PduInfoPtr.SduDataPtr[0] >> 0) & 0x0F;
+        data.header.id = phRX_PduInfoPtr.SduDataPtr[1];
+        data.header.length = ((uint16_t)phRX_PduInfoPtr.SduDataPtr[2] << 8) |
+                             (uint16_t)phRX_PduInfoPtr.SduDataPtr[3];
+
+        for(int i = 0; i<data.header.length;i++)
+        {
+            data.payload[i] = phRX_PduInfoPtr.SduDataPtr[i+4];
+        }
+        
         phCom_Recv(&data);
     }
 

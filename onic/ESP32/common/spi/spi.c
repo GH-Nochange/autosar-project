@@ -6,6 +6,7 @@
 #include "driver/spi_master.h"
 #include "esp_log.h"
 #include "esp_heap_caps.h"
+#include "driver/gpio.h"   
 #include "spi.h"
 
 #ifndef SPI_MAX_XFER_SZ
@@ -28,6 +29,32 @@ typedef struct
     uint16_t len;
     uint8_t used_rxdata; // true nếu dùng rx_data (<=4B)
 } spi_meta_t;
+
+static void spi_powerup_guard(void)
+{
+    gpio_config_t cfg_in = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_INPUT,
+        .pin_bit_mask = (1ULL<<SPI_MOSI_PIN) | (1ULL<<SPI_MISO_PIN) | (1ULL<<SPI_CLK_PIN),
+        .pull_down_en = 0,
+        .pull_up_en   = 0
+    };
+    gpio_config(&cfg_in);
+
+    // CS ở mức HIGH (không chọn slave)
+    gpio_config_t cfg_cs = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_OUTPUT,
+        .pin_bit_mask = (1ULL<<SPI_CS_PIN),
+        .pull_down_en = 0,
+        .pull_up_en   = 0
+    };
+    gpio_config(&cfg_cs);
+    gpio_set_level(SPI_CS_PIN, 1);
+
+    // Chờ S32K lên nguồn ổn định (200 ms)
+    vTaskDelay(pdMS_TO_TICKS(200));
+}
 
 static inline bool spi_is_inited(void) { return (spi_handle != NULL); }
 
@@ -103,6 +130,8 @@ void spi_init(void)
 
     s_shutting_down = false;
 
+    spi_powerup_guard();
+
     spi_bus_config_t buscfg = {
         .mosi_io_num = SPI_MOSI_PIN,
         .miso_io_num = SPI_MISO_PIN,
@@ -117,8 +146,8 @@ void spi_init(void)
         .spics_io_num = SPI_CS_PIN,
         .queue_size = SPI_QUEUE_SIZE,
         .flags = 0,            // FULL-DUPLEX
-        .cs_ena_pretrans = 4,  // giữ CS thấp trước khi clock (cứu byte đầu)
-        .cs_ena_posttrans = 4, // giữ CS thêm chút sau khi xong
+        .cs_ena_pretrans = 16,  // giữ CS thấp trước khi clock (cứu byte đầu)
+        .cs_ena_posttrans = 8, // giữ CS thêm chút sau khi xong
         .command_bits = 0,
         .address_bits = 0,
         .dummy_bits = 0,

@@ -14,46 +14,60 @@ static const char *TAG = "APP_MQTT";
 
 void mqtt_data_callback(char *dt, int len)
 {
-    char buf[256] = {0};
-    int length = (len > 255) ? 255 : len;
-    memcpy(buf, dt, length);
-    buf[length] = '\0';
-
-    phApp_DataTypes_t data;
-    data.length = len;
-    data.group = dt[0];
-    data.id = dt[1];
-    for (int i = 0; i < len - 2; i++)
+    if (len < 4)
     {
-        data.payload[i] = dt[i + 2];
+        ESP_LOGW(TAG, "Frame to short %d", len);
+        return;
     }
-    QueueTX_Push(&data, length + 2);
-    printf("DATA=%s\n", buf);
+    phApp_Data_t data;
+    memset(&data, 0, sizeof(data));
+
+    data.header.group = (dt[0] >> 4) & 0x0F;
+    data.header.ecu = dt[0] & 0x0F;
+
+    data.header.id = dt[1];
+
+    data.header.length = (dt[2] << 8) | dt[3];
+
+    int length = data.header.length;
+    if (length > (len - 4))
+    {
+        length = len - 4;
+    }
+
+    memcpy(data.payload, &dt[4], len);
+    QueueRX_Push(&data);
+
+    ESP_LOGI(TAG, "Received frame grp=%u ecu=%u id=%u len=%u (copied=%d)",
+             data.header.group, data.header.ecu,
+             data.header.id, data.header.length, length);
 }
 
 static void mqtt_pub_task(void *arg)
 {
-    phApp_DataTypes_t msg;
+    phApp_Data_t msg;
 
     for (;;)
     {
         if (QueueRX_Pop(&msg))
         {
-            char frame[256];
+            char frame[MESSAGE_SIZE];
             int n = 0;
 
-            frame[n++] = msg.group;
-            frame[n++] = msg.id;
+            frame[n++] = ((msg.header.group & 0x0F) << 4) | (msg.header.ecu & 0x0F);
+            frame[n++] = msg.header.id;
 
-            int copy = msg.length;
-            if (copy > sizeof(frame) - 2)
-                copy = sizeof(frame) - 2;
-            memcpy(&frame[2], msg.payload, copy);
+            frame[n++] = ((msg.header.length >> 8) & 0xFF);
+            frame[n++] = (msg.header.length & 0xFF);
+            int copy = msg.header.length;
+            if (copy > sizeof(frame) - n)
+                copy = sizeof(frame) - n;
+            memcpy(&frame[n], msg.payload, copy);
             n += copy;
 
             mqtt_pub(MQTT_PUB_TOPIC, frame, n);
 
-            ESP_LOGI(TAG, "Published %d bytes (grp=%u id=%u)", n, msg.group, msg.id);
+            ESP_LOGI(TAG, "Published %d bytes (grp=%u id=%u)", n, msg.header.group, msg.header.id);
         }
     }
 }

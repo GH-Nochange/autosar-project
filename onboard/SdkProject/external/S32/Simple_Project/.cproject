@@ -200,12 +200,18 @@
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460.1490060211" name="Libraries support" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.libraries.179380460"/>
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269.2043262319" name="Sysroot" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.sysroot.1092876269"/>
 							<option id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997.1911351337" name="ARM family" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.option.target.mcpu.624726997"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.995740248" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.995740248" name="Standard S32DS C Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.compiler.1984279068">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1029135353" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.878025696" name="Standard S32DS C++ Compiler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.compiler.1177720984"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.2006799099" name="Standard S32DS C Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.c.linker.1573000136"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.954075906" name="Standard S32DS C++ Linker" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.cpp.linker.1453341682"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.1058502140" name="Standard S32DS Archiver" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.archiver.2030768299"/>
-							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1687912150" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716"/>
+							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1687912150" name="Standard S32DS Assembler" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.assembler.1331687716">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1171933149" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+								<inputType id="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile.778925248" superClass="com.freescale.s32ds.cross.gnu.tool.assembler.inputType.asmfile"/>
+							</tool>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.2084537153" name="Standard S32DS Create Flash Image" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.createflash.944051245"/>
 							<tool id="com.freescale.s32ds.cross.gnu.tool.createlisting.876662975" name="Standard S32DS Create Listing" superClass="com.freescale.s32ds.cross.gnu.tool.createlisting.133556425"/>
 							<tool id="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.1893431275" name="Standard S32DS Print Size" superClass="com.nxp.s32ds.cle.arm.mbs.arm32.bare.tool.printsize.506490212"/>
@@ -271,7 +277,7 @@
 					<sourceEntries>
 						<entry excluding="Linker_Files/S32K144_64_ram.ld|Debugger/Simple_Project_Debug_RAM.launch|Debugger/Simple_Project_Release.launch" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project_Settings"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="clock"/>
-						<entry excluding="phDriver/Gpio" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="comps"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="comps"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="edma"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="flexcan"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>

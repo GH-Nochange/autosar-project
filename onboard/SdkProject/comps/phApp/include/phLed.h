@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void LED_SetState(uint8_t state);
-uint8_t LED_GetState(void);
+void phSetLed(uint8_t value);
+uint8_t phGetLed(void);
 
 #endif

@@ -52,7 +52,7 @@ void input_button_callback(int gpio_num, uint64_t tick) {
 
 void app_main(void) {
   ESP_LOGI(TAG, "[APP] Startup..");
-  ol ESP_LOGI(TAG, "[APP] Free memory: %lu bytes", esp_get_free_heap_size());
+  ESP_LOGI(TAG, "[APP] Free memory: %lu bytes", esp_get_free_heap_size());
   ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
 
   ESP_ERROR_CHECK(nvs_flash_init());

@@ -18,9 +18,9 @@
 ---
 
 ### **ECU ID**
-- 🖥️ `0b0000` – **HOST (S32K-Dashboard)**
-- 🛠️ `0b0001` – **BOARD (S32K)**
-- 📡 `0b0002` – **IC (ESP32/STM32/...)**
+- 🖥️ `0b1000` – **HOST (S32K-Dashboard)**
+- 🛠️ `0b0100` – **BOARD (S32K)**
+- 📡 `0b0000` – **IC (ESP32/STM32/...)**
 - ➕ … (expandable)
 
 ---
@@ -31,3 +31,12 @@
 - 🔄 `0x02` – **reset soft**
 - 💡 `0x03` – **led**
 - … (extend more)
+
+## 3. Features
+
+### Displays the general status of the vehicle
+#### Temperature & Humidity
+Sensor: DHT11
+Value: float(convert -> 4byte)
+
+####Speed

@@ -30,27 +30,10 @@
 #define SPI_LPSPI_PCS LPSPI_PCS2
 #endif
 
-/* ---- "Slave Ready" pin: PTC6 ---- */
+/* ---- "Slave Ready" pin: PTC7 ---- */
 #define SLAVE_READY_PORT PORTC
 #define SLAVE_READY_GPIO PTC
 #define SLAVE_READY_PIN 7u
-
-/* ---- SPI pin location (PORTB alt3) ----
- * Giữ nguyên macro SPI_SCK_PIN / MOSI / MISO / SS ở PORTB
- * SPI_TRANSFER_SIZE, SPI_CLOCK_* và SPI_BIT_ORDER lấy từ phSpi.h
- */
-#ifndef SPI_SCK_PIN
-#define SPI_SCK_PIN 14u /* PTB14 */
-#endif
-#ifndef SPI_MOSI_PIN
-#define SPI_MOSI_PIN 15u /* PTB15 */
-#endif
-#ifndef SPI_MISO_PIN
-#define SPI_MISO_PIN 16u /* PTB16 */
-#endif
-#ifndef SPI_SS_PIN
-#define SPI_SS_PIN 17u /* PTB17 -> PCS3 mặc định ở trên */
-#endif
 
 static uint8_t s_inited = 0;
 static volatile uint16_t s_armed_len = 0;
@@ -104,13 +87,13 @@ static inline void spi_pins_init(void)
           .intConfig = PORT_DMA_INT_DISABLED,
           .clearIntFlag = true,
           .gpioBase = NULL,
-          .direction = GPIO_OUTPUT_DIRECTION,
+          .direction = GPIO_INPUT_DIRECTION,
           .initValue = 0u,
       },
       {
           .base = PORTB,
           .pinPortIdx = SPI_SS_PIN,
-          .pullConfig = PORT_INTERNAL_PULL_NOT_ENABLED,
+          .pullConfig = PORT_INTERNAL_PULL_UP_ENABLED,
           .passiveFilter = false,
           .driveSelect = PORT_HIGH_DRIVE_STRENGTH,
           .mux = PORT_MUX_ALT3,
@@ -170,11 +153,6 @@ void phSpi_SlaveInit(phSpi_Callback_t *cb)
   cfg.callback = cb;
 
   (void)phSpiDrvSlave_Init(SPI_INSTANCE, &cfg);
-  LPSPI_Type *base = (SPI_INSTANCE == 0) ? LPSPI0 : (SPI_INSTANCE == 1) ? LPSPI1
-                                                                        : LPSPI2;                                                     
-  base->TCR = (base->TCR & ~(LPSPI_TCR_FRAMESZ_MASK | LPSPI_TCR_LSBF_MASK)) | LPSPI_TCR_FRAMESZ(7) 
-              | LPSPI_TCR_LSBF(0);
-
   s_armed_len = 0;
   s_inited = 1;
 }
