@@ -67,3 +67,5 @@ dkms.conf
 **/certs/
 
 **/settings/
+
+**/examples/

@@ -17,9 +17,6 @@ int main(void)
 //	spi_test();
     phMcu_Init();
 
-	PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC_MASK;
-	PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
-
 	phBoard_Init();
 	while (1)
 	{

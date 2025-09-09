@@ -1,56 +1,166 @@
-#include "S32K144.h"           
+#include "phClock.h"
+#include "clock.h"
 
-static void SOSC_init_8MHz(void) {
-  SCG->SOSCDIV=0x00000101;  /* SOSCDIV1 & SOSCDIV2 =1: divide by 1 */
-  SCG->SOSCCFG=0x00000024;  /* Range=2: Medium freq (SOSC betw 1MHz-8MHz)*/
-                            /* HGO=0:   Config xtal osc for low power */
-                            /* EREFS=1: Input is external XTAL */
-  while(SCG->SOSCCSR & SCG_SOSCCSR_LK_MASK); /* Ensure SOSCCSR unlocked */
-  SCG->SOSCCSR=0x00000001;  /* LK=0:          SOSCCSR can be written */
-                            /* SOSCCMRE=0:    OSC CLK monitor IRQ if enabled */
-                            /* SOSCCM=0:      OSC CLK monitor disabled */
-                            /* SOSCERCLKEN=0: Sys OSC 3V ERCLK output clk disabled */
-                            /* SOSCLPEN=0:    Sys OSC disabled in VLP modes */
-                            /* SOSCSTEN=0:    Sys OSC disabled in Stop modes */
-                            /* SOSCEN=1:      Enable oscillator */
-  while(!(SCG->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK)); /* Wait for sys OSC clk valid */
-}
+// ============================================================================
+// Peripheral Clock Configuration (instance 0)
+// ============================================================================
+peripheral_clock_config_t peripheralClockConfig0[NUM_OF_PERIPHERAL_CLOCKS_0] = {
+    {.clockName = ADC0_CLK, .clkGate = true, .clkSrc = CLK_SRC_SIRC_DIV2, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = ADC1_CLK, .clkGate = true, .clkSrc = CLK_SRC_SIRC_DIV2, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = DMAMUX0_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FTFC0_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FTM0_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FTM1_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FTM2_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FTM3_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = LPSPI0_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV2, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = LPSPI1_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV2, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = LPSPI2_CLK, .clkGate = true, .clkSrc = CLK_SRC_FIRC_DIV2, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = PORTA_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = PORTB_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = PORTC_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = PORTD_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = PORTE_CLK, .clkGate = true, .clkSrc = CLK_SRC_OFF, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FlexCAN0_CLK, .clkGate = true, .clkSrc = CLK_SRC_SOSC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+    {.clockName = FlexCAN1_CLK, .clkGate = true, .clkSrc = CLK_SRC_SOSC_DIV1, .frac = MULTIPLY_BY_ONE, .divider = DIVIDE_BY_ONE},
+};
 
-static void SPLL_init_160MHz(void) {
-  while(SCG->SPLLCSR & SCG_SPLLCSR_LK_MASK); /* Ensure SPLLCSR unlocked */
-  SCG->SPLLCSR = 0x00000000;  /* SPLLEN=0: SPLL is disabled (default) */
-  SCG->SPLLDIV = 0x00000302;  /* SPLLDIV1 divide by 2; SPLLDIV2 divide by 4 */
-  SCG->SPLLCFG = 0x00180000;  /* PREDIV=0: Divide SOSC_CLK by 0+1=1 */
-                              /* MULT=24:  Multiply sys pll by 4+24=40 */
-                              /* SPLL_CLK = 8MHz / 1 * 40 / 2 = 160 MHz */
-  while(SCG->SPLLCSR & SCG_SPLLCSR_LK_MASK); /* Ensure SPLLCSR unlocked */
-  SCG->SPLLCSR = 0x00000001; /* LK=0:        SPLLCSR can be written */
-                             /* SPLLCMRE=0:  SPLL CLK monitor IRQ if enabled */
-                             /* SPLLCM=0:    SPLL CLK monitor disabled */
-                             /* SPLLSTEN=0:  SPLL disabled in Stop modes */
-                             /* SPLLEN=1:    Enable SPLL */
-  while(!(SCG->SPLLCSR & SCG_SPLLCSR_SPLLVLD_MASK)); /* Wait for SPLL valid */
-}
+// ============================================================================
+// Clock Manager User Configuration (instance 0)
+// ============================================================================
+clock_manager_user_config_t clockMan1_InitConfig0 = {
+    .scgConfig = {
+        .sircConfig = {
+            .initialize = true,
+            .enableInStop = false,
+            .enableInLowPower = true,
+            .locked = false,
+            .range = SCG_SIRC_RANGE_HIGH,
+            .div1 = SCG_ASYNC_CLOCK_DIV_BY_1,
+            .div2 = SCG_ASYNC_CLOCK_DIV_BY_1,
+        },
+        .fircConfig = {
+            .initialize = true,
+            .regulator = true,
+            .locked = false,
+            .range = SCG_FIRC_RANGE_48M,
+            .div1 = SCG_ASYNC_CLOCK_DIV_BY_1,
+            .div2 = SCG_ASYNC_CLOCK_DIV_BY_1,
+        },
+        .rtcConfig = {
+            .initialize = true,
+            .rtcClkInFreq = 0U,
+        },
+        .soscConfig = {
+            .initialize = true,
+            .freq = 8000000U,
+            .monitorMode = SCG_SOSC_MONITOR_DISABLE,
+            .locked = false,
+            .extRef = SCG_SOSC_REF_OSC,
+            .gain = SCG_SOSC_GAIN_LOW,
+            .range = SCG_SOSC_RANGE_MID,
+            .div1 = SCG_ASYNC_CLOCK_DIV_BY_1,
+            .div2 = SCG_ASYNC_CLOCK_DIV_BY_1,
+        },
+        .spllConfig = {
+            .initialize = true,
+            .monitorMode = SCG_SPLL_MONITOR_DISABLE,
+            .locked = false,
+            .prediv = (uint8_t)SCG_SPLL_CLOCK_PREDIV_BY_1,
+            .mult = (uint8_t)SCG_SPLL_CLOCK_MULTIPLY_BY_28,
+            .src = 0U,
+            .div1 = SCG_ASYNC_CLOCK_DIV_BY_1,
+            .div2 = SCG_ASYNC_CLOCK_DIV_BY_1,
+        },
+        .clockOutConfig = {
+            .initialize = true,
+            .source = SCG_CLOCKOUT_SRC_FIRC,
+        },
+        .clockModeConfig = {
+            .initialize = true,
+            .rccrConfig = {
+                .src = SCG_SYSTEM_CLOCK_SRC_FIRC,
+                .divCore = SCG_SYSTEM_CLOCK_DIV_BY_1,
+                .divBus = SCG_SYSTEM_CLOCK_DIV_BY_2,
+                .divSlow = SCG_SYSTEM_CLOCK_DIV_BY_2,
+            },
+            .vccrConfig = {
+                .src = SCG_SYSTEM_CLOCK_SRC_SIRC,
+                .divCore = SCG_SYSTEM_CLOCK_DIV_BY_2,
+                .divBus = SCG_SYSTEM_CLOCK_DIV_BY_1,
+                .divSlow = SCG_SYSTEM_CLOCK_DIV_BY_4,
+            },
+            .hccrConfig = {
+                .src = SCG_SYSTEM_CLOCK_SRC_SYS_PLL,
+                .divCore = SCG_SYSTEM_CLOCK_DIV_BY_1,
+                .divBus = SCG_SYSTEM_CLOCK_DIV_BY_2,
+                .divSlow = SCG_SYSTEM_CLOCK_DIV_BY_4,
+            },
+        },
+    },
+    .pccConfig = {
+        .peripheralClocks = peripheralClockConfig0,
+        .count = NUM_OF_PERIPHERAL_CLOCKS_0,
+    },
+    .simConfig = {
+        .clockOutConfig = {
+            .initialize = true,
+            .enable = false,
+            .source = SIM_CLKOUT_SEL_SYSTEM_SCG_CLKOUT,
+            .divider = SIM_CLKOUT_DIV_BY_1,
+        },
+        .lpoClockConfig = {
+            .initialize = true,
+            .enableLpo1k = true,
+            .enableLpo32k = true,
+            .sourceLpoClk = SIM_LPO_CLK_SEL_LPO_128K,
+            .sourceRtcClk = SIM_RTCCLK_SEL_SOSCDIV1_CLK,
+        },
+        .platGateConfig = {
+            .initialize = true,
+            .enableMscm = true,
+            .enableMpu = true,
+            .enableDma = true,
+            .enableErm = true,
+            .enableEim = true,
+        },
+        .qspiRefClkGating = {
+            .enableQspiRefClk = false,
+        },
+        .tclkConfig = {
+            .initialize = true,
+            .tclkFreq[0] = 0U,
+            .tclkFreq[1] = 0U,
+            .tclkFreq[2] = 0U,
+        },
+        .traceClockConfig = {
+            .initialize = true,
+            .divEnable = true,
+            .source = CLOCK_TRACE_SRC_CORE_CLK,
+            .divider = 0U,
+            .divFraction = false,
+        },
+    },
+    .pmcConfig = {
+        .lpoClockConfig = {
+            .initialize = true,
+            .enable = true,
+            .trimValue = 0,
+        },
+    },
+};
 
-static void NormalRUNmode_80MHz (void) {  /* Change to normal RUN mode with 8MHz SOSC, 80 MHz PLL*/
-  SCG->RCCR=SCG_RCCR_SCS(6)      /* PLL as clock source*/
-    |SCG_RCCR_DIVCORE(0b01)      /* DIVCORE=1, div. by 2: Core clock = 160/2 MHz = 80 MHz*/
-    |SCG_RCCR_DIVBUS(0b01)       /* DIVBUS=1, div. by 2: bus clock = 40 MHz*/
-    |SCG_RCCR_DIVSLOW(0b10);     /* DIVSLOW=2, div. by 2: SCG slow, flash clock= 26 2/3 MHz*/
-  while (((SCG->CSR & SCG_CSR_SCS_MASK) >> SCG_CSR_SCS_SHIFT ) != 6) {}
-                                 /* Wait for sys clk src = SPLL */
-}
+// ============================================================================
+// Global configuration arrays
+// ============================================================================
+clock_manager_user_config_t const *g_clockManConfigsArr[] = {
+    &clockMan1_InitConfig0};
 
-static void WDOG_disable (void){
-  WDOG->CNT=0xD928C520; 	/* Unlock watchdog */
-  WDOG->TOVAL=0x0000FFFF;	/* Maximum timeout value */
-  WDOG->CS = 0x00002100;    /* Disable watchdog */
-}
+clock_manager_callback_user_config_t *g_clockManCallbacksArr[] = {
+    (void *)0};
 
-void system_clock_init(void)
+void phClockInit(void)
 {
-    WDOG_disable();        // 1) Tắt watchdog để tránh reset ngoài ý muốn
-    SOSC_init_8MHz();      // 2) Bật thạch anh ngoài 8 MHz (SOSC)
-    SPLL_init_160MHz();    // 3) Nhân PLL lên 160 MHz
-    NormalRUNmode_80MHz(); // 4) Chuyển sang RUN: Core 80 MHz
+  CLOCK_SYS_Init(g_clockManConfigsArr, CLOCK_MANAGER_CONFIG_CNT, g_clockManCallbacksArr, CLOCK_MANAGER_CALLBACK_CNT);
+  CLOCK_SYS_UpdateConfiguration(0U, CLOCK_MANAGER_POLICY_AGREEMENT);
 }

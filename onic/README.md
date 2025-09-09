@@ -1,34 +1,18 @@
 # IC – Product Monitoring App
 
 ## 1. Introduce
-Giới thiệu ngắn gọn về hệ thống theo dõi tình trạng ô tô thông qua IC, hiển thị dữ liệu trực quan và cảnh báo kịp thời cho người dùng.
-
----
-
 ## 2. Product Requirements Document
-
-### 2.1 System Status  🚗
-- Hiển thị trạng thái tổng thể của xe theo thời gian thực.
-
-### 2.2 Fuel / Pin  ⛽🔋
-- Theo dõi mức nhiên liệu (xe xăng/diesel) hoặc phần trăm pin (xe điện).
-
-### 2.3 Speed (RPM)  🧭
-- Hiển thị tốc độ vòng tua động cơ (RPM) và vận tốc xe.
-
-### 2.4 LED  💡
-- Theo dõi và điều khiển LED.
-
-### 2.5 Temperature  🌡️
-- Theo dõi nhiệt độ động cơ và môi trường xung quanh.
-
-### 2.6 Humidity  💧
-- Ghi nhận và hiển thị độ ẩm môi trường.
-
-### 2.7 Air Conditioning System ❄️
-- Điều hòa không khí trong
-
-### 2.8 Warring (Cảnh báo)  ⚠️
-- Check Engine  
-- ABS  
-- Unspecified Errors
+### 2.1. Vehicle Telemetry Data
+- Tốc độ xe (vehicle speed)  0->250 km/h
+- Vòng tua động cơ (Engine RPM) 0 → 15000 rpm
+- Mức nhiên liệu (Fuel level) 0 → 100%
+- Đèn xe (Lighting Status) on/off
+- Áp suất lốp TPMS (Tire Pressure Monitoring System) 150 → 350 kPa 
+- Nhiệt độ động cơ Engine Temperature -40°C → 150°C
+### 2.2. Remote Control Commands
+- Khóa mở cửa (Door lock/unlock)
+- Khởi động / tắt máy từ xa (Remote Engine Start / Stop)
+- Bật tắt điều hòa (HVAC Remote Control) Temperature: 16°C → 30°C, Fan speed: 0 → 5
+- Bật / tắt còi, đèn cảnh báo (Horn / Hazard Light Activation)
+- Giới hạn tốc độ (Speed Limiter)
+- Gửi cảnh báo tới tài xế (Driver Notification)

@@ -26,19 +26,19 @@ extern "C"
 #define SPI_CLOCK_PHASE 0
 
 /** MOSI pin assignment (PTB15). */
-#define SPI_MOSI_PIN 15
+#define SPI_MOSI_PIN 3
 
 /** MISO pin assignment (PTB16). */
-#define SPI_MISO_PIN 16
+#define SPI_MISO_PIN 4
 
 /** SCK pin assignment (PTB14). */
-#define SPI_SCK_PIN 14
+#define SPI_SCK_PIN 2
 
 /** Slave select pin assignment (PTB17 -> PCS3). */
-#define SPI_SS_PIN 17
+#define SPI_SS_PIN 5
 
 /** Hardware SPI instance used (LPSPI1). */
-#define SPI_INSTANCE 1
+#define SPI_INSTANCE 0
 
     typedef void (*phSpi_Callback_t)(void *userData);
 

@@ -57,7 +57,10 @@
     "app_spi.h": "c",
     "task.h": "c",
     "app_mqtt.h": "c",
-    "lpspi_shared_function.h": "c"
+    "lpspi_shared_function.h": "c",
+    "clock.h": "c",
+    "send.h": "c",
+    "convert.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

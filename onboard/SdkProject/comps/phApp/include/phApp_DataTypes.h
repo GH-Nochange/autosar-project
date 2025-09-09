@@ -23,7 +23,7 @@ extern "C"
         PH_HOST1 = 0b1000,
         PH_BOARD1 = 0b0100,
         PH_IC1 = 0b0000,
-    } phApp_Ecu_t; 
+    } phApp_Ecu_t;
 
     typedef enum
     {
@@ -31,13 +31,15 @@ extern "C"
         PH_VERSION,
         PH_RESET,
         PH_LED,
+
     } phApp_Id_t;
 
-    typedef struct __attribute__((packed)) {
-    uint16_t group : 4;  
-    uint16_t ecu   : 4;   
-    uint16_t id    : 8;   
-    uint16_t length;      
+    typedef struct __attribute__((packed))
+    {
+        uint16_t group : 4;
+        uint16_t ecu : 4;
+        uint16_t id : 8;
+        uint16_t length;
     } phApp_Header_t;
 
     typedef struct
@@ -46,8 +48,6 @@ extern "C"
         uint8_t payload[PAYLOAD_SIZE];
     } phApp_Data_t;
 
-
-    
 #ifdef __cplusplus
 }
 #endif

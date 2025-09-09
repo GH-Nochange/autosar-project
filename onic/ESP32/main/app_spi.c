@@ -197,5 +197,3 @@ void app_spi(void)
     xTaskCreate(transfer_task, "spi_xfer", 3072, NULL, tskIDLE_PRIORITY + 2, NULL);
     input_set_callback((void *)input_cb_isr);
 }
-
-

@@ -19,17 +19,6 @@
 #define PCC_LPSPIx_IDX PCC_LPSPI2_INDEX
 #endif
 
-/* ---- PCS mapping theo chân SS ---- */
-#if (SPI_SS_PIN == 17)
-#define SPI_LPSPI_PCS LPSPI_PCS3
-#elif (SPI_SS_PIN == 5)
-#define SPI_LPSPI_PCS LPSPI_PCS0
-#elif (SPI_SS_PIN == 6)
-#define SPI_LPSPI_PCS LPSPI_PCS1
-#elif (SPI_SS_PIN == 7)
-#define SPI_LPSPI_PCS LPSPI_PCS2
-#endif
-
 /* ---- "Slave Ready" pin: PTC7 ---- */
 #define SLAVE_READY_PORT PORTC
 #define SLAVE_READY_GPIO PTC
@@ -37,13 +26,6 @@
 
 static uint8_t s_inited = 0;
 static volatile uint16_t s_armed_len = 0;
-
-static inline void spi_pcc_enable_(void)
-{
-  PCC->PCCn[PCC_PORTB_INDEX] |= PCC_PCCn_CGC_MASK;
-  PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
-  PCC->PCCn[PCC_LPSPIx_IDX] = PCC_PCCn_PCS(6) | PCC_PCCn_CGC_MASK;
-}
 
 static inline void spi_pins_init(void)
 {
@@ -57,10 +39,8 @@ static inline void spi_pins_init(void)
           .mux = PORT_MUX_ALT3,
           .pinLock = false,
           .intConfig = PORT_DMA_INT_DISABLED,
-          .clearIntFlag = true,
+          .clearIntFlag = false,
           .gpioBase = NULL,
-          .direction = GPIO_INPUT_DIRECTION,
-          .initValue = 0u,
       },
       {
           .base = PORTB,
@@ -71,10 +51,8 @@ static inline void spi_pins_init(void)
           .mux = PORT_MUX_ALT3,
           .pinLock = false,
           .intConfig = PORT_DMA_INT_DISABLED,
-          .clearIntFlag = true,
+          .clearIntFlag = false,
           .gpioBase = NULL,
-          .direction = GPIO_INPUT_DIRECTION,
-          .initValue = 0u,
       },
       {
           .base = PORTB,
@@ -85,10 +63,8 @@ static inline void spi_pins_init(void)
           .mux = PORT_MUX_ALT3,
           .pinLock = false,
           .intConfig = PORT_DMA_INT_DISABLED,
-          .clearIntFlag = true,
+          .clearIntFlag = false,
           .gpioBase = NULL,
-          .direction = GPIO_INPUT_DIRECTION,
-          .initValue = 0u,
       },
       {
           .base = PORTB,
@@ -96,13 +72,11 @@ static inline void spi_pins_init(void)
           .pullConfig = PORT_INTERNAL_PULL_UP_ENABLED,
           .passiveFilter = false,
           .driveSelect = PORT_HIGH_DRIVE_STRENGTH,
-          .mux = PORT_MUX_ALT3,
+          .mux = PORT_MUX_ALT4,
           .pinLock = false,
           .intConfig = PORT_DMA_INT_DISABLED,
-          .clearIntFlag = true,
+          .clearIntFlag = false,
           .gpioBase = NULL,
-          .direction = GPIO_INPUT_DIRECTION,
-          .initValue = 0u,
       },
       {
           .base = SLAVE_READY_PORT,
@@ -127,8 +101,6 @@ void phSpi_SlaveInit(phSpi_Callback_t *cb)
 {
   if (s_inited)
     return;
-
-  spi_pcc_enable_();
   spi_pins_init();
 
   S32_NVIC->ICPR[LPSPIx_IRQn >> 5u] = (1u << (LPSPIx_IRQn & 31u));
@@ -142,14 +114,14 @@ void phSpi_SlaveInit(phSpi_Callback_t *cb)
   LPSPI_DRV_SlaveGetDefaultConfig(&cfg);
 
   cfg.bitcount = (uint16_t)SPI_TRANSFER_SIZE;
-  cfg.clkPolarity = (SPI_CLOCK_POLARITY == 0) ? LPSPI_SCK_ACTIVE_HIGH : LPSPI_SCK_ACTIVE_LOW;
-  cfg.clkPhase = (SPI_CLOCK_PHASE == 0) ? LPSPI_CLOCK_PHASE_1ST_EDGE : LPSPI_CLOCK_PHASE_2ND_EDGE;
-  cfg.lsbFirst = (SPI_BIT_ORDER != 0);
-  cfg.whichPcs = SPI_LPSPI_PCS;
-  cfg.pcsPolarity = LPSPI_ACTIVE_LOW;        /* Mặc định active-low */
-  cfg.transferType = LPSPI_USING_INTERRUPTS; /* Interrupt mode */
-  cfg.rxDMAChannel = 0xFF;
-  cfg.txDMAChannel = 0xFF;
+  cfg.clkPolarity = LPSPI_SCK_ACTIVE_HIGH;
+  cfg.clkPhase = LPSPI_CLOCK_PHASE_1ST_EDGE;
+  cfg.lsbFirst = false;
+  cfg.whichPcs = LPSPI_PCS0;
+  cfg.pcsPolarity = LPSPI_ACTIVE_LOW; 
+  cfg.transferType = LPSPI_USING_DMA; /* DMA mode */
+  cfg.rxDMAChannel = 0u;
+  cfg.txDMAChannel = 1u;
   cfg.callback = cb;
 
   (void)phSpiDrvSlave_Init(SPI_INSTANCE, &cfg);

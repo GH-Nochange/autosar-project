@@ -141,7 +141,7 @@ void spi_init(void)
         .max_transfer_sz = SPI_MAX_XFER_SZ};
 
     spi_device_interface_config_t devcfg = {
-        .clock_speed_hz = 1 * 1000 * 1000, // 1 MHz
+        .clock_speed_hz = 10 * 1000 * 1000, // 20 MHz
         .mode = 0,                         // CPOL=0, CPHA=0
         .spics_io_num = SPI_CS_PIN,
         .queue_size = SPI_QUEUE_SIZE,

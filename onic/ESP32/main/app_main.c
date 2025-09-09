@@ -10,13 +10,17 @@
 #include <stdio.h>
 
 #include "input.h"
+#include "output.h"
 #include "phQueue.h"
 #include "wifi_config.h"
 
 #include "app_mqtt.h"
 #include "app_spi.h"
+#include "app_handle.h"
 
 static const char *TAG = "APP_MAIN";
+
+#define LED GPIO_NUM_2
 
 // Reset ESP32
 typedef struct {
@@ -59,16 +63,15 @@ void app_main(void) {
   ESP_ERROR_CHECK(esp_netif_init());
   ESP_ERROR_CHECK(esp_event_loop_create_default());
 
+  output_io_init(LED);
+
   // input_set_callback(input_button_callback);
   // input_io_create(GPIO_NUM_0, ANY_EDGE);
 
   button_evt_queue = xQueueCreate(4, sizeof(button_event_t));
   xTaskCreate(button_task, "button_task", 2048, NULL, 5, NULL);
 
-  // Queue Init
-  PhTypes_ErrorCode_t err = Queue_Init();
-  if (err != PH_ERR_OK)
-    ESP_LOGI(TAG, "Queue_Init error: %d", err);
+  app_handle();
 
   // wifi_config();
   // app_mqtt();

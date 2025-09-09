@@ -1,7 +1,7 @@
 #ifndef __NDD_MQTT_CLIENT_H__
 #define __NDD_MQTT_CLIENT_H__
 
-typedef void(*mqtt_handle_t)(char *data, int len);
+typedef void (*mqtt_handle_t)(char *topic, int topic_len, char *data, int len);
 
 void mqtt_init(void);
 void mqtt_start(void);

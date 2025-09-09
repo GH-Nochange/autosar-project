@@ -35,8 +35,6 @@ extern const uint8_t client_key_pem_end[] asm("_binary_client_key_end");
 static esp_mqtt_client_handle_t client = NULL;
 static mqtt_handle_t mqtt_handle = NULL;
 
-#define MQTT_SUB_TOPIC "/topic/rx"
-
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
     esp_mqtt_event_handle_t event = (esp_mqtt_event_handle_t)event_data;
@@ -46,7 +44,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        mqtt_sub(MQTT_SUB_TOPIC);
+        mqtt_sub("/topic/nddung05082004");
         break;
 
     case MQTT_EVENT_DISCONNECTED:
@@ -55,7 +53,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
     case MQTT_EVENT_SUBSCRIBED:
         ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
-        mqtt_pub(MQTT_SUB_TOPIC, "Hello MQTT", 10);
+        mqtt_pub("/topic/nddung05082004", "Hello MQTT", 10);
         break;
 
     case MQTT_EVENT_UNSUBSCRIBED:
@@ -69,7 +67,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_DATA:
         ESP_LOGI(TAG, "MQTT_EVENT_DATA");
 
-        mqtt_handle(event->data, event->data_len);
+        mqtt_handle(event->topic, event->topic_len, event->data, event->data_len);
 
         break;
 

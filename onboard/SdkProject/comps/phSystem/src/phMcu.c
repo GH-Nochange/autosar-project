@@ -1,5 +1,7 @@
 #include "phMcu.h"       
 #include "phTypes.h"
+#include "phClock.h"
+#include "phDma.h"
 
 #include "device_registers.h"      
 
@@ -29,7 +31,9 @@ static phMcu_ResetReason_t s_resetReason = PH_UNKNOWN_RS;
 PhTypes_ErrorCode_t phMcu_Init(void)
 {
     // s_resetReason = phMcu_MapResetReason();
-    system_clock_init();
+    phClockInit();
+    phDma_Init();
+    
     return PH_ERR_OK; 
 }
 

@@ -1,0 +1,2301 @@
+<?xml version='1.0'?>
+<datamodel version="3.0"
+           xmlns="http://www.tresos.de/_projects/DataModel2/08/root.xsd"
+           xmlns:a="http://www.tresos.de/_projects/DataModel2/08/attribute.xsd"
+           xmlns:v="http://www.tresos.de/_projects/DataModel2/06/schema.xsd"
+           xmlns:d="http://www.tresos.de/_projects/DataModel2/06/data.xsd">
+<!--
+*   @file    Gdu.xdm
+*   @version 3.0.0
+*
+*   @brief   AUTOSAR Gdu - Tresos Studio plugin schema file
+*   @details This file contains the schema configuration for and Gdu Tresos Studio plugin.
+-->
+<!--
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.7
+*   Platform             : CORTEXM
+*   Peripheral           : IPV_GDU
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.7.0
+*   Autosar Revision     : ASR_REL_4_7_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 3.0.0
+*   Build Version        : S32K1_RTD_3_0_0_QLP02_D2505_ASR_REL_4_7_REV_0000_20250530
+*
+*   Copyright 2020-2025 NXP
+*
+*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
+-->
+
+<d:ctr type="AUTOSAR" factory="autosar"
+    xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd"
+    xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd"
+    xmlns:mt="http://www.tresos.de/_projects/DataModel2/11/multitest.xsd" >
+    <d:lst type="TOP-LEVEL-PACKAGES">
+        <d:ctr name="TS_T40D2M30I0R0" type="AR-PACKAGE">
+            <a:a name="UUID" value="ECUC:f7815460-6e74-4f94-9ed0-68bdee194a75"/>
+            <d:lst type="ELEMENTS">
+                <d:chc name="Gdu" type="AR-ELEMENT" value="MODULE-DEF">
+                    <v:ctr type="MODULE-DEF">
+                        <a:a name="RELEASE" value="asc:4.7"/>
+                        <a:a name="ADMIN-DATA" type="ADMIN-DATA">
+                            <ad:ADMIN-DATA>
+                                <ad:DOC-REVISIONS>
+                                    <ad:DOC-REVISION>
+                                        <ad:REVISION-LABEL>4.6.0</ad:REVISION-LABEL>
+                                        <ad:ISSUED-BY>AUTOSAR</ad:ISSUED-BY>
+                                        <ad:DATE>2022-04-01</ad:DATE>
+                                    </ad:DOC-REVISION>
+                                </ad:DOC-REVISIONS>
+                            </ad:ADMIN-DATA>
+                        </a:a>
+                        <a:a name="DESC"
+                             value="EN: Vendor specific: Configuration of the Gdu module."/>
+                        <a:a name="POSTBUILDVARIANTSUPPORT" value="true"/>
+                        <a:a name="UUID" value="ECUC:b00e5104-b8c1-4d27-8ef3-99c1f095e4f4"/>
+                        <v:var name="POST_BUILD_VARIANT_USED" type="BOOLEAN">
+                            <a:a name="DESC"
+                                value="Indicates whether a module implementation has or plans to have (i.e., introduced at link or post-build time) new post-build variation points."/>
+                            <a:a name="IMPLEMENTATIONCONFIGCLASS"
+                                type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                            </a:a>
+                            <a:a name="LABEL" value="Post Build Variant Used"/>
+                            <a:a name="ORIGIN" value="EB"/>
+                            <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                            <a:da name="DEFAULT" value="false"/>
+                            <a:da name="TOOLTIP"
+                                value="Indicates whether a module implementation has or plans to have (i.e., introduced at link or post-build time) new post-build variation points."/>
+                        </v:var>
+                        <v:var name="IMPLEMENTATION_CONFIG_VARIANT" type="ENUMERATION">
+                            <a:a name="LABEL" value="Config Variant"/>
+                            <a:a name="UUID" value="ECUC:35c2dedd-010d-4660-be5f-4e43354c6759"/>
+                            <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                            </a:a>
+                            <a:a name="DESC">
+                                <a:v>
+                                    <![CDATA[EN:<html>
+                                        <p>VariantPostBuild: Mix of precompile and postbuild time configuration parameters.<br>
+                                        </p>
+                                    </html>]]>
+                                </a:v>
+                            </a:a>
+                            <a:da name="DEFAULT" value="VariantPreCompile"/>
+                            <a:da name="RANGE">
+                                <a:v>VariantPostBuild</a:v>
+                                <a:v>VariantPreCompile</a:v>
+                            </a:da>
+                        </v:var>
+
+                        <v:ctr name="GduGeneral" type="IDENTIFIABLE">
+                            <a:a name="DESC" value="EN: Vendor specific: Configuration of general Gdu parameters."/>
+                            <a:a name="UUID" value="ECUC:af491547-851c-440b-84da-d6d2cce8bbb8"/>
+                            <a:a name="LABEL" value="Gdu General Configuration"/>
+
+                            <!-- @implements GduVersionInfoApi_Object -->
+                            <v:var name="GduVersionInfoApi" type="BOOLEAN">
+                                <a:a name="LABEL" value="GduVersionInfoApi"/>
+                                <a:a name="DESC"
+                                     value="Toggles the availability of Gdu_GetVersionInfo API."/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                    <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                    <icc:v vclass="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="AUTOSAR_ECUC"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:ae413159-227b-4b3d-adae-aeb1f1b624ea"/>
+                                <a:da name="DEFAULT" value="true"/>
+                                <a:da name="INVALID" type="XPath">
+                                     <a:tst expr="(ecu:get('Gdu.Available')='FALSE')"
+                                            true="GDU is not available on this derivative."/>
+                                </a:da>
+                            </v:var>
+
+                            <!-- @implements GduDevErrorDetect_Object -->
+                            <v:var name="GduDevErrorDetect" type="BOOLEAN">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        <p>Switches the Development Error Detection and Notification on or off.</p>
+                                            <ul>
+                                                <li>true: Enabled.</li>
+                                                <li>false: Disabled.</li>
+                                            </ul>
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                    <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                    <icc:v vclass="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="POSTBUILDVARIANTVALUE" value="false"/>
+                                <a:a name="LABEL" value="Gdu Development Error Detect"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:3ab33ff9-8239-4e8e-b9af-4276b2375f57"/>
+                                <a:da name="DEFAULT" value="true"/>
+                            </v:var>
+
+                            <!-- @implements GduEnableUserModeSupport_Object -->
+                            <v:var name="GduEnableUserModeSupport" type="BOOLEAN">
+                                <a:a name="LABEL" value="Enable Gdu User Mode Support"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            If this parameter is not ediatable, that means Gdu driver can run in User Mode.
+                                            Note: The Gdu driver code can be executed at any time from both supervisor and user mode.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="POSTBUILDVARIANTVALUE" value="false"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS"
+                                        type="IMPLEMENTATIONCONFIGCLASS">
+                                    <icc:v vclass="PreCompile">VariantPostBuild</icc:v>
+                                    <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:9271a950-90ec-4572-9f37-58db562982d6"/>
+                                <a:da name="DEFAULT" value="false"/>
+                                <a:a name="READONLY" value="true"/>
+                            </v:var>
+
+                            <v:var name="GduHDHighVoltageDetectNotification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD High Voltage Detect Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:85beeb38-510a-401b-8e88-c2f1481f7460"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationHighSide0Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation High Side 0 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:12beeb38-510a-401b-8e88-c2a1481f7441"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationHighSide1Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation High Side 1 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:17beeb71-510a-401b-8e88-c2a1281a7621"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationHighSide2Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation High Side 2 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:12beeb38-510a-151b-8e88-a6d1481f7441"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationLowSide0Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation Low Side 0 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:12eeee18-510a-401f-8f88-a2f1481f7441"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationLowSide1Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation Low Side 1 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:12beeb38-510a-411b-8e11-c2a1481f7441"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+                            <v:var name="GduDesaturationLowSide2Notification" type="FUNCTION-NAME">
+                            <a:a name="LABEL" value="HD Desaturation Low Side 2 Notification"/>
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html>
+                                            Function pointer to callback function. <br/>
+                                            Prototype:
+                                            void Gdu_Callback(void);
+                                            Note: Implementation Specific Parameter.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                <icc:v class="PreCompile">VariantPreCompile</icc:v>
+                                <icc:v class="PreCompile">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="UUID" value="ECUC:12beeb38-510a-401b-8e88-a6d1481f7441"/>
+                                <a:da name="DEFAULT" value="NULL_PTR"/>
+                                <a:da name="INVALID" type="XPath">
+                                    <a:tst expr="(
+                                                    (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null') or
+                                                    (normalize-space(node:fallback(., '')) = 'false') or
+                                                    (normalize-space(node:fallback(., '')) = 'FALSE') or
+                                                    (normalize-space(node:fallback(., '')) = 'null') or
+                                                    (normalize-space(node:fallback(., '')) = 'null_ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'Null_Ptr') or
+                                                    (normalize-space(node:fallback(., '')) = 'NULL_PTR')
+                                                )"
+                                        true="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                    <a:tst expr="(normalize-space(node:fallback(., '')) = '&quot;NULL_PTR&quot;') or
+                                                (normalize-space(node:fallback(., '')) = '&quot;NULL&quot;') or
+                                                (normalize-space(node:fallback(., '')) = 'NULL') or
+                                                (text:match(normalize-space(.),'^[_a-zA-Z]+[_0-9a-zA-Z]*$'))"
+                                    false="Invalid identifier. The field must specify a valid C function identifier (i.e. an arbitrarily long sequence of digits, underscores, lowercase and uppercase Latin letters, that must begin with a non-digit character)."/>
+                                </a:da>
+                            </v:var>
+                            
+
+                            <v:ctr name="GduCtl" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Controls operation of GDU."/>
+                                <a:a name="UUID" value="ECUC:410e34e7-20a4-4f43-9892-8c650f24075e"/>
+                                <a:a name="LABEL" value="Gdu Control"/>
+
+                                <v:var name="GduBoostConverterEn" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enable the boost converter circuit.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Boost Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:4c2d4084-8afc-47c4-9b69-4207b0943363"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduCustomIrefTrimming" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables writing of Iref trimming values ( IRT ). When disabled, GDU loads device-specific trimming values into the Iref trimming fields and does not allow software to do so. When enabled, GDU does not load the trimming fields and allows software to trim the Iref current. IRT is also proctected by RWEN . In other words, for software to trim the Iref current, both RWEN and IRTSW must be 1.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming by Software"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:e5e3e678-a198-4b46-a0a9-cb2d0e3c9094"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduIntEn" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Enables assertion of interrupts when errors set the corresponding interrupt flags."/>
+                                <a:a name="UUID" value="ECUC:d09a15cd-42ec-448e-b2f4-8e551c25e5a3"/>
+                                <a:a name="LABEL" value="Gdu Interrupt Enable"/>
+
+                                <v:var name="GduHighVoltageIE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the high HD interrupt ( INTF[HDHVDIF] ).</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="HD High Voltage Detect Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:fc56d127-8f0e-4fb9-bda0-b2fcc59939a0"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationHs0IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DHSIF0] ) on the high-side FET of phase 0.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation High-Side 0 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:f830a43b-99cc-4a82-943b-674209163a1f"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationHs1IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DHSIF1] ) on the high-side FET of phase 1.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation High-Side 1 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:1ed6e50f-69e1-4d48-a6c4-ed475f074e83"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationHs2IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DHSIF2] ) on the high-side FET of phase 2.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation High-Side 2 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:37780431-c502-4374-9949-1fc52e027b99"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationLs0IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DLSIF0] ) on the low-side FET of phase 0.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Low-Side 0 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:cc1d06b6-dde2-427b-880e-aff8262d8e27"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationLs1IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DLSIF1] ) on the low-side FET of phase 1.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Low-Side 1 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:c70b7658-20e8-4003-b741-ff7005b32a76"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationLs2IE" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables the desaturation error interrupt ( INTF[DLSIF2] ) on the low-side FET of phase 2.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Low-Side 2 Interrupt Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:ff419dc2-356d-491f-93fb-c80f878ab3c0"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures driver operation."/>
+                                <a:a name="UUID" value="ECUC:67c0008a-f37e-4fcf-8aa8-dabb6555f76d"/>
+                                <a:a name="LABEL" value="Gdu Configuration"/>
+
+                                <v:var name="GduSyncPwmClock" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Enables PWM synchronization to the module clock.</p>
+                                                <ul>
+                                                    <li>true: Enabled.</li>
+                                                    <li>false: Disabled.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Synchronisation Enable"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:ad15e5eb-e294-4612-a4b0-9ef0f5ec42cc"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name= "GduVoltageDividerFactor" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN:<html> Vendor specific:
+                                            <p>Selects the voltage divider factor on HD and HSx to measure them by the ADC. For the exact values of the divider factors, see the data sheet electrical specs. </p>
+                                            <ul>
+                                                <li>0b - GDU_IP_DIVIDER_LOW. If the MCU operating supply is 3.3V, divide by ADIVlow3p3. If the MCU operating supply is 5V, divide by ADIVlow5p0.</li>
+                                                <li>1b - GDU_IP_DIVIDER_HIGH. If the MCU operating supply is 3.3V, divide by ADIVhigh3p3. If the MCU operating supply is 5V, divide by ADIVhigh5p0.</li>
+
+                                                Note: Implementation Specific Parameter.
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="UUID" value="ECUC:b30ca75f-a3e2-42e2-a3dd-51a634521435"/>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:da name="DEFAULT" value = "GDU_IP_DIVIDER_LOW"/>
+                                    <a:a name="LABEL" value="HD and High-Side Divider"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Divider.List')"/>
+                                </v:var>
+
+                                <v:var name= "GduOvervoltageThreshold" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN:<html> Vendor specific:
+                                            <p>Selects the voltage thresholds of overvoltage detection on the HD pin. For the exact value of the threshold, see the data sheet electrical specs.</p>
+                                            <ul>
+                                                <li>0b - GDU_IP_VOLTAGE_LOW voltage. Selects VHVHDLA and VHVHDLD.</li>
+                                                <li>1b - GDU_IP_VOLTAGE_HIGH voltage. Selects VHVHDHA and VHVHDHD.</li>
+
+                                                Note: Implementation Specific Parameter.
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="UUID" value="ECUC:098551dd-2f9e-426f-8137-92310f8675c6"/>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:da name="DEFAULT" value = "GDU_IP_VOLTAGE_LOW"/>
+                                    <a:a name="LABEL" value="HD High Voltage Detect"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Voltage.List')"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduEaCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the GDU reaction to the different error events."/>
+                                <a:a name="UUID" value="ECUC:65b4c7fd-2cf4-4cbc-a84d-02cfd3a3dab7"/>
+                                <a:a name="LABEL" value="Gdu Error Reaction"/>
+
+                                <v:var name="GduDesaturationAction" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Selects the action in response to a desaturation error on any FET.</p>
+                                                <ul>
+                                                    <li>true: Turn off all FETs.</li>
+                                                    <li>false: Turn off only the desaturated FET.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Action"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:531c6604-2a9c-4669-a0f3-bc7c50f2354a"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduOvercurrentAction" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Selects the action in response to too much current out of the motor control phases on any external FET.</p>
+                                                <ul>
+                                                    <li>true: Low-side gate drivers off.</li>
+                                                    <li>false: Low-side gate drivers on.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Overcurrent Action"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:8f96d775-79b9-4746-b50d-b1f81ee6f9ab"/>
+                                    <a:da name="DEFAULT" value="false"/>
+                                </v:var>
+
+                                <v:var name="GduOvervoltageAction" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Selects the action in response to an overvoltage fault or a safe-state request from AEC. The following conditions cause an overvoltage fault:.</p>
+                                                <ul>
+                                                    <li>Overvoltage on the HD pin.</li>
+                                                    <li>Overvoltage from the supply (faults coming from PMC).</li>
+                                                </ul>
+                                                <ul>
+                                                    <li>true: Turn off all low-side gate drivers.</li>
+                                                    <li>false: Turn on all low-side gate drivers.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Voltage Detection Action"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:b7e09add-16e5-4fb2-9238-ef2f74b0adfe"/>
+                                    <a:da name="DEFAULT" value="true"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduBoostCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures boost operation."/>
+                                <a:a name="UUID" value="ECUC:09d44963-11a1-4823-aeaa-78a512d1db3e"/>
+                                <a:a name="LABEL" value="Gdu Boost"/>
+
+                                <v:var name="GduBoostCoilCurrent" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies an adjustment to the boost coil current limit ICOIL0,16 on the BST pin.</p>
+                                                <ul>
+                                                    <li>GDU_ICOIL_0: Boost coil current limit (lowest setting).</li>
+                                                    <li>...</li>
+                                                    <li>GDU_ICOIL_7: Boost coil current limit (highest setting).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Boost Current Limit"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:b0b461fa-2eb6-4ba1-a74d-cb993f81e79b"/>
+                                    <a:da name="DEFAULT" value="GDU_ICOIL_0"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Coil.List')"/>
+                                </v:var>
+
+                                <v:var name="GduBoostClockDivider" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the clock divider applied to the module clock to obtain the boost converter clock.</p>
+                                            <table>
+                                                <tr>
+                                                  <th>Desired boost clock frequency fBOOST, f_module = 42 MHz</th>
+                                                  <th>Clock division</th>
+                                                  <th>BOOSTCFG[BOCD]</th>
+                                                </tr>
+                                                <tr>
+                                                  <td>62.5 KHz</td>
+                                                  <td>k = 672</td>
+                                                  <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>125 KHz</td>
+                                                  <td>k = 336</td>
+                                                  <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>250 KHz</td>
+                                                  <td>k = 168</td>
+                                                  <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>500 KHz</td>
+                                                  <td>k = 84</td>
+                                                  <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>1 MHz</td>
+                                                  <td>k = 42</td>
+                                                  <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>2 MHz</td>
+                                                  <td>k = 21</td>
+                                                  <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                  <td>2.5 MHz</td>
+                                                  <td>k = 16</td>
+                                                  <td>0</td>
+                                                </tr>
+                                              </table>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Boost Clock Divider"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:a3ed494b-079c-480f-a471-4d9ddda5279b"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=6"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduBoostDutyCyle" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Selects the duty cycle of the boost converter clock.</p>
+                                                <ul>
+                                                    <li>GDU_DUTY_CYCLE_1_DIV_4: 25%.</li>
+                                                    <li>GDU_DUTY_CYCLE_1_DIV_2: 50%.</li>
+                                                    <li>GDU_DUTY_CYCLE_3_DIV_4: 75%.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Boost Duty Cycle"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:a4d9c89a-6bd8-46a2-b557-7562bf45c32b"/>
+                                    <a:da name="DEFAULT" value="GDU_DUTY_CYCLE_1_DIV_2"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.DutyCycle.List')"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduBtCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Specifes the blanking time."/>
+                                <a:a name="UUID" value="ECUC:7be5ee78-7c13-4f50-bbb9-3da2ae24a8e0"/>
+                                <a:a name="LABEL" value="Gdu Blanking Time"/>
+
+                                <v:var name="GduBlankingTime" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the blanking time for hiding desaturation errors according to this equation:</p>
+                                                <ul>
+                                                    <li>tBLANK = BT * module clock cycles.</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Blanking Time Adjustment"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:7a4f5640-1df2-4353-b51c-2bd360cd974f"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=511"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduHssrOn" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the high-side slew rate."/>
+                                <a:a name="UUID" value="ECUC:1d8b0187-43fb-4595-ba5a-96a487567bff"/>
+                                <a:a name="LABEL" value="Gdu High Side Slew Rate On"/>
+
+                                <v:var name="GduHsTurnOnTicks1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the high-side drivers to the reference specified in High Side Turn On Current Time Point 1</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn On Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:47957ded-c682-4ce6-bfaa-42bc3dc8c3d6"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOnTicks2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the high-side drivers to the reference specified in High Side Turn On Current Time Point 2</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn On Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:c125618e-526a-4ac0-9790-36e6d14cfecc"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOnSlew1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn On Current Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:ed727cbe-831c-497a-aed8-b34cc7ace7d5"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOnSlew2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn On Current Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:627312f2-5ad9-40a3-b5fb-041889bbbf7a"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOnSlew3" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn On Current Time Point 3"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:d5a936fb-29ab-489b-948c-b7ce7d3f6ea7"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduHssrOff" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the high-side slew rate."/>
+                                <a:a name="UUID" value="ECUC:d43b8d4b-48d3-4bf0-82e3-acd1f0007a4e"/>
+                                <a:a name="LABEL" value="Gdu High Side Slew Rate Off"/>
+
+                                <v:var name="GduHsTurnOffTicks1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the high-side drivers to the reference specified in High Side Turn Off Current Time Point 1</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn Off Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:d3284623-b677-4787-9057-92aa73d4a96c"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOffTicks2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the high-side drivers to the reference specified in High Side Turn Off Current Time Point 2</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn Off Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:c33dd9aa-b4d6-4944-b9e6-9314ebf8b97c"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOffSlew1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn Off Current Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:6d742e98-f993-4e45-bfe9-99e0d22969a8"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOffSlew2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn Off Current Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:ce98dca2-c021-4219-bbff-e61e0e4f2ba4"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduHsTurnOffSlew3" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="High Side Turn Off Current Time Point 3"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:3e99a3bf-eead-40f1-a388-de6f78b34a76"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduLssrOn" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the low-side slew rate."/>
+                                <a:a name="UUID" value="ECUC:8bd8d70a-c177-4b25-a02d-c66e2aea6d06"/>
+                                <a:a name="LABEL" value="Gdu Low Side Slew Rate On"/>
+
+                                <v:var name="GduLsTurnOnTicks1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the low-side drivers to the reference specified in Low Side Turn On Current Time Point 1</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn On Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:339999bc-3ed7-4770-9f4f-2844b59e4020"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOnTicks2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the low-side drivers to the reference specified in Low Side Turn On Current Time Point 2</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn On Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:8e3ba838-3cda-476b-a8db-e974cba228d6"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOnSlew1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn On Current Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:569ec976-bae3-4c94-acd0-790868379e4c"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOnSlew2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn On Current Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:6af2848c-bc94-4de8-a0e0-48c161538217"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOnSlew3" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn On Current Time Point 3"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:05aea3eb-f302-4237-b178-48c78eee5f64"/>
+                                    <a:da name="DEFAULT" value="4"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduLssrOff" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the low-side slew rate."/>
+                                <a:a name="UUID" value="ECUC:69259ffd-4334-4006-8d15-5afbd2f58bac"/>
+                                <a:a name="LABEL" value="Gdu Low Side Slew Rate Off"/>
+
+                                <v:var name="GduLsTurnOffTicks1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the low-side drivers to the reference specified in Low Side Turn Off Current Time Point 1</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn Off Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:71b31141-3b6a-4bf3-9533-deceea8a0e37"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOffTicks2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the time, in module clock cycles, when GDU sets the gate current for the low-side drivers to the reference specified in Low Side Turn Off Current Time Point 2</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn Off Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:cf24c77c-fa5d-45b5-93f6-f87e9ca3ddeb"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=127"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOffSlew1" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn Off Current Time Point 1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:27ea409b-6bbf-4ea7-a9e4-33770d39a3e4"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOffSlew2" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn Off Current Time Point 2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:bda446af-2428-4e62-86d9-3026232bceee"/>
+                                    <a:da name="DEFAULT" value="0"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduLsTurnOffSlew3" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the slew, from 0 (minimum) to 31 (maximum).</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Low Side Turn Off Current Time Point 3"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:f2580acf-87e6-4f1f-883f-57544f19871d"/>
+                                    <a:da name="DEFAULT" value="4"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=31"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduDsCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Specifies the desaturation level adjustement."/>
+                                <a:a name="UUID" value="ECUC:30dbb33b-0d42-4030-bcd5-e832f36d79e8"/>
+                                <a:a name="LABEL" value="Gdu Desaturation Level"/>
+
+                                <v:var name="GduDesaturationFilterHs" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the desaturation filter characteristic adjustment for the three high-side FET gate drivers.</p>
+                                                <ul>
+                                                    <li>GDU_DS_FILTER_200ns</li>
+                                                    <li>GDU_DS_FILTER_600ns</li>
+                                                    <li>GDU_DS_FILTER_1000ns</li>
+                                                    <li>GDU_DS_FILTER_1400ns</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Filter High Side"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:61962c02-81d8-4cf6-a574-7e8c5b928ea2"/>
+                                    <a:da name="DEFAULT" value="GDU_DS_FILTER_200ns"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Desaturation.Filter.List')"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationFilterLs" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the desaturation filter characteristic adjustment for the three low-side FET gate drivers.</p>
+                                                <ul>
+                                                    <li>GDU_DS_FILTER_200ns</li>
+                                                    <li>GDU_DS_FILTER_600ns</li>
+                                                    <li>GDU_DS_FILTER_1000ns</li>
+                                                    <li>GDU_DS_FILTER_1400ns</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Filter Low Side"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:8cc8e758-a410-4ab5-9c76-0a5ce80b24d6"/>
+                                    <a:da name="DEFAULT" value="GDU_DS_FILTER_200ns"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Desaturation.Filter.List')"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationLevelHs" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the desaturation level adjustment (V desaths ) for the three high-side FET gate drivers.</p>
+                                                <ul>
+                                                    <li>GDU_DS_LEVEL_150mV</li>
+                                                    <li>GDU_DS_LEVEL_250mV</li>
+                                                    <li>GDU_DS_LEVEL_350mV</li>
+                                                    <li>GDU_DS_LEVEL_450mV</li>
+                                                    <li>GDU_DS_LEVEL_700mV</li>
+                                                    <li>GDU_DS_LEVEL_950mV</li>
+                                                    <li>GDU_DS_LEVEL_1200mV</li>
+                                                    <li>GDU_DS_LEVEL_1450mV</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Level High Side"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:6da304b7-00d8-4075-97c9-b73f425e7912"/>
+                                    <a:da name="DEFAULT" value="GDU_DS_LEVEL_150mV"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Desaturation.Level.List')"/>
+                                </v:var>
+
+                                <v:var name="GduDesaturationLevelLs" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the desaturation level adjustment (V desaths ) for the three low-side FET gate drivers.</p>
+                                                <ul>
+                                                    <li>GDU_DS_LEVEL_150mV</li>
+                                                    <li>GDU_DS_LEVEL_250mV</li>
+                                                    <li>GDU_DS_LEVEL_350mV</li>
+                                                    <li>GDU_DS_LEVEL_450mV</li>
+                                                    <li>GDU_DS_LEVEL_700mV</li>
+                                                    <li>GDU_DS_LEVEL_950mV</li>
+                                                    <li>GDU_DS_LEVEL_1200mV</li>
+                                                    <li>GDU_DS_LEVEL_1450mV</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Desaturation Level Low Side"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:d9e86e52-457f-4799-b4f9-20d53c87a23e"/>
+                                    <a:da name="DEFAULT" value="GDU_DS_LEVEL_150mV"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Desaturation.Level.List')"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduCpCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Configures the charge pump."/>
+                                <a:a name="UUID" value="ECUC:fba2828c-1428-4121-8f70-1b60d2be2a55"/>
+                                <a:a name="LABEL" value="Gdu Charge Pump"/>
+
+                                <v:var name="GduChargePumpDischarge" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the desaturation filter characteristic adjustment for the three high-side FET gate drivers.</p>
+                                                <ul>
+                                                    <li>GDU_CP_DISCHARGE_250ns</li>
+                                                    <li>GDU_CP_DISCHARGE_500ns</li>
+                                                    <li>GDU_CP_DISCHARGE_750ns</li>
+                                                    <li>GDU_DS_FILTER_1000ns</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Charge Pump Charge Discharge Timing"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:71ea61f8-8d3f-4638-851d-54b92ed05d82"/>
+                                    <a:da name="DEFAULT" value="GDU_CP_DISCHARGE_500ns"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Charge.Pump.Discharge.List')"/>
+                                </v:var>
+
+                                <v:var name="GduChargePumpVcpOn" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the number of module clock cycles to wait before closing the switch that connects the charge pump voltage (VCP) to VBSx.</p>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Charge Pump VCP On switch Timing"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:39b310ae-bddb-497e-8c35-3c6ab1c4b398"/>
+                                    <a:da name="DEFAULT" value="1"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=63"/>
+                                    </a:da>
+                                </v:var>
+
+                                <v:var name="GduChargePumpClockDivider" type="INTEGER">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Specifies the half period, in module clock cycles, of the charge pump clock (fCP), according to this equation:</p>
+                                                <ul>
+                                                    <li>Tcharge_pump = 2 x (CPCD x Tmodule_clock)</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Charge Pump Clock Divider"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:d9ffb8cd-1576-47e7-aa3e-c6494bf56111"/>
+                                    <a:da name="DEFAULT" value="167"/>
+                                    <a:da name="INVALID" type="Range">
+                                        <a:tst expr="&gt;=0"/>
+                                        <a:tst expr="&lt;=1023"/>
+                                    </a:da>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduSupCfg" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Specifies the state of the low-side driver on functional reset."/>
+                                <a:a name="UUID" value="ECUC:ce97896f-affc-4f57-bab0-0005e6376321"/>
+                                <a:a name="LABEL" value="Gdu Startup Configuration"/>
+
+                                <v:var name="GduDriveLsFunctionalReset" type="BOOLEAN">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Selects the state of the low-side driver upon functional reset. This field configuration applies during functional reset and when ( CTL[SSTEN] = 1).</p>
+                                            <p>A POR turns off the high-side and low-side drivers (SUPCFG[SUP] = 1).
+                                            If you turn startup on (write 0 to SUPCFG[SUP]), then the next functional reset turns off the high side but leaves the low side turned on with a slew rate value of 00100b.</p>
+                                                <ul>
+                                                    <li>false: ON</li>
+                                                    <li>true: OFF</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Startup"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:db4bbb88-449e-4c4d-925c-ccefcae543fe"/>
+                                    <a:da name="DEFAULT" value="true"/>
+                                </v:var>
+
+                            </v:ctr>
+
+                            <v:ctr name="GduIrt" type="IDENTIFIABLE">
+                                <a:a name="DESC" value="EN: Vendor specific: Specifies the trimming percentage to apply to the 10 μA reference current for the the corresponding gate drivers. GDU loads these values from OTP at startup. For each trimming field, 100% (011b) should provide 10 μA at nominal process."/>
+                                <a:a name="UUID" value="ECUC:5f6a6e36-ac7e-4a28-9212-d678e3594332"/>
+                                <a:a name="LABEL" value="Gdu Iref Trimming"/>
+
+                                <v:var name="GduIrefTrimmingHg0" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the high-side gate driver HG0.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming HG0"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:cebd9103-306e-4633-81dd-de034e7513ea"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+
+                                </v:var>
+
+                                <v:var name="GduIrefTrimmingLg0" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the low-side gate driver LG0.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming LG0"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:4c17bd93-1a42-450c-b0ee-2c76bb4fff93"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+                                </v:var>
+
+                                <v:var name="GduIrefTrimmingHg1" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the high-side gate driver HG1.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming HG1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:509847ba-b993-4f39-902f-fadc2db6a056"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+                                </v:var>
+
+                                <v:var name="GduIrefTrimmingLg1" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the low-side gate driver LG1.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming LG1"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:8b3ce90c-bf9a-4bcf-a56f-f4d0479b0bef"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+                                </v:var>
+
+                                <v:var name="GduIrefTrimmingHg2" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the high-side gate driver HG2.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming HG2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:f3255486-272e-458a-a456-922072087997"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+                                </v:var>
+
+                                <v:var name="GduIrefTrimmingLg2" type="ENUMERATION">
+                                    <a:a name="DESC">
+                                        <a:v>
+                                            <![CDATA[EN: <html> Vendor specific:
+                                            <p>Trims the reference current of the low-side gate driver LG2.</p>
+                                                <ul>
+                                                    <li>GDU_IP_IREF_TRIM_000: 62.5% (minimum current).</li>
+                                                    <li>GDU_IP_IREF_TRIM_001: 75%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_010: 87.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_011: 100% (10 μA at nominal process).</li>
+                                                    <li>GDU_IP_IREF_TRIM_100: 112.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_101: 125%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_110: 137.5%.</li>
+                                                    <li>GDU_IP_IREF_TRIM_111: 150% (maximum current).</li>
+                                                </ul>
+                                            </html>]]>
+                                        </a:v>
+                                    </a:a>
+                                    <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PreCompile">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PostBuild">VariantPostBuild</icc:v>
+                                    </a:a>
+                                    <a:a name="ORIGIN" value="NXP"/>
+                                    <a:a name="SCOPE" value="LOCAL"/>
+                                    <a:a name="POSTBUILDVARIANTVALUE" value="true"/>
+                                    <a:a name="LABEL" value="Iref Trimming LG2"/>
+                                    <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                    <a:a name="UUID" value="ECUC:4d8cbf23-7cbe-4693-8574-45864af13b71"/>
+                                    <a:da name="DEFAULT" value="GDU_IP_IREF_TRIM_000"/>
+                                    <a:da name="RANGE" type="XPath" expr="ecu:list('Gdu.Iref.Trimming.List')"/>
+                                    <a:a name="READONLY" type="XPath">
+                                        <a:tst expr="../../GduCtl/GduCustomIrefTrimming = 'false'"/>
+                                    </a:a>
+                                </v:var>
+
+                            </v:ctr>
+
+                    </v:ctr>
+
+                        <!-- @implements CommonPublishedInformation_Object -->
+                        <v:ctr name="CommonPublishedInformation" type="IDENTIFIABLE">
+                            <a:a name="DESC">
+                                <a:v>
+                                    <![CDATA[EN: <html> Vendor specific:
+                                    Common container, aggregated by all modules. It contains published information about vendor and versions.
+                                    </html>]]>
+                                </a:v>
+                            </a:a>
+                            <a:a name="UUID" value="ECUC:30bc6d94-b222-4af1-8edc-d3107dd39d0b"/>
+
+                            <v:var name="ArReleaseMajorVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Major version number of AUTOSAR specification on which the appropriate implementation is based on.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:3d986048-6f1d-448f-84d0-496698232dc8"/>
+                                <a:da name="DEFAULT" value="4"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=4"/>
+                                    <a:tst expr="&lt;=4"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="ArReleaseMinorVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Minor version number of AUTOSAR specification on which the appropriate implementation is based on.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="POSTBUILDVARIANTVALUE" value="false"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:3424754a-c33b-4a80-b58f-216831436178"/>
+                                <a:da name="DEFAULT" value="7"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=7"/>
+                                    <a:tst expr="&lt;=7"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="ArReleaseRevisionVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN:<html> Vendor specific:
+                                        Revision version number of AUTOSAR specification on which the appropriate implementation is based on.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:964bb5d1-3366-4283-aa55-7c3f942508ca"/>
+                                <a:da name="DEFAULT" value="0"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=0"/>
+                                    <a:tst expr="&lt;=0"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="ModuleId" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html>Vendor specific:
+                                        Module ID of this module from Module List.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:b78f0cce-3573-4148-aaaf-ac35ebd86c83"/>
+                                <a:da name="DEFAULT" value="123"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=123"/>
+                                    <a:tst expr="&lt;=123"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="SwMajorVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Major version number of the vendor specific implementation of the module. The numbering is vendor specific.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:0fcf52db-8a35-4451-8078-4a806a85d444"/>
+                                <a:da name="DEFAULT" value="3"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=3"/>
+                                    <a:tst expr="&lt;=3"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="SwMinorVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Minor version number of the vendor specific implementation of the module. The numbering is vendor specific.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:e84ddf3e-23e5-49aa-a23d-8dcc69c47f44"/>
+                                <a:da name="DEFAULT" value="0"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=0"/>
+                                    <a:tst expr="&lt;=0"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="SwPatchVersion" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Patch level version number of the vendor specific implementation of the module. The numbering is vendor specific.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                    <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                    <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:f9b3a765-0417-484f-bfcc-6aacaedf1bf7"/>
+                                <a:da name="DEFAULT" value="0"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=0"/>
+                                    <a:tst expr="&lt;=0"/>
+                                </a:da>
+                            </v:var>
+
+                            <v:var name="VendorApiInfix" type="STRING_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        In driver modules which can be instantiated several times on a single ECU, BSW00347 requires
+                                        that the name of APIs is extended by the VendorId and a vendor specific name.
+                                        This parameter is used to specify the vendor specific name. In total, the
+                                        implementation specific name is generated as follows: &lt;ModuleName&gt;_&gt;VendorId&gt;_&lt;VendorApiInfix&gt;&lt;Api name from SWS&gt;.
+                                        <p>E.g.  assuming that the VendorId of the implementor is 123 and the implementer chose a VendorApiInfix of &quot;v11r456&quot; a api name Can_Write defined in the SWS will translate to Can_123_v11r456Write.
+                                        This parameter is mandatory for all modules with upper multiplicity &gt; 1. It shall not be used for modules with upper multiplicity =1.</p>
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                    <icc:v class="PublishedInformation">VariantPreCompile</icc:v>
+                                    <icc:v class="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:71a03136-36af-4b10-8890-335ea187c0df"/>
+                                <a:da name="DEFAULT" value=""/>
+                                <a:a name="OPTIONAL" value="true"/>
+                                <a:da name="READONLY" value="true"/>
+                            </v:var>
+
+                            <v:var name="VendorId" type="INTEGER_LABEL">
+                                <a:a name="DESC">
+                                    <a:v>
+                                        <![CDATA[EN: <html> Vendor specific:
+                                        Vendor ID of the dedicated implementation of this module according to the AUTOSAR vendor list.
+                                        </html>]]>
+                                    </a:v>
+                                </a:a>
+                                <a:a name="SCOPE" value="LOCAL"/>
+                                <a:a name="IMPLEMENTATIONCONFIGCLASS" type="IMPLEMENTATIONCONFIGCLASS">
+                                        <icc:v vclass="PublishedInformation">VariantPreCompile</icc:v>
+                                        <icc:v vclass="PublishedInformation">VariantPostBuild</icc:v>
+                                </a:a>
+                                <a:a name="ORIGIN" value="NXP"/>
+                                <a:a name="SYMBOLICNAMEVALUE" value="false"/>
+                                <a:a name="UUID" value="ECUC:61c39754-677d-4710-9c33-15cbfe71a86e"/>
+                                <a:da name="DEFAULT" value="43"/>
+                                <a:da name="INVALID" type="Range">
+                                    <a:tst expr="&gt;=43"/>
+                                    <a:tst expr="&lt;=43"/>
+                                </a:da>
+                            </v:var>
+                        </v:ctr>
+                    </v:ctr>
+                </d:chc>
+                <d:chc name="M4_XDM_AR_MODULE_NAME_EcuParameterDefinition"
+                    type="AR-ELEMENT" value="ECU_PARAMETER_DEFINITION">
+                    <d:ctr type="AR-ELEMENT">
+                        <a:a name="UUID" value="ECUC:847ac375-5951-4a1c-baf6-8a03e87fe65f"/>
+                        <a:a name="DEF" value="ASPath:/AR_PACKAGE_SCHEMA/ECU_PARAMETER_DEFINITION"/>
+                        <d:lst name="MODULE_REF">
+                            <d:ref type="MODULE_REF" value="ASPath:/TS_T40D2M30I0R0/Gdu"/>
+                        </d:lst>
+                    </d:ctr>
+                </d:chc>
+                <d:chc name="M4_XDM_AR_MODULE_NAME_ModuleDescription"
+                    type="AR-ELEMENT" value="BSW_MODULE_DESCRIPTION">
+                    <d:ctr type="AR-ELEMENT">
+                        <a:a name="DEF" value="ASPath:/AR_PACKAGE_SCHEMA/BSW_MODULE_DESCRIPTION"/>
+                        <d:var name="MODULE_ID" type="INTEGER" >
+                            <a:a name="READONLY" value="true"/>
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:ref type="RECOMMENDED_CONFIGURATION" >
+                            <a:a name="READONLY" value="true"/>
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:ref>
+                        <d:ref type="PRE_CONFIGURED_CONF" >
+                            <a:a name="READONLY" value="true"/>
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:ref>
+                        <d:ref type="VENDOR_SPECIFIC_MODULE_DEF"
+                        value="ASPath:/TS_T40D2M30I0R0/Gdu"/>
+                    </d:ctr>
+                </d:chc>
+            </d:lst>
+        </d:ctr>
+    </d:lst>
+</d:ctr>
+
+</datamodel>
+

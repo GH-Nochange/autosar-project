@@ -31,6 +31,18 @@ extern "C"
         PH_VERSION,
         PH_RESET,
         PH_LED,
+
+        PH_SPEED,
+        PH_RPM,
+        PH_FUEL,
+        PH_LIGHT,
+        PH_TPMS,
+        PH_ENG_TEMP,
+        PH_DOOR,
+        PH_ENGINE,
+        PH_HVAC,
+        PH_WARNING,
+
     } phApp_Id_t;
 
     typedef struct __attribute__((packed)) {

@@ -1,0 +1,145 @@
+[!AUTOSPACING!][!//
+[!CODE!][!//
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.7
+*   Platform             : CORTEXM
+*   Peripheral           : Ftm Lpit Lptmr Port_Ci LpCmp
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.7.0
+*   Autosar Revision     : ASR_REL_4_7_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 3.0.0
+*   Build Version        : S32K1_RTD_3_0_0_QLP02_D2505_ASR_REL_4_7_REV_0000_20250530
+*
+*   Copyright 2020-2025 NXP
+*
+*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
+
+#ifndef LPIT_ICU_IP_CFG_H
+#define LPIT_ICU_IP_CFG_H
+
+/**
+ *   @file    Lpit_Icu_Ip_Cfg.h
+ *   @version 3.0.0
+ *
+ *   @brief   AUTOSAR Icu - contains the data exported by the ICU module.
+ *   @details Contains the information that will be exported by the module, as requested by AUTOSAR.
+ *
+ *   @addtogroup lpit_icu_ip LPIT IPL
+ *   @{
+ */
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/*==================================================================================================
+*                                          INCLUDE FILES
+* 1) system and project includes
+* 2) needed interfaces from external units
+* 3) internal and external interfaces from this unit
+==================================================================================================*/
+/* Include all variants header files. */
+[!NOCODE!][!//
+
+[!IF "var:defined('postBuildVariant')"!][!//
+    [!LOOP "variant:all()"!][!//
+        [!CODE!][!WS "0"!]#include "Lpit_Icu_Ip_[!"."!]_PBcfg.h"[!CR!][!ENDCODE!][!//
+    [!ENDLOOP!][!//
+[!ELSE!][!//
+    [!CODE!][!WS "0"!]#include "Lpit_Icu_Ip_PBcfg.h"[!CR!][!ENDCODE!][!//
+[!ENDIF!][!//
+
+[!ENDNOCODE!][!//
+
+/*==================================================================================================
+*                                 SOURCE FILE VERSION INFORMATION
+==================================================================================================*/
+#define LPIT_ICU_IP_CFG_VENDOR_ID                    43
+#define LPIT_ICU_IP_CFG_AR_RELEASE_MAJOR_VERSION     4
+#define LPIT_ICU_IP_CFG_AR_RELEASE_MINOR_VERSION     7
+#define LPIT_ICU_IP_CFG_AR_RELEASE_REVISION_VERSION  0
+#define LPIT_ICU_IP_CFG_SW_MAJOR_VERSION             3
+#define LPIT_ICU_IP_CFG_SW_MINOR_VERSION             0
+#define LPIT_ICU_IP_CFG_SW_PATCH_VERSION             0
+
+/*==================================================================================================
+*                                       FILE VERSION CHECKS
+==================================================================================================*/
+[!IF "var:defined('postBuildVariant')"!][!//
+    [!LOOP "variant:all()"!][!//
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same vendor */
+#if (LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_VENDOR_ID != LPIT_ICU_IP_CFG_VENDOR_ID)
+    #error "Lpit_Icu_Ip_[!"."!]_PBcfg.h and Lpit_Icu_Ip_Cfg.h have different vendor IDs"
+#endif
+
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same Autosar version */
+#if ((LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_AR_RELEASE_MAJOR_VERSION    != LPIT_ICU_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
+     (LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_AR_RELEASE_MINOR_VERSION    != LPIT_ICU_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
+     (LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_AR_RELEASE_REVISION_VERSION != LPIT_ICU_IP_CFG_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Lpit_Icu_Ip_[!"."!]_PBcfg.h and Lpit_Icu_Ip_Cfg.h are different"
+#endif
+
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same Software version */
+#if ((LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_SW_MAJOR_VERSION != LPIT_ICU_IP_CFG_SW_MAJOR_VERSION) || \
+     (LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_SW_MINOR_VERSION != LPIT_ICU_IP_CFG_SW_MINOR_VERSION) || \
+     (LPIT_ICU_IP_[!"text:toupper(.)"!]_PBCFG_SW_PATCH_VERSION != LPIT_ICU_IP_CFG_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Lpit_Icu_Ip_[!"."!]_PBcfg.h and Lpit_Icu_Ip_Cfg.h are different"
+#endif
+    [!ENDLOOP!][!//
+[!ELSE!][!//
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same vendor */
+#if (LPIT_ICU_IP_PBCFG_VENDOR_ID != LPIT_ICU_IP_CFG_VENDOR_ID)
+    #error "Lpit_Icu_Ip_PBcfg.h and Lpit_Icu_Ip_Cfg.h have different vendor IDs"
+#endif
+
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same Autosar version */
+#if ((LPIT_ICU_IP_PBCFG_AR_RELEASE_MAJOR_VERSION    != LPIT_ICU_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
+     (LPIT_ICU_IP_PBCFG_AR_RELEASE_MINOR_VERSION    != LPIT_ICU_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
+     (LPIT_ICU_IP_PBCFG_AR_RELEASE_REVISION_VERSION != LPIT_ICU_IP_CFG_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version Numbers of Lpit_Icu_Ip_PBcfg.h and Lpit_Icu_Ip_Cfg.h are different"
+#endif
+
+/* Check if header file and Lpit_Icu_Ip_Cfg header file are of the same Software version */
+#if ((LPIT_ICU_IP_PBCFG_SW_MAJOR_VERSION != LPIT_ICU_IP_CFG_SW_MAJOR_VERSION) || \
+     (LPIT_ICU_IP_PBCFG_SW_MINOR_VERSION != LPIT_ICU_IP_CFG_SW_MINOR_VERSION) || \
+     (LPIT_ICU_IP_PBCFG_SW_PATCH_VERSION != LPIT_ICU_IP_CFG_SW_PATCH_VERSION))
+    #error "Software Version Numbers of Lpit_Icu_Ip_PBcfg.h and Lpit_Icu_Ip_Cfg.h are different"
+#endif
+[!ENDIF!][!//
+
+/*==================================================================================================
+*                                       DEFINES AND MACROS
+==================================================================================================*/
+[!NOCODE!][!//
+
+[!IF "count(./IcuConfigSet/IcuLpit/*) > '0'"!][!//
+    [!CODE!]/* Macro used to export generated configuration. */[!CR!][!ENDCODE!][!//
+    [!CODE!]#define LPIT_ICU_CONFIG_EXT \[!CR!][!ENDCODE!][!//
+    [!IF "var:defined('postBuildVariant')"!][!//
+        [!LOOP "variant:all()"!][!//
+            [!CODE!][!WS "8"!]LPIT_ICU_CONFIG_[!"text:toupper(.)"!]_PB \[!CR!][!ENDCODE!][!//
+        [!ENDLOOP!][!//
+        [!CODE!][!CR!][!CR!][!ENDCODE!][!//
+    [!ELSE!][!//
+        [!CODE!][!WS "8"!]LPIT_ICU_CONFIG_PB[!CR!][!ENDCODE!][!//
+    [!ENDIF!][!//
+[!ENDIF!][!//
+[!ENDNOCODE!][!//
+#ifdef __cplusplus
+}
+#endif
+
+/** @} */
+
+#endif /* LPIT_ICU_IP_CFG_H */
+
+[!ENDCODE!][!//
