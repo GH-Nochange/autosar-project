@@ -188,7 +188,18 @@
                   </d:lst>
                 </d:ctr>
               </d:lst>
-              <d:lst name="EcucPduCollection" type="MAP"/>
+              <d:lst name="EcucPduCollection" type="MAP">
+                <d:ctr name="EcucPduCollection_0" type="IDENTIFIABLE">
+                  <d:lst name="Pdu" type="MAP">
+                    <d:ctr name="Tx_Pdu_0" type="IDENTIFIABLE">
+                      <d:var name="EcucPduId" type="INTEGER" value="0"/>
+                    </d:ctr>
+                    <d:ctr name="Rx_Pdu_0" type="IDENTIFIABLE">
+                      <d:var name="EcucPduId" type="INTEGER" value="1"/>
+                    </d:ctr>
+                  </d:lst>
+                </d:ctr>
+              </d:lst>
               <d:ctr name="EcucSelectedLoadableVariant" type="IDENTIFIABLE">
                 <a:a name="ENABLE" value="false"/>
                 <d:ref name="EcucSelectedLoadableRef" type="REFERENCE" >

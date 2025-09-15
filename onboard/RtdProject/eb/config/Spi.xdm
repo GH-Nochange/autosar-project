@@ -331,9 +331,8 @@
                   </d:ctr>
                   <d:ctr name="SpiJob_1" type="IDENTIFIABLE">
                     <d:var name="SpiJobEndNotification" type="FUNCTION-NAME" 
-                           value="NULL_PTR">
-                      <a:a name="ENABLE" value="false"/>
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                           value="SpiJob1_EndCb">
+                      <a:a name="ENABLE" value="true"/>
                     </d:var>
                     <d:var name="SpiJobStartNotification" type="FUNCTION-NAME" 
                            value="NULL_PTR">
@@ -391,7 +390,7 @@
                              value="ASPath:/Spi/Spi/SpiDriver/SpiJob_0"/>
                     </d:lst>
                   </d:ctr>
-                  <d:ctr name="SpiSequence_1" type="IDENTIFIABLE">
+                  <d:ctr name="SpiSequence_Slave" type="IDENTIFIABLE">
                     <d:var name="SpiInterruptibleSequence" type="BOOLEAN" 
                            value="false">
                       <a:a name="IMPORTER_INFO" value="@DEF"/>

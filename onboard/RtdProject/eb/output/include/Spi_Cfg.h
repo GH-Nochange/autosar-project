@@ -216,7 +216,7 @@ extern "C"{
 *     for all the driver configurations.
 */
 #define SpiConf_SpiSequence_SpiSequence_Master   ((Spi_SequenceType)0U)
-#define SpiConf_SpiSequence_SpiSequence_1   ((Spi_SequenceType)1U)
+#define SpiConf_SpiSequence_SpiSequence_Slave   ((Spi_SequenceType)1U)
 #define SPI_MAX_SEQUENCE  (2U)
 
 /**

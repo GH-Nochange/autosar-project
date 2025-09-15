@@ -103,7 +103,7 @@ extern "C"{
 /**
 * @brief
 */
-#define POWER_IP_PERFORM_RESET_API   (STD_OFF)
+#define POWER_IP_PERFORM_RESET_API   (STD_ON)
 
 /**
 * @brief            ISR Mcu_VoltageError_ISR is/isn't available (STD_ON/STD_OFF)

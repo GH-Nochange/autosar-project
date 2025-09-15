@@ -57,18 +57,18 @@ phBufReq_ReturnType phPduR_CanTpStartOfReception(const phPduInfoType* info, phPd
         break;
     }
 }
-phBufReq_ReturnType phPduR_CanTpCopyTxData(const phPduInfoType* info, const phRetryInfoType* retry, phPduLengthType* bufferSizePtr)
-{
-    switch (g_pdur)
-    {
-    case PH_CAN:
-        return phCom_CopyTxData(info, retry, bufferSizePtr);
-        break;
-    
-    default:
-        break;
-    }
-}
+//phBufReq_ReturnType phPduR_CanTpCopyTxData(const phPduInfoType* info, const phRetryInfoType* retry, phPduLengthType* bufferSizePtr)
+//{
+//    switch (g_pdur)
+//    {
+//    case PH_CAN:
+//        return phCom_CopyTxData(info, retry, bufferSizePtr);
+//        break;
+//
+//    default:
+//        break;
+//    }
+//}
 void phPduR_CanTpTxConfirmation(PhTypes_ErrorCode_t result)
 {
     switch (g_pdur)
@@ -81,15 +81,15 @@ void phPduR_CanTpTxConfirmation(PhTypes_ErrorCode_t result)
         break;
     }
 }
-PhTypes_ErrorCode_t phPduR_CanTpTriggerTransmit(const phPduInfoType *PduInfoPtr)
-{
-    switch (g_pdur)
-    {
-    case PH_CAN:
-        return phCom_TriggerTransmit(PduInfoPtr);
-        break;
-    
-    default:
-        break;
-    }
-}
+//PhTypes_ErrorCode_t phPduR_CanTpTriggerTransmit(const phPduInfoType *PduInfoPtr)
+//{
+//    switch (g_pdur)
+//    {
+//    case PH_CAN:
+//        return phCom_TriggerTransmit(PduInfoPtr);
+//        break;
+//
+//    default:
+//        break;
+//    }
+//}

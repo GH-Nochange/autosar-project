@@ -4,8 +4,22 @@
 #include "phCom.h"
 #include "phLed.h"
 #include "phApp_Spi.h"
-#include "phMcu.h"
-#include "phCan.h"
+
+#include "Mcu.h"
+#include "Platform.h"
+#include "Can_43_FLEXCAN.h"
+#include "SchM_Can_43_FLEXCAN.h"
+#include "Port.h"
+#include "phCanTp.h"
+#include "CanIf.h"
+#include "Spi.h"
+#include "phTypes.h"
+
+#include "string.h"
+#if (SPI_DMA_USED == STD_ON)
+#include "Mcl.h"
+#include "CDD_Rm.h"
+#endif
 
 PhTypes_ErrorCode_t phBoard_Recv(phApp_Data_t *data)
 {
@@ -64,14 +78,14 @@ static PhTypes_ErrorCode_t phBoard_ProcessCmd(phApp_Data_t *data)
 
         phBoard_Send(data);
 
-        phMcu_PerformReset(); // McuInit -> send Ntf reason reset trigger Flash.
+        Mcu_PerformReset(); // McuInit -> send Ntf reason reset trigger Flash.
         break;
     case PH_LED:
         data->header.group = PH_RESPONSE;
         if (data->header.length != 1)
         {
-            data->header.length = 1; 
-            data->payload[0] = PH_ERR_UNKNOWN;
+            data->header.length = 1;
+            data->payload[0] = PH_ERR_LENGTH;
         }
         else if (data->payload[0] >= 0 && data->payload[0] <= 7)
         {
@@ -97,19 +111,6 @@ static PhTypes_ErrorCode_t phBoard_ProcessResp(phApp_Data_t *data)
     }
     else if (data->header.ecu != PH_BOARD1)
         return PH_ERR_FAILED;
-
-    // switch (data->header.id)
-    // {
-    // case PH_ECHO_REVERSE:
-    //     // Check
-    //     break;
-    // case PH_VERSION:
-    //     break;
-    // case PH_RESET:
-    //     break;
-    // case PH_LED:
-    //     break;
-    // }
 }
 
 static PhTypes_ErrorCode_t phBoard_ProcessNtf(phApp_Data_t *data)
@@ -121,14 +122,6 @@ static PhTypes_ErrorCode_t phBoard_ProcessNtf(phApp_Data_t *data)
     }
     else if (data->header.ecu != PH_BOARD1)
         return PH_ERR_FAILED;
-
-    // switch (data->header.id)
-    // {
-    // case PH_RESET:
-    //     break;
-    // case PH_LED:
-    //     break;
-    // }
 }
 
 static PhTypes_ErrorCode_t phBoard_RxProcessing(phApp_Data_t *data)
@@ -167,10 +160,59 @@ static PhTypes_ErrorCode_t phBoard_CreateFrame(phApp_Group_t group, phApp_Ecu_t 
 
 void phBoard_Init()
 {
+    /* Initialize Platform driver */
+    Platform_Init(NULL_PTR);
+
+    /* Initialize Mcu driver */
+#if (MCU_PRECOMPILE_SUPPORT == STD_ON)
+    Mcu_Init(NULL_PTR);
+#else
+    Mcu_Init(&Mcu_Config);
+#endif
+    Mcu_InitClock(McuClockSettingConfig_0);
+#if (MCU_NO_PLL == STD_OFF)
+    while (MCU_PLL_LOCKED != Mcu_GetPllStatus())
+    {
+        /* Busy wait until the System PLL is locked */
+    }
+    Mcu_DistributePllClock();
+#endif
+    Mcu_SetMode(McuModeSettingConf_0);
+
+#if (PORT_PRECOMPILE_SUPPORT == STD_ON)
+    Port_Init(NULL_PTR);
+#else
+    Port_Init(&Port_Config);
+#endif
+
     Queue_Init();
-    phGpio_Init();
-    phCan0_Init();
     phApp_SpiInit();
+
+    /* Initialize Can driver */
+#if (CAN_43_FLEXCAN_PRECOMPILE_SUPPORT == STD_ON)
+    Can_43_FLEXCAN_Init(NULL_PTR);
+#else
+    Can_43_FLEXCAN_Init(&Can_43_FLEXCAN_Config);
+#endif
+
+    CanIf_Init(NULL_PTR);
+    /* Start Can controller */
+    Can_43_FLEXCAN_SetControllerMode(Can_43_FLEXCANConf_CanController_CanController_0, CAN_CS_STARTED);
+
+#if (SPI_DMA_USED == STD_ON)
+        /* Initialize Mcl to use Dma and/or FlexIO */
+        Mcl_Init(NULL_PTR);
+        /* Initialize Rm to use Dma*/
+        Rm_Init(NULL_PTR);
+#endif
+
+    Spi_Init(NULL_PTR);
+
+    Mcu_ResetType reset_reson = Mcu_GetResetReason();
+    uint8_t reset_val = (uint8_t)reset_reson;
+    phApp_Data_t data;
+    phBoard_CreateFrame(PH_NOTIFY, PH_BOARD1, PH_RESET, 1u, &reset_val, &data);
+    phBoard_Send(&data);
 }
 
 void phBoard_MainFunction()

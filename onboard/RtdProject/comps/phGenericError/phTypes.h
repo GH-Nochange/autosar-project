@@ -20,6 +20,9 @@ typedef enum
     PH_ERR_NO_RESOURCE,        /*!< Hết tài nguyên (RAM/Queue/Buffer) */
     PH_ERR_UNKNOWN,            /*!< Lỗi không xác định */
 
+    PH_ERR_LENGTH,
+
+
     PH_ERR_ALREADY_INIT,       /*!< Đã khởi tạo trước đó */
     PH_ERR_UNSUPPORTED,        /*!< Không được hỗ trợ */
     PH_ERR_OUT_OF_RANGE,       /*!< Vượt quá giới hạn hợp lệ */

@@ -1,9 +1,8 @@
 #include "phApp_Spi.h"
-#include "phSpi.h"
+#include "Spi.h"
 #include "phQueue.h"
 #include "phApp_DataTypes.h"
 #include <string.h>
-#include "device_registers.h"
 
 /* --- TX buffers --- */
 static uint8_t tx_buf[2][MESSAGE_SIZE+2];
@@ -29,10 +28,8 @@ static inline void phApp_SpiSwapTxBuffers(void)
     tx_fill = tmp;
 }
 
-static void spi_cb(void *ud)
+void SpiJob1_EndCb(void)
 {
-    (void)ud;
-
     uint16_t len = (uint16_t)rx[0] | ((uint16_t)rx[1] << 8);
     if (len > MESSAGE_SIZE)
     {
@@ -75,8 +72,6 @@ static void spi_cb(void *ud)
 
 void phApp_SpiInit(void)
 {
-    phSpi_SlaveInit(&spi_cb);
-
     memset(tx_buf[0], 0, MESSAGE_SIZE + 2);
     memset(tx_buf[1], 0, MESSAGE_SIZE + 2);
 
@@ -128,6 +123,9 @@ void phApp_SpiPrepareData(phApp_Data_t *data)
 
 void phApp_SpiMainFunction(void)
 {
+    Std_ReturnType ret;
+    Spi_SeqResultType seqResult;
+
     if (!f_transfer)
     {
         if (outstanding > 0u)
@@ -140,47 +138,51 @@ void phApp_SpiMainFunction(void)
             tx_active_has_data = 0u;
         }
 
-        memset(rx, 0, MESSAGE_SIZE + 2);
         f_transfer = 1u;
 
+        /* Ghi vào internal buffer */
         const uint8_t *tx_src = tx_active_has_data ? tx_buf[tx_active] : tx_dummy;
-
-        if (phSpi_SlaveTransfer(tx_src, rx, MESSAGE_SIZE + 2) == PH_ERR_OK)
+        ret = Spi_WriteIB(SpiConf_SpiChannel_SpiChannel_Slave, tx_src);
+        if (ret != E_OK)
         {
+            f_transfer = 0u;
+            return;
+        }
+
+        /* Bắt đầu truyền */
+        ret = Spi_AsyncTransmit(SpiConf_SpiSequence_SpiSequence_Slave);
+        if (ret != E_OK)
+        {
+            f_transfer = 0u;
+            return;
+        }
+    }
+    else
+    {
+        seqResult = Spi_GetSequenceResult(SpiConf_SpiSequence_SpiSequence_Slave);
+        if (seqResult == SPI_SEQ_OK)
+        {
+            /* Đọc dữ liệu nhận về */
+            ret = Spi_ReadIB(SpiConf_SpiChannel_SpiChannel_Slave, rx);
+            if (ret == E_OK)
+            {
+                // TODO
+            }
+
             if (tx_active_has_data)
             {
-                phSpi_SlaveSetReady();
+                tx_active_has_data = 0u;
+                if (outstanding > 0u)
+                {
+                    outstanding--;
+                }
             }
-        }
-        else
-        {
+
             f_transfer = 0u;
         }
-        return;
-    }
-
-    if ((outstanding > 0u) && phSpi_SlaveIsCsHigh())
-    {
-        phSpi_SlaveAbort();
-
-        phApp_SpiSwapTxBuffers();
-        tx_active_has_data = 1u;
-
-        if (outstanding > 0u)
+        else if (seqResult == SPI_SEQ_FAILED)
         {
-            outstanding--;
-        }
-
-        memset(rx, 0, MESSAGE_SIZE + 2);
-        f_transfer = 1u;
-
-        if (phSpi_SlaveTransfer(tx_buf[tx_active], rx, MESSAGE_SIZE + 2) == PH_ERR_OK)
-        {
-            phSpi_SlaveSetReady();
-        }
-        else
-        {
-            f_transfer = 0u;
+            f_transfer = 0u; // reset cho lần sau
         }
     }
-} 
+}

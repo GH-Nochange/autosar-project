@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "phApp_DataTypes.h"
-#include "device_registers.h"
 
 typedef struct
 {

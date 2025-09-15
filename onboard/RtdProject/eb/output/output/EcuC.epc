@@ -218,6 +218,32 @@
                 </CONTAINER>
               </SUB-CONTAINERS>
             </CONTAINER>
+            <CONTAINER>
+              <SHORT-NAME>EcucPduCollection_0</SHORT-NAME>
+              <DEFINITION-REF>/TS_T40D2M30I0R0/EcuC/EcucPduCollection</DEFINITION-REF>
+              <SUB-CONTAINERS>
+                <CONTAINER>
+                  <SHORT-NAME>Tx_Pdu_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/EcuC/EcucPduCollection/Pdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <INTEGER-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/EcuC/EcucPduCollection/Pdu/EcucPduId</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </INTEGER-VALUE>
+                  </PARAMETER-VALUES>
+                </CONTAINER>
+                <CONTAINER>
+                  <SHORT-NAME>Rx_Pdu_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/EcuC/EcucPduCollection/Pdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <INTEGER-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/EcuC/EcucPduCollection/Pdu/EcucPduId</DEFINITION-REF>
+                      <VALUE>1</VALUE>
+                    </INTEGER-VALUE>
+                  </PARAMETER-VALUES>
+                </CONTAINER>
+              </SUB-CONTAINERS>
+            </CONTAINER>
           </CONTAINERS>
         </MODULE-CONFIGURATION>
       </ELEMENTS>

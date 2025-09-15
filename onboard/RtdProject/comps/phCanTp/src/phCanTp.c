@@ -1,5 +1,5 @@
 #include "phCanTp.h"
-#include "phCanIf.h"
+#include "CanIf.h"
 #include "phPduR.h"
 #include "phPduR_CanTp.h"
 #include "phTypes.h"
@@ -12,7 +12,7 @@ static const uint8_t *TX_appPtr = NULL;
 static phPduLengthType TX_totalLen = 0;
 static phPduLengthType TX_sentLen = 0;
 static uint8_t TX_SN = 0;
-// static phPduLengthType TX_bufferSizePtr;
+
 static phCanTpState txState = PH_IDLE;
 
 // RX
@@ -30,7 +30,7 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
 
     if (PduInfoPtr->SduLength <= 7u) // Single Frame
     {
-        phPduInfoType info;
+        PduInfoType info;
         static uint8_t sfBuf[8];
         info.SduDataPtr = sfBuf;
         info.MetaDataPtr = NULL;
@@ -39,13 +39,13 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
         info.SduLength = (phPduLengthType)(1u + PduInfoPtr->SduLength);
 
         txState = PH_SF;
-        return phCanIf_Transmit(&info);
+        return CanIf_Transmit(0, &info);
     }
 
     if (PduInfoPtr->SduLength > 0x0FFFu)
         return PH_ERR_FAILED;
     // Multiple Frame (First Frame)
-    phPduInfoType infoFirstFrame;
+    PduInfoType infoFirstFrame;
     static uint8_t ffBuf[8];
 
     infoFirstFrame.SduDataPtr = ffBuf;
@@ -63,10 +63,11 @@ PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr)
     TX_SN = 1u;
 
     txState = PH_FF;
-    return phCanIf_Transmit(&infoFirstFrame);
+    return CanIf_Transmit(0, &infoFirstFrame);
 }
 
-void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
+// typedef void (*CanIf_UserTxConfirmationPtrType)(PduIdType CanIfTxPduId, Std_ReturnType result);
+void phCanTp_TxConfirmation(PduIdType CanIfTxPduId, Std_ReturnType result)
 {
     if (result != PH_ERR_OK)
     {
@@ -100,7 +101,7 @@ void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
         }
 
         static uint8_t cfBuf[8];
-        phPduInfoType info;
+        PduInfoType info;
         phPduLengthType chunk = (phPduLengthType)((TX_totalLen - TX_sentLen) > 7u ? 7u : (TX_totalLen - TX_sentLen));
 
         info.SduDataPtr = cfBuf;
@@ -109,7 +110,7 @@ void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result)
         memcpy(&info.SduDataPtr[1], &TX_appPtr[TX_sentLen], chunk);
         info.SduLength = (phPduLengthType)(1u + chunk);
 
-        if (phCanIf_Transmit(&info) != PH_ERR_OK)
+        if (CanIf_Transmit(0, &info) != PH_ERR_OK)
         {
             txState = PH_IDLE;
             phPduR_CanTpTxConfirmation(PH_ERR_FAILED);
@@ -131,7 +132,7 @@ void phCanTp_MainFunction(void)
 static void phPrepareFC_AllowAll(void)
 {
     static uint8_t fc_buf[3];
-    phPduInfoType pdu;
+    PduInfoType pdu;
 
     /* PCI: FT=FC(0x3) | FS=CTS(0x0) */
     fc_buf[0] = (uint8_t)((PCI_TYPE_FC << 4) | 0);
@@ -142,11 +143,13 @@ static void phPrepareFC_AllowAll(void)
     pdu.MetaDataPtr = NULL;
     pdu.SduLength = (phPduLengthType)sizeof(fc_buf); /* 3 byte */
 
-    (void)phCanIf_Transmit(&pdu);
+    (void)CanIf_Transmit(0, &pdu);
 }
 
-void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
+// typedef void (*CanIf_UserRxIndicationPtrType)(PduIdType RxPduId, const PduInfoType * PduInfoPtr);
+void phCanTp_RxIndication(PduIdType RxPduId, const PduInfoType * PduInfoPtr)
 {
+    (void)RxPduId;
     phPduLengthType TpSduLength = 0;
     phPduInfoType info;
     phBufReq_ReturnType bufferReq;
@@ -251,7 +254,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
             if (fs == FC_FS_CTS)
             {
                 static uint8_t cfBuf[8];
-                phPduInfoType info;
+                PduInfoType info;
 
                 phPduLengthType left = (phPduLengthType)(TX_totalLen - TX_sentLen);
                 phPduLengthType chunk = (left > 7u) ? 7u : left;
@@ -263,7 +266,7 @@ void phCanTp_RxIndication(const phPduInfoType *PduInfoPtr)
                 info.SduLength = (phPduLengthType)(1u + chunk);
 
                 txState = PH_CF;
-                if (phCanIf_Transmit(&info) != PH_ERR_OK) // send first CF
+                if (CanIf_Transmit(0, &info) != PH_ERR_OK) // send first CF
                 {
                     txState = PH_IDLE;
                     phPduR_CanTpTxConfirmation(PH_ERR_FAILED);

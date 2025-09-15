@@ -4,7 +4,6 @@
 #include "phPduR_Com.h"
 #include "phBoard.h"
 #include <string.h>
-#include "device_registers.h"
 
 #ifndef PH_COM_MAX_PDU
 #define PH_COM_MAX_PDU 256u

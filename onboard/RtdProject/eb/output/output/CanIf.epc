@@ -14,6 +14,10 @@
               <SHORT-NAME>CanIfPublicCfg</SHORT-NAME>
               <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfPublicCfg</DEFINITION-REF>
               <PARAMETER-VALUES>
+                <STRING-VALUE>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfPublicCfg/CanIfPublicCddHeaderFile</DEFINITION-REF>
+                  <VALUE>phCanTp</VALUE>
+                </STRING-VALUE>
                 <BOOLEAN-VALUE>
                   <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfPublicCfg/CanIfDevErrorDetect</DEFINITION-REF>
                   <VALUE>false</VALUE>
@@ -51,6 +55,126 @@
             <CONTAINER>
               <SHORT-NAME>CanIfInitCfg</SHORT-NAME>
               <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg</DEFINITION-REF>
+              <PARAMETER-VALUES>
+                <INTEGER-VALUE>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfMaxRxPduCfg</DEFINITION-REF>
+                  <VALUE>1</VALUE>
+                </INTEGER-VALUE>
+                <INTEGER-VALUE>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfMaxTxPduCfg</DEFINITION-REF>
+                  <VALUE>1</VALUE>
+                </INTEGER-VALUE>
+              </PARAMETER-VALUES>
+              <SUB-CONTAINERS>
+                <CONTAINER>
+                  <SHORT-NAME>CanIfTxPduCfg_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <INTEGER-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduCanId</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </INTEGER-VALUE>
+                    <ENUMERATION-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduCanIdType</DEFINITION-REF>
+                      <VALUE>STANDARD_CAN</VALUE>
+                    </ENUMERATION-VALUE>
+                    <INTEGER-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduId</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </INTEGER-VALUE>
+                    <FUNCTION-NAME-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduUserTxConfirmationName</DEFINITION-REF>
+                      <VALUE>phCanTp_TxConfirmation</VALUE>
+                    </FUNCTION-NAME-VALUE>
+                    <ENUMERATION-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduUserTxConfirmationUL</DEFINITION-REF>
+                      <VALUE>CDD</VALUE>
+                    </ENUMERATION-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <REFERENCE-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduBufferRef</DEFINITION-REF>
+                      <VALUE-REF>/CanIf/CanIf/CanIfInitCfg/CanIfBufferCfg_0</VALUE-REF>
+                    </REFERENCE-VALUE>
+                    <REFERENCE-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduRef</DEFINITION-REF>
+                      <VALUE-REF>/EcuC/EcuC/EcucPduCollection_0/Tx_Pdu_0</VALUE-REF>
+                    </REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </CONTAINER>
+                <CONTAINER>
+                  <SHORT-NAME>CanIfRxPduCfg_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <INTEGER-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduId</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </INTEGER-VALUE>
+                    <FUNCTION-NAME-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduUserRxIndicationName</DEFINITION-REF>
+                      <VALUE>phCanTp_RxIndication</VALUE>
+                    </FUNCTION-NAME-VALUE>
+                    <ENUMERATION-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduUserRxIndicationUL</DEFINITION-REF>
+                      <VALUE>CDD</VALUE>
+                    </ENUMERATION-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <REFERENCE-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduHrhIdRef</DEFINITION-REF>
+                      <VALUE-REF>/CanIf/CanIf/CanIfInitCfg/CanIfInitHohCfg_0/CanIfHrhCfg_0</VALUE-REF>
+                    </REFERENCE-VALUE>
+                    <REFERENCE-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduRef</DEFINITION-REF>
+                      <VALUE-REF>/EcuC/EcuC/EcucPduCollection_0/Rx_Pdu_0</VALUE-REF>
+                    </REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </CONTAINER>
+                <CONTAINER>
+                  <SHORT-NAME>CanIfBufferCfg_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfBufferCfg</DEFINITION-REF>
+                  <REFERENCE-VALUES>
+                    <REFERENCE-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfBufferCfg/CanIfBufferHthRef</DEFINITION-REF>
+                      <VALUE-REF>/CanIf/CanIf/CanIfInitCfg/CanIfInitHohCfg_0/CanIfHthCfg_0</VALUE-REF>
+                    </REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </CONTAINER>
+                <CONTAINER>
+                  <SHORT-NAME>CanIfInitHohCfg_0</SHORT-NAME>
+                  <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg</DEFINITION-REF>
+                  <SUB-CONTAINERS>
+                    <CONTAINER>
+                      <SHORT-NAME>CanIfHthCfg_0</SHORT-NAME>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHthCfg</DEFINITION-REF>
+                      <REFERENCE-VALUES>
+                        <REFERENCE-VALUE>
+                          <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHthCfg/CanIfHthCanCtrlIdRef</DEFINITION-REF>
+                          <VALUE-REF>/CanIf/CanIf/CanIfCtrlDrvCfg_0/CanIfCtrlCfg_0</VALUE-REF>
+                        </REFERENCE-VALUE>
+                        <REFERENCE-VALUE>
+                          <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHthCfg/CanIfHthIdSymRef</DEFINITION-REF>
+                          <VALUE-REF>/Can_43_FLEXCAN/Can/CanConfigSet/CanHardwareObject_1</VALUE-REF>
+                        </REFERENCE-VALUE>
+                      </REFERENCE-VALUES>
+                    </CONTAINER>
+                    <CONTAINER>
+                      <SHORT-NAME>CanIfHrhCfg_0</SHORT-NAME>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHrhCfg</DEFINITION-REF>
+                      <REFERENCE-VALUES>
+                        <REFERENCE-VALUE>
+                          <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHrhCfg/CanIfHrhCanCtrlIdRef</DEFINITION-REF>
+                          <VALUE-REF>/CanIf/CanIf/CanIfCtrlDrvCfg_0/CanIfCtrlCfg_0</VALUE-REF>
+                        </REFERENCE-VALUE>
+                        <REFERENCE-VALUE>
+                          <DEFINITION-REF>/TS_T40D2M30I0R0/CanIf/CanIfInitCfg/CanIfInitHohCfg/CanIfHrhCfg/CanIfHrhIdSymRef</DEFINITION-REF>
+                          <VALUE-REF>/Can_43_FLEXCAN/Can/CanConfigSet/CanHardwareObject_0</VALUE-REF>
+                        </REFERENCE-VALUE>
+                      </REFERENCE-VALUES>
+                    </CONTAINER>
+                  </SUB-CONTAINERS>
+                </CONTAINER>
+              </SUB-CONTAINERS>
             </CONTAINER>
             <CONTAINER>
               <SHORT-NAME>CanIfDispatchCfg</SHORT-NAME>

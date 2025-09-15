@@ -46,6 +46,7 @@ extern "C"{
 ==================================================================================================*/
 #include "CanIf.h"
 
+#include "phCanTp.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -80,13 +81,47 @@ extern "C"{
 #include "CanIf_MemMap.h"
 
 
+/* Here is the TxPdu configuration */
+static const CanIf_TxPduType CanIf_TxPdu[1U] =
+{
+    {
+        /* .PduIdType */
+        (uint8)0U,
+        /* .CanId */
+        (Can_IdType)0U,
+        /* .CanFrameType */
+        CANIF_STANDARD_CAN,
+        /* .Can_HwHandleType */
+        (Can_HwHandleType)1U,
+        /* .CanIfCtrlId */
+        (uint8)0U,
+        /* .UserTxConfirmation */
+        phCanTp_TxConfirmation
+    }
+};
 
+/* Here is the RxPdu configuration */
+static const CanIf_RxPduType CanIf_RxPdu[1U] =
+{
+    {
+        /* .PduId */
+        (uint8)0U,
+        /* .PduLengthCheck */
+        (boolean)FALSE,
+        /* .PduLength */
+        (uint16)8U,
+        /* .CanIfCtrlId */
+        (uint8)0U,
+        /* .UserRxIndication */
+        phCanTp_RxIndication
+    }
+};
 
 
 /* Here is the configuration related to Can_43_FLEXCAN Driver */
 static const CanIf_RxPduType * const CanIf_Can_43_FLEXCAN_HohToRxPduMapping[2U] = 
 {
-    NULL_PTR,
+    &CanIf_RxPdu[0U],
     NULL_PTR
 };
 
@@ -104,14 +139,14 @@ static const CanIf_CanDrvConfigType * const CanIf_CanDrvConfig[1U] =
 const CanIf_ConfigType CanIf_Config =
 {
     /* .NumRxPdu */
-    (uint8)0U,
+    (uint8)1U,
     /* .NumTxPdu */
-    (uint8)0U,
+    (uint8)1U,
     CanIf_CanDrvConfig,
     /* .CanIf_RxPduConfigPtr */
-    NULL_PTR,
+    CanIf_RxPdu,
     /* .CanIf_TxPduConfigPtr */
-    NULL_PTR
+    CanIf_TxPdu
 };
 
 #define CANIF_STOP_SEC_CONFIG_DATA_UNSPECIFIED

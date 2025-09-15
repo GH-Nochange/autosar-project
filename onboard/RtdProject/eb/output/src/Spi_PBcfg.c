@@ -138,6 +138,7 @@ extern "C"{
 /* Job start Notifications */
 
 /* Job End Notifications */
+extern void SpiJob1_EndCb(void); /* End Notification for Job 'SpiJob_1' */
 
 /* Sequence End Notifications */
 
@@ -304,7 +305,7 @@ static const Spi_JobConfigType Spi_JobConfig_SpiJob_1 =
         (Spi_ChannelType)1U, /* NumChannels field */
         Spi_SpiJob_1_ChannelAssignment, /* List of Channels */
         
-            NULL_PTR,
+            &SpiJob1_EndCb, /* End Notification */
         
         
             NULL_PTR,
@@ -339,7 +340,7 @@ static const Spi_JobType Spi_SpiSequence_Master_JobAssignment[1] =
     SpiConf_SpiJob_SpiJob_0
 };
 
-static const Spi_JobType Spi_SpiSequence_1_JobAssignment[1] = 
+static const Spi_JobType Spi_SpiSequence_Slave_JobAssignment[1] = 
 {
     SpiConf_SpiJob_SpiJob_1
 };
@@ -361,13 +362,13 @@ static const Spi_SequenceConfigType Spi_SequenceConfig_SpiSequence_Master =
         
         
 };
-/* Sequence Configuration of SpiSequence_1 */
-static const Spi_SequenceConfigType Spi_SequenceConfig_SpiSequence_1 =
+/* Sequence Configuration of SpiSequence_Slave */
+static const Spi_SequenceConfigType Spi_SequenceConfig_SpiSequence_Slave =
 {
-        /* SpiSequence_1 */
+        /* SpiSequence_Slave */
         (Spi_JobType)1U,
         (uint32)SPI_SPURIOUS_ID_U32,
-        Spi_SpiSequence_1_JobAssignment, /* List of Jobs */
+        Spi_SpiSequence_Slave_JobAssignment, /* List of Jobs */
         NULL_PTR, /* End Notification */
         (uint8)FALSE /* Interruptible */
                 #if ((SPI_DMA_USED == STD_ON) && (SPI_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON))
@@ -384,8 +385,8 @@ static const Spi_SeqsConfigType Spi_aSequenceConfigList[2] =
     &Spi_SequenceConfig_SpiSequence_Master
     },
     {
-    /* SpiSequence_1 */
-    &Spi_SequenceConfig_SpiSequence_1
+    /* SpiSequence_Slave */
+    &Spi_SequenceConfig_SpiSequence_Slave
     }
 };
 

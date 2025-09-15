@@ -236,6 +236,10 @@
                   <SHORT-NAME>SpiJob_1</SHORT-NAME>
                   <DEFINITION-REF>/TS_T40D2M30I0R0/Spi/SpiDriver/SpiJob</DEFINITION-REF>
                   <PARAMETER-VALUES>
+                    <FUNCTION-NAME-VALUE>
+                      <DEFINITION-REF>/TS_T40D2M30I0R0/Spi/SpiDriver/SpiJob/SpiJobEndNotification</DEFINITION-REF>
+                      <VALUE>SpiJob1_EndCb</VALUE>
+                    </FUNCTION-NAME-VALUE>
                     <INTEGER-VALUE>
                       <DEFINITION-REF>/TS_T40D2M30I0R0/Spi/SpiDriver/SpiJob/SpiJobId</DEFINITION-REF>
                       <VALUE>1</VALUE>
@@ -295,7 +299,7 @@
                   </REFERENCE-VALUES>
                 </CONTAINER>
                 <CONTAINER>
-                  <SHORT-NAME>SpiSequence_1</SHORT-NAME>
+                  <SHORT-NAME>SpiSequence_Slave</SHORT-NAME>
                   <DEFINITION-REF>/TS_T40D2M30I0R0/Spi/SpiDriver/SpiSequence</DEFINITION-REF>
                   <PARAMETER-VALUES>
                     <BOOLEAN-VALUE>

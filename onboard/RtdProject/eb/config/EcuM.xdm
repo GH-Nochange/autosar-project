@@ -38,8 +38,7 @@
                     <d:var name="EcuMDefaultState" type="ENUMERATION" 
                            value="EcuMStateReset"/>
                     <d:ref name="EcuMDefaultResetModeRef" type="REFERENCE" >
-                      <a:a name="ENABLE" value="false"/>
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      <a:a name="ENABLE" value="true"/>
                     </d:ref>
                     <d:ref name="EcuMDefaultSleepModeRef" type="REFERENCE" >
                       <a:a name="ENABLE" value="false"/>

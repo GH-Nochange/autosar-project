@@ -1,5 +1,5 @@
-#ifndef COMSTACK_TYPES_H
-#define COMSTACK_TYPES_H
+#ifndef PH_COMSTACK_TYPES_H
+#define PH_COMSTACK_TYPES_H
 
 #ifdef __cplusplus
 extern "C"{
@@ -63,4 +63,4 @@ typedef uint16_t       phCbkHandleIdType;
 }
 #endif
 
-#endif /* COMSTACK_TYPES_H */
+#endif /* PH_COMSTACK_TYPES_H */

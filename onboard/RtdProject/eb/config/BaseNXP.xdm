@@ -60,6 +60,7 @@
                 </d:var>
                 <d:chc name="OsIfOperatingSystemType" type="IDENTIFIABLE" 
                        value="OsIfBaremetalType">
+                  <a:a name="SHORT-NAME" value="OsIfOperatingSystemType"/>
                   <d:ctr name="OsIfAutosarOsType" type="IDENTIFIABLE"/>
                   <d:ctr name="OsIfFreeRtosType" type="IDENTIFIABLE"/>
                   <d:ctr name="OsIfZephyrOsType" type="IDENTIFIABLE"/>

@@ -41,6 +41,11 @@
                           <VALUE>EcuMStateReset</VALUE>
                         </ENUMERATION-VALUE>
                       </PARAMETER-VALUES>
+                      <REFERENCE-VALUES>
+                        <REFERENCE-VALUE>
+                          <DEFINITION-REF>/TS_T40D2M30I0R0/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultResetModeRef</DEFINITION-REF>
+                        </REFERENCE-VALUE>
+                      </REFERENCE-VALUES>
                     </CONTAINER>
                     <CONTAINER>
                       <SHORT-NAME>EcuMSleepMode_0</SHORT-NAME>

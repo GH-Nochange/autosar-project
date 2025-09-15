@@ -60,7 +60,16 @@
     "lpspi_shared_function.h": "c",
     "clock.h": "c",
     "send.h": "c",
-    "convert.h": "c"
+    "convert.h": "c",
+    "phcomstack_types.h": "c",
+    "canif.h": "c",
+    "canif_types.h": "c",
+    "comstack_types.h": "c",
+    "comstacktypes.h": "c",
+    "spi.h": "c",
+    "phqueue.h": "c",
+    "phcom.h": "c",
+    "mcu.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

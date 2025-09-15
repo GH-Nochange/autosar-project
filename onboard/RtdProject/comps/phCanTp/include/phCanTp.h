@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 #include "phComStack_Types.h"
+#include "ComStack_Types.h"
 #include "phTypes.h"
 
 /**
@@ -63,7 +64,7 @@ typedef enum {
  * @param[in] PduInfoPtr Pointer to PDU descriptor.
  * @return PH_ERR_OK on success, error code otherwise.
  */
-PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType* PduInfoPtr);
+PhTypes_ErrorCode_t phCanTp_Transmit(const phPduInfoType *PduInfoPtr);
 
 /**
  * @brief Periodic scheduler for CAN TP.
@@ -81,7 +82,7 @@ void phCanTp_MainFunction(void);
  *
  * @param[in] PduInfoPtr Pointer to received CAN PDU.
  */
-void phCanTp_RxIndication(const phPduInfoType* PduInfoPtr);
+void phCanTp_RxIndication(PduIdType RxPduId, const PduInfoType * PduInfoPtr);
 
 /**
  * @brief Confirm the result of a transmitted CAN frame.
@@ -90,7 +91,7 @@ void phCanTp_RxIndication(const phPduInfoType* PduInfoPtr);
  *
  * @param[in] result PH_ERR_OK if success, error otherwise.
  */
-void phCanTp_TxConfirmation(PhTypes_ErrorCode_t result);
+void phCanTp_TxConfirmation(PduIdType CanIfTxPduId, Std_ReturnType result);
 
 #ifdef __cplusplus
 }

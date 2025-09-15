@@ -61,9 +61,7 @@
                   <a:a name="ENABLE" value="false"/>
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:ref>
-                <d:var name="McuPerformResetApi" type="BOOLEAN" value="false">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                <d:var name="McuPerformResetApi" type="BOOLEAN" value="true"/>
                 <d:var name="McuCalloutBeforePerformReset" type="BOOLEAN" 
                        value="false">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>

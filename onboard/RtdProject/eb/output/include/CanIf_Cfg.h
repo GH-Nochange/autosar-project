@@ -108,7 +108,11 @@ extern "C"{
 */
 #define CANIF_PRECOMPILE_SUPPORT    (STD_ON)
 
+/*Symbolic name for CanIfTxPduCfg_0 */
+#define CanIfTxPduCfg_0    ((PduIdType)0U)
 
+/*Symbolic name for CanIfRxPduCfg_0 */
+#define CanIfRxPduCfg_0    ((PduIdType)0U)
 
 #define CANIF_CONFIG_EXT
 
